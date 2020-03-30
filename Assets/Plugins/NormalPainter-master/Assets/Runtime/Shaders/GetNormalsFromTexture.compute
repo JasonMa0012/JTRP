@@ -1,0 +1,29 @@
+#pragma kernel GetNormalsFromTexture
+
+StructuredBuffer<float2>    _UV;
+StructuredBuffer<float3>    _Normals;
+StructuredBuffer<float4>    _Tangents;
+RWStructuredBuffer<float3>  _Dst;
+Texture2D                   _NormalMap;
+SamplerState _LinearClamp;
+int _Packed;
+
+[numthreads(1, 1, 1)]
+void GetNormalsFromTexture(uint i : SV_DispatchThreadID)
+{
+    float3 base_normal = _Normals[i];
+    float4 base_tangent = _Tangents[i];
+    float3 base_binormal = normalize(cross(base_normal, base_tangent.xyz) * base_tangent.w);
+    float3x3 tbn = float3x3(base_tangent.xyz, base_binormal, base_normal);
+
+    float4 pn = _NormalMap.SampleLevel(_LinearClamp, _UV[i], 0);
+    float3 n;
+    if (_Packed) {
+        n.xy = (pn.wy * 2 - 1);
+        n.z = sqrt(1.0 - saturate(dot(n.xy, n.xy)));
+    }
+    else {
+        n = pn.xyz * 2.0 - 1.0;
+    }
+    _Dst[i] = normalize(mul(n, tbn));
+}

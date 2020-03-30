@@ -1,0 +1,7 @@
+{
+    "name": "com.utj.normalpainter",
+    "description": "This package allow you to edit mesh normals in scene view.",
+    "version": "1.0.0",
+    "unity": "2018.3",
+    "displayName": "NormalPainter"
+}

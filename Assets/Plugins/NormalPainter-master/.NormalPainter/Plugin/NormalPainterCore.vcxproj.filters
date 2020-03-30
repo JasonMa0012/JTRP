@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Natvis Include="NatvisFile.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NormalPainter">
+      <UniqueIdentifier>{0ce9faa4-7f38-42e5-a2be-9e6615f8bf8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NormalPainter\NormalPainter.cpp">
+      <Filter>NormalPainter</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalPainter\pch.cpp">
+      <Filter>NormalPainter</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalPainter\npPenTablet_Win.cpp">
+      <Filter>NormalPainter</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NormalPainter\pch.h">
+      <Filter>NormalPainter</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalPainter\NormalPainter.h">
+      <Filter>NormalPainter</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="RawVector&lt;*&gt;">
+        <DisplayString>{{ size={m_size} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]" ExcludeView="simple">m_size</Item>
+            <Item Name="[capacity]" ExcludeView="simple">m_capacity</Item>
+            <ArrayItems>
+                <Size>m_size</Size>
+                <ValuePointer>m_data</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+    <Type Name="IntrusiveArray&lt;*&gt;">
+        <DisplayString>{{ size={m_size} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]" ExcludeView="simple">m_size</Item>
+            <ArrayItems>
+                <Size>m_size</Size>
+                <ValuePointer>m_data</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+</AutoVisualizer>

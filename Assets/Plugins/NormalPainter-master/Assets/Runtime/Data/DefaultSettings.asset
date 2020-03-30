@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9bf60ef3a593b46ab72dba33ebfb6e, type: 3}
+  m_Name: DefaultSettings
+  m_EditorClassIdentifier: 
+  tangentsMode: 1
+  tangentsPrecision: 0
+  editMode: 1
+  brushMode: 0
+  selectMode: 1
+  mirrorMode: 0
+  selectFrontSideOnly: 1
+  selectVertex: 1
+  selectTriangle: 1
+  rotatePivot: 0
+  brushMaskWithSelection: 1
+  brushBlendMode: 0
+  brushData:
+  - maxRadius: 3
+    radius: 0.4
+    strength: 0.3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - maxRadius: 3
+    radius: 0.4
+    strength: 0.3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2.6563878
+        outSlope: 2.6563878
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - maxRadius: 3
+    radius: 0.4
+    strength: 0.3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.6895746
+        value: 0.5986756
+        inSlope: 2.784463
+        outSlope: 2.784463
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0.032112285
+        outSlope: 0.032112285
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - maxRadius: 3
+    radius: 0.4
+    strength: 0.3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - maxRadius: 3
+    radius: 0.6
+    strength: 0.3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 3.4452863
+        outSlope: 3.4452863
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.44303998
+        value: 0.9296538
+        inSlope: 0.15956543
+        outSlope: 0.15956543
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.27312776
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  projectionMode: 0
+  projectionDir: {x: 0, y: -1, z: 0}
+  projectionRayDir: 0
+  showVertices: 1
+  showNormals: 1
+  showTangents: 0
+  showBinormals: 0
+  visualize: 1
+  showSelectedOnly: 0
+  showBrushRange: 1
+  modelOverlay: 0
+  vertexSize: 0.0075
+  normalSize: 0.1
+  tangentSize: 0.075
+  binormalSize: 0.06
+  vertexColor: {r: 0.15, g: 0.15, b: 0.3, a: 0.75}
+  vertexColor2: {r: 1, g: 0, b: 0, a: 0.75}
+  vertexColor3: {r: 0, g: 1, b: 1, a: 1}
+  normalColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  tangentColor: {r: 0, g: 1, b: 1, a: 1}
+  binormalColor: {r: 0, g: 1, b: 0, a: 1}

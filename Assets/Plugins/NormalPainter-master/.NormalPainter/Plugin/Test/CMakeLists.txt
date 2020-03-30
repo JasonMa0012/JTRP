@@ -1,0 +1,15 @@
+if(APPLE)
+    option(ENABLE_TEST "Build tests" OFF)
+else()
+    option(ENABLE_TEST "Build tests" ON)
+endif()
+
+if(ENABLE_TEST)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}")
+
+    file(GLOB sources *.cpp *.h)
+    add_executable(Test ${sources})
+    add_dependencies(Test MeshUtils)
+    target_link_libraries(Test MeshUtils ${EXTERNAL_LIBS})
+    install(TARGETS Test DESTINATION .)
+endif()

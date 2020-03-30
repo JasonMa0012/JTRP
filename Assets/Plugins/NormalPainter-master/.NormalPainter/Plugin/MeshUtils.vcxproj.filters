@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="MeshUtils\MeshUtils.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\pch.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\mikktspace.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muTLS.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muAllocator.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muRawVector.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muIntrusiveArray.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muSIMD.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muVertex.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muMeshRefiner.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\ispcmath.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\ampmath.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muMisc.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muConcurrency.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\ampmath_impl.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muIterator.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muMath.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muConfig.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\MeshUtils_impl.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUtils\muSIMDConfig.h">
+      <Filter>MeshUtils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="MeshUtils">
+      <UniqueIdentifier>{7c7e8a56-7f18-4fed-967a-dd734cc4db8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MeshUtils\MeshUtils.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\pch.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\mikktspace.c">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muAllocator.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muVertex.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muSIMD.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muMeshRefiner.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muMisc.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils\muMath.cpp">
+      <Filter>MeshUtils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="MeshUtils\MeshUtilsCore.ispc">
+      <Filter>MeshUtils</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
