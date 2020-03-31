@@ -10,6 +10,7 @@ namespace JTRP.ShaderDrawer
     public class GUIData
     {
         public static Dictionary<string, bool> group = new Dictionary<string, bool>();
+        public static Dictionary<string, bool> keyWord = new Dictionary<string, bool>();
     }
     public class LWGUI : ShaderGUI
     {
@@ -51,7 +52,7 @@ namespace JTRP.ShaderDrawer
             return k;
         }
 
-        public static void Foldout(ref bool display, ref bool value, bool hasToggle, string title, UnityEngine.Object[] materials, string keyWord)
+        public static bool Foldout(ref bool display, bool value, bool hasToggle, string title)
         {
             var style = new GUIStyle("ShurikenModuleTitle");// 背景
             style.font = EditorStyles.boldLabel.font;
@@ -84,17 +85,17 @@ namespace JTRP.ShaderDrawer
             {
                 EditorStyles.foldout.Draw(triangleRect, false, false, display, false);
                 if (hasToggle)
-                    GUI.Toggle(toggleRect, value, "");
+                {
+                    if (EditorGUI.showMixedValue)
+                        GUI.Toggle(toggleRect, false, "", new GUIStyle("ToggleMixed"));
+                    else
+                        GUI.Toggle(toggleRect, value, "");
+                }
             }
 
             if (hasToggle && e.type == EventType.MouseDown && toggleRect.Contains(e.mousePosition))
             {
                 value = !value;
-                foreach (Material item in materials)
-                {
-                    if (value) item.EnableKeyword(keyWord);
-                    else item.DisableKeyword(keyWord);
-                }
                 e.Use();
             }
             else if (e.type == EventType.MouseDown && rect.Contains(e.mousePosition))
@@ -102,6 +103,7 @@ namespace JTRP.ShaderDrawer
                 display = !display;
                 e.Use();
             }
+            return value;
         }
 
         public static MaterialProperty[] GetProperties(MaterialEditor editor)
@@ -125,48 +127,6 @@ namespace JTRP.ShaderDrawer
                 return -num;
             return num;
         }
-        /*
-                public static Color RGBToHSV(Color c)
-                {
-                    Vector4 K = new Vector4(0.0f, -1.0f / 3.0f, 2.0f / 3.0f, -1.0f);
-                    Vector4 p, q;
-
-                    if (c.b > c.g)
-                    {
-                        p = new Vector4(c.b, c.g, K.w, K.z);
-                    }
-                    else
-                    {
-                        p = new Vector4(c.g, c.b, K.x, K.y);
-                    }
-
-                    if (p.x > c.r)
-                    {
-                        q = new Vector4(p.x, p.y, p.w, c.r);
-                    }
-                    else
-                    {
-                        q = new Vector4(c.r, p.y, p.z, p.x);
-                    }
-
-                    float d = q.x - Mathf.Min(q.w, q.y);
-                    float e = 0.0001f;
-                    return new Color(Mathf.Abs(q.z + (q.w - q.y) / (6.0f * d + e)), d / (q.x + e), q.x, c.a);
-                }
-                public static Color HSVToRGB(Color c)
-                {
-                    Vector4 K = new Vector4(1.0f, 2.0f / 3.0f, 1.0f / 3.0f, 3.0f);
-                    Vector3 value = new Vector3(c.r, c.r, c.r) + (Vector3)K;
-                    value = value - new Vector3((int)value.x, (int)value.y, (int)value.z);
-                    Vector3 p = value * 6.0f - new Vector3(K.w, K.w, K.w);
-                    p = new Vector3(Math.Abs(p.x), Math.Abs(p.y), Math.Abs(p.z));
-                    var Kx = new Vector3(K.x, K.x, K.x);
-                    var Kx01 = p - Kx;
-                    Kx01 = new Vector3(Mathf.Clamp01(Kx01.x), Mathf.Clamp01(Kx01.y), Mathf.Clamp01(Kx01.z));
-                    var result = c.b * Vector3.Lerp(Kx, Kx01, c.g);
-                    return new Color(result.x, result.y, result.z, c.a);
-                }
-        */
 
         public static Color RGBToHSV(Color color)
         {
@@ -196,6 +156,47 @@ namespace JTRP.ShaderDrawer
             }
         }
 
+        public static void SetShaderKeyWord(UnityEngine.Object[] materials, string[] keyWords, int index)
+        {
+            Debug.Assert(keyWords.Length >= 1 && index < keyWords.Length && index >= 0, $"KeyWords:{keyWords} or Index:{index} Error! ");
+            for (int i = 0; i < keyWords.Length; i++)
+            {
+                SetShaderKeyWord(materials, keyWords[i], index == i);
+                if (GUIData.keyWord.ContainsKey(keyWords[i]))
+                {
+                    GUIData.keyWord[keyWords[i]] = index == i;
+                }
+                else
+                {
+                    Debug.LogError("KeyWord not exist! Throw a shader error to refresh the instance.");
+                }
+            }
+        }
+
+        public static bool NeedShow(string group)
+        {
+            if (group == "" || group == "_")
+                return true;
+            if (GUIData.group.ContainsKey(group))
+            {// 一般sub
+                return GUIData.group[group];
+            }
+            else
+            {// 存在后缀，可能是依据枚举的条件sub
+                foreach (var prefix in GUIData.group.Keys)
+                {
+                    if (group.Contains(prefix))
+                    {
+                        string suffix = group.Substring(prefix.Length, group.Length - prefix.Length).ToUpperInvariant();
+                        if (GUIData.keyWord.ContainsKey(suffix))
+                        {
+                            return GUIData.keyWord[suffix] && GUIData.group[prefix];
+                        }
+                    }
+                }
+                return false;
+            }
+        }
     }
 
 }//namespace ShaderDrawer

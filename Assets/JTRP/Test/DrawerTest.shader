@@ -1,10 +1,45 @@
-Shader "Jason Ma/Hair Pro"
+Shader "JTRP/DrawerTest"
 {
     Properties
     {
         _MainTex ("Color Map", 2D) = "white" { }
-        _LightMap ("Light Map", 2D) = "white" { }
+        
         _Color ("Color", Color) = (1, 1, 1, 1)
+        
+        
+        
+        [Tex(_, _group81Color)]  _group3 ("g3", 2D) = "white" { }
+        
+        [Main(g1)] _group ("g1", float) = 1
+        [Sub(g1)]  _group2 ("g2", float) = 2
+        
+        [KWEnum(g1, name1, key1, name2, key2, name3, key3)]
+        _g1_enum ("enum", float) = 0
+        [Sub(g1key1)]  _enum1 ("enum1", float) = 0
+        [Sub(g1key2)]  _enum2 ("enum2", float) = 0
+        [Sub(g1key3)]  _enum3 ("enum3", float) = 0
+        [Sub(g1key3)]  _enum30 ("enum30", float) = 0
+        
+        [Tex(g1)] [Normal] _group33 ("g33", 2D) = "white" { }
+        [Sub(g1)] [HDR] _group3Color ("Color", Color) = (1, 1, 1, 1)
+        [Title(g1, SubHeaderDecorator)]
+        [SubToggle(g1, _)] _group5 ("g5", float) = 0
+
+        [SubToggle(g1, _HHHHHHHHH)] _group6 ("ghhhh6", float) = 0 
+        [Sub(g1_HHHHHHHHH)]  _enum30h ("enum30hh", float) = 0
+
+        [SubPowerSlider(g1)]  _group4 ("g4", Range(0, 10)) = 2
+        [SubPowerSlider(g1, 2)] _group7 ("g7", Range(0, 100)) = 0
+        [Color(g1, _)] _group8Color ("Color", Color) = (1, 1, 1, 1)
+        [Color(g1, _, _group8Color, _group81Color)] _group83Color ("Color4", Color) = (1, 1, 1, 1)
+        [HideInInspector] _group81Color ("Color", Color) = (1, 1, 1, 1)
+        [HideInInspector] [HDR] _group82Color ("Color", Color) = (1, 1, 1, 1)
+        
+        
+        [Main] _group21 ("_ShowOutlineNormal", float) = 1
+        [Sub(_group21)]  _group22 ("g22", float) = 2
+        [Sub(_group21)]  _group32 ("g32", 2D) = "white" { }
+        [Sub(_group21)]  _group42 ("g42", Range(0, 10)) = 2
     }
     
     HLSLINCLUDE
@@ -24,7 +59,6 @@ Shader "Jason Ma/Hair Pro"
     CBUFFER_END
     
     TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
-    TEXTURE2D(_LightMap); SAMPLER(sampler_LightMap);
     
     ENDHLSL
     
@@ -40,27 +74,12 @@ Shader "Jason Ma/Hair Pro"
             #pragma vertex vert
             #pragma fragment frag
             
-            float GetStep(float map, float width, float soft, float dot)
-            {
-                float max = saturate(dot + width);
-                float min = saturate(dot - width);
-                if (map >= min && map <= max)
-                    return 1;
-                else if(map > max)
-                {
-                    return smoothstep(max + soft, max, map);
-                }
-                else
-                {
-                    return smoothstep(min - soft, min, map);
-                }
-            }
-            
             struct GraphVertexInput
             {
                 float4 vertex: POSITION;
                 float4 texcoord0: TEXCOORD0;
                 float3 normal: NORMAL;
+                float4 color: COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
             struct GraphVertexOutput
@@ -69,6 +88,7 @@ Shader "Jason Ma/Hair Pro"
                 half4 uv0: TEXCOORD0;
                 float3 positionWS: TEXCOORD1;
                 float3 normal: TEXCOORD2;
+                float4 color: COLOR;
             };
             
             GraphVertexOutput vert(GraphVertexInput v)
@@ -79,38 +99,18 @@ Shader "Jason Ma/Hair Pro"
                 o.positionWS = positionWS;
                 o.normal = TransformObjectToWorldNormal(v.normal);
                 o.uv0 = v.texcoord0;
+                o.color = v.color;
                 
                 return o;
             }
             
             float4 frag(GraphVertexOutput i): SV_Target0
             {
-                float4 uv0 = i.uv0;
-                DirectionalLightData light = _DirectionalLightDatas[0];
-                float3 L = -light.forward.xyz;
-                float3 V = GetWorldSpaceNormalizeViewDir(i.positionWS);
-                float3 N = normalize(i.normal);
-                float3 Up = float3(0, 1, 0);
-                
-                float4 lightMap = SAMPLE_TEXTURE2D(_LightMap, sampler_LightMap, uv0.xy);
-                float4 baseColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv0.xy) * _Color;
-                
-                float VdotN = dot(normalize(mul(UNITY_MATRIX_V, V).yz), normalize(mul(UNITY_MATRIX_V, N).yz)) * 0.5 + 0.5;
-                float VdotUp = dot(V, Up) * 0.5 + 0.5;
-                
-                float width = 0.05;
-                float soft = 0.001;
-                
-                float lightStep = GetStep(lightMap.r, width, soft, VdotUp);
-                
-                float4 finalColor = baseColor;
-                
-                finalColor.rgb = (float3)lightStep;
-                
-                return finalColor;
+                return(float4)0;
             }
             ENDHLSL
             
         }
     }
+    CustomEditor "JTRP.ShaderDrawer.LWGUI"
 }

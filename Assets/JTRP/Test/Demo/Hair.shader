@@ -1,5 +1,4 @@
-// by 喵刀Hime  2020/1/22 首发于知乎
-Shader "Jason Ma/Hair"
+Shader "JTRP/Hair"
 {
     Properties
     {

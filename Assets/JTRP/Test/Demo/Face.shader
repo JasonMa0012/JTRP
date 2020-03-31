@@ -1,4 +1,4 @@
-Shader "Jason Ma/Face"
+Shader "JTRP/Face"
 {
     Properties
     {

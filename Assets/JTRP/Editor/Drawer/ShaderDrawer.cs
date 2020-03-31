@@ -32,16 +32,18 @@ namespace JTRP.ShaderDrawer
         public override void OnGUI(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
         {
             var value = prop.floatValue == 1.0f;
+            EditorGUI.showMixedValue = prop.hasMixedValue;
             string g = group != "" ? group : prop.name;
             show = ((style == 1 || style == 3) && !GUIData.group.ContainsKey(g)) ? true : show;
 
-            Func.Foldout(ref show, ref value,
-             style == 0 || style == 1,
-             label.text,
-             editor.targets,
-             Func.GetKeyWord(keyWord, prop.name));
+            bool result = Func.Foldout(ref show, value, style == 0 || style == 1, label.text);
+            EditorGUI.showMixedValue = false;
 
-            prop.floatValue = value ? 1.0f : 0.0f;
+            if (result != value)
+            {
+                prop.floatValue = result ? 1.0f : 0.0f;
+                Func.SetShaderKeyWord(editor.targets, Func.GetKeyWord(keyWord, prop.name), result);
+            }
 
             if (GUIData.group.ContainsKey(g))
             {
@@ -56,7 +58,7 @@ namespace JTRP.ShaderDrawer
 
     /// <summary>
     /// 在折叠组内以默认形式绘制属性
-    /// group：对应折叠组的title
+    /// group：对应折叠组的title，支持后缀KWEnum或SubToggle的KeyWord以根据enum显示
     /// </summary>
     public class SubDrawer : MaterialPropertyDrawer
     {
@@ -64,7 +66,7 @@ namespace JTRP.ShaderDrawer
         public const int propHeight = 20;
         protected string group = "";
         protected float height;
-        protected bool needShow => GUIData.group.ContainsKey(group) && GUIData.group[group];
+        protected bool needShow => Func.NeedShow(group);
         protected virtual bool matchPropType => true;
         protected MaterialProperty prop;
         protected MaterialProperty[] props;
@@ -114,6 +116,60 @@ namespace JTRP.ShaderDrawer
         public virtual void DrawProp(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
         {
             editor.DefaultShaderProperty(prop, label.text);
+        }
+    }
+
+    /// <summary>
+    /// n为显示的name，k为对应KeyWord，float值为当前激活的数组index
+    /// </summary>
+    public class KWEnumDrawer : SubDrawer
+    {
+        #region 
+        public KWEnumDrawer(string group, string n1, string k1)
+        : this(group, new string[1] { n1 }, new string[1] { k1 }) { }
+        public KWEnumDrawer(string group, string n1, string k1, string n2, string k2)
+        : this(group, new string[2] { n1, n2 }, new string[2] { k1, k2 }) { }
+        public KWEnumDrawer(string group, string n1, string k1, string n2, string k2, string n3, string k3)
+        : this(group, new string[3] { n1, n2, n3 }, new string[3] { k1, k2, k3 }) { }
+        public KWEnumDrawer(string group, string n1, string k1, string n2, string k2, string n3, string k3, string n4, string k4)
+        : this(group, new string[4] { n1, n2, n3, n4 }, new string[4] { k1, k2, k3, k4 }) { }
+        public KWEnumDrawer(string group, string n1, string k1, string n2, string k2, string n3, string k3, string n4, string k4, string n5, string k5)
+        : this(group, new string[5] { n1, n2, n3, n4, n5 }, new string[5] { k1, k2, k3, k4, k5 }) { }
+        public KWEnumDrawer(string group, string[] names, string[] keyWords)
+        {
+            this.group = group;
+            this.names = names;
+            for (int i = 0; i < keyWords.Length; i++)
+            {
+                keyWords[i] = keyWords[i].ToUpperInvariant();
+                if (!GUIData.keyWord.ContainsKey(keyWords[i]))
+                {
+                    GUIData.keyWord.Add(keyWords[i], false);
+                }
+            }
+            this.keyWords = keyWords;
+            this.values = new int[keyWords.Length];
+            for (int index = 0; index < keyWords.Length; ++index)
+                this.values[index] = index;
+        }
+        #endregion
+        protected override bool matchPropType => prop.type == MaterialProperty.PropType.Float;
+        string[] names, keyWords;
+        int[] values;
+        public override void DrawProp(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
+        {
+            var rect = EditorGUILayout.GetControlRect();
+            int index = (int)prop.floatValue;
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUI.showMixedValue = prop.hasMixedValue;
+            int num = EditorGUI.IntPopup(rect, label.text, index, this.names, this.values);
+            EditorGUI.showMixedValue = false;
+            if (EditorGUI.EndChangeCheck())
+            {
+                prop.floatValue = (float)num;
+            }
+            Func.SetShaderKeyWord(editor.targets, keyWords, num);
         }
     }
 
@@ -234,8 +290,8 @@ namespace JTRP.ShaderDrawer
     }
 
     /// <summary>
-    /// 以SubToggle形式显示float，其他行为与内置Toggle一致
-    /// keyword：_为忽略，不填和__为属性名大写 + _ON
+    /// 以SubToggle形式显示float，KeyWord行为与内置Toggle一致，
+    /// keyword：_为忽略，不填和__为属性名大写 + _ON，将KeyWord后缀于group可根据toggle是否显示
     /// </summary>
     public class SubToggleDrawer : SubDrawer
     {
@@ -256,13 +312,15 @@ namespace JTRP.ShaderDrawer
             if (EditorGUI.EndChangeCheck())
             {
                 prop.floatValue = value ? 1.0f : 0.0f;
-                foreach (Material m in editor.targets)
-                {
-                    if (value)
-                        m.EnableKeyword(k);
-                    else
-                        m.DisableKeyword(k);
-                }
+                Func.SetShaderKeyWord(editor.targets, k, value);
+            }
+            if (GUIData.keyWord.ContainsKey(k))
+            {
+                GUIData.keyWord[k] = value;
+            }
+            else
+            {
+                GUIData.keyWord.Add(k, value);
             }
             EditorGUI.showMixedValue = false;
         }
@@ -326,6 +384,9 @@ namespace JTRP.ShaderDrawer
         }
     }
 
+    /// <summary>
+    /// 与本插件共同使用，在不带Drawer的prop上请使用内置Header，否则会错位，
+    /// </summary>
     public class TitleDecorator : SubDrawer
     {
         private readonly string header;
@@ -349,7 +410,8 @@ namespace JTRP.ShaderDrawer
             s.fontSize += 1;
             var r = EditorGUILayout.GetControlRect(true, 24);
             r.yMin += 5;
-            EditorGUI.PrefixLabel(r, new GUIContent(header), s);
+
+            EditorGUI.LabelField(r, new GUIContent(header), s);
         }
 
     }

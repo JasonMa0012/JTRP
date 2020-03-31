@@ -1,33 +1,12 @@
-Shader "JNGO/Debug"
+Shader "JTRP/Debug"
 {
     Properties
     {
         _MainTex ("Color Map", 2D) = "white" { }
         
-        [Color(_, _, _group8Color, _group81Color, _group82Color)]_Color ("Color", Color) = (1, 1, 1, 1)
-        /*
-        [Tex(_, _group3Color)]  _group3 ("g3", 2D) = "white" { }
+        _Color ("Color", Color) = (1, 1, 1, 1)
+            
         
-        [Main(g111)] _group ("g1", float) = 1
-        [Sub(g111)]  _group2 ("g2", float) = 2
-        [Tex(g111)] [Normal] _group33 ("g33", 2D) = "white" { }
-        [Title(g111, SubHeaderDecorator)]
-        [Sub(g111)] [HDR] _group3Color ("Color", Color) = (1, 1, 1, 1)
-        [SubToggle(g111, _)] _group5 ("g5", float) = 0
-        [SubToggle(g111, _HHhhhhHHH)] _group6 ("g6", float) = 0
-        [SubPowerSlider(g111)]  _group4 ("g4", Range(0, 10)) = 2
-        [SubPowerSlider(g111, 2)] _group7 ("g7", Range(0, 100)) = 0
-        [Color(g111, _)] _group8Color ("Color", Color) = (1, 1, 1, 1)
-        [Color(g111, _, _group8Color, _group81Color)] _group83Color ("Color4", Color) = (1, 1, 1, 1)
-        [HideInInspector] _group81Color ("Color", Color) = (1, 1, 1, 1)
-        [HideInInspector] [HDR] _group82Color ("Color", Color) = (1, 1, 1, 1)
-        
-        [Main] _group21 ("_ShowOutlineNormal", float) = 1
-        [Sub(_ShowOutlineNormal)]  _group22 ("g2", float) = 2
-        [Sub(_ShowOutlineNormal)]  _group32 ("g3", 2D) = "white" { }
-        [Sub(_ShowOutlineNormal)]  _group42 ("g4", Range(0, 10)) = 2
-        
-        */
         [Toggle(_)]_ShowOutlineNormal ("Show Outline Normal", float) = 0
         [Toggle(_)]_ShowVertecColorR ("VC R", float) = 0
         [Toggle(_)]_ShowVertecColorG ("VC G", float) = 0

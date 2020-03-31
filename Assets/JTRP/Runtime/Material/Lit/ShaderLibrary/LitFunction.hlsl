@@ -59,10 +59,10 @@ float3 GetHighLight(float3 N, float3 V, float3 L, float3 lightColor, float shado
 {
     float3 result = 0;
     #ifdef _ENABLE_HIGHLIGHT_ON
-        #ifdef _ENABLE_PBR_SPECULAR_ON
+        #ifdef _HL_PBR
             float spec = PBRSpecular(N, V, L, roughness, intensity1);
             result = spec * lightColor * _HighColor1.rgb * intensity1;
-        #else
+        #elif _HL_NPR
             float halfLambert = 0.5 * dot(normalize(V + L), N) + 0.5;
             float3 c1 = GetHighLight(lightColor * _HighColor1.rgb, halfLambert, _HighLightStep1,
             intensity1, _HighLightFeather1, shadowStep, intensity2? _HighColorIntOnShadow1: 0);

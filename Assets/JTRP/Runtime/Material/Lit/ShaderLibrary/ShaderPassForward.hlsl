@@ -51,7 +51,6 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     float4 _LightMap_var = SAMPLE_TEXTURE2D(_LightMap, sampler_LightMap, context.uv0);
     float3 normalMap = UnpackNormalmapRGorAG(SAMPLE_TEXTURE2D_LOD(_NormalMap, sampler_NormalMap, context.uv0, 0), _NormalScale);
     
-    _MainTex_var.rgb = ChooseColor(context.uv1, _MainTex_var.rgb, _ColorInt);
     AlphaGammaCorrection(_MainTex_var.a, _ShadowMap_var.a, _LightMap_var.a);
     
     context.roughness = ComputeRoughness((1 - _ShadowMap_var.b) * _roughness);

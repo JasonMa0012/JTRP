@@ -71,11 +71,6 @@ float4 frag(VertexOutput i): SV_Target
     float2 Set_UV0 = i.uv0;
     float2 Set_UV1 = i.uv1;
     float4 _MainTex_var = SAMPLE_TEXTURE2D_LOD(_MainTex, sampler_MainTex, Set_UV0, _Outline_Lod) * _Color;
-    #ifdef _IS_HAIRMODE
-        // hair
-    #else
-        _MainTex_var.rgb = ChooseColor(Set_UV1, _MainTex_var.rgb, _ColorInt);
-    #endif
     
     float3 Set_BaseColor = _Outline_Color.rgb * lightColor * lerp(1, _MainTex_var.rgb, _Outline_Blend);
     Set_BaseColor = RgbToHsv(Set_BaseColor);

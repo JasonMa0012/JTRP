@@ -1,4 +1,4 @@
-Shader "JNGO/Lit"
+Shader "JTRP/Lit"
 {
     Properties
     {
@@ -10,17 +10,8 @@ Shader "JNGO/Lit"
         [HideInInspector] _Color ("Color", Color) = (1, 1, 1, 1)
         _AddColorIntensity ("Add Int", Range(0, 1)) = 0
         [HDR]_AddColor ("Add Color", Color) = (0, 0, 0, 1)
-        _ColorInt ("染色强度", Range(0, 1)) = 0
-        [Color(_, HSV, _OColor2, _OColor3, _OColor4)] _OColor1 ("OColor1：原色", Color) = (1, 0, 0, 1)
-        [Color(_, HSV, _Color2, _Color3, _Color4)] _Color1 ("Color1：染色", Color) = (1, 0, 0, 1)
-        [HideInInspector] _OColor2 ("OColor2：原色", Color) = (0, 1, 0, 1)
-        [HideInInspector] _OColor3 ("OColor3：原色", Color) = (0, 0, 1, 1)
-        [HideInInspector] _OColor4 ("OColor4：原色", Color) = (0, 0, 0, 1)
-        [HideInInspector] _Color2 ("Color2：染色", Color) = (0, 1, 0, 1)
-        [HideInInspector] _Color3 ("Color3：染色", Color) = (0, 0, 1, 1)
-        [HideInInspector] _Color4 ("Color4：染色", Color) = (0, 0, 0, 1)
         
-        [Title(_, Light Setting)]
+        [Header(Light Setting)][Space(5)] 
         [PowerSlider(3)] _LightColorIntensity ("Light Int：平行光强度", Range(0, 1)) = 0.15
         _SkyColorIntensity ("Sky Int：天空盒强度", Range(0, 1)) = 0.75
         _LightColorBlend ("Blend：灯光混合固有色", Range(0, 1)) = 1
@@ -49,9 +40,13 @@ Shader "JNGO/Lit"
         [Sub(_shadow)]_Shadow_Step2 ("Step：阈值", Range(0, 1)) = 0.2
         [SubPowerSlider(_shadow, 6)] _Shadow_Feather2 ("Feather：羽化", Range(0.0001, 1)) = 0.001
         
+        
         [Main(_HL)]
         _Enable_HighLight ("HighLight", float) = 0
         [Tex(_HL)] _LightMap ("LightMap (RGBA)", 2D) = "white" { }
+        [KWEnum(_HL, NPR, _HL_NPR, PBR, _HL_PBR)]
+        _HighLight_Mode ("HighLight Mode", float) = 0
+        
         [SubPowerSlider(_HL, 2)] _HighColorLevel ("Level：强度偏移", Range(-1, 1)) = 0
         [Sub(_HL)][HDR] _HighColor1 ("Toon High Color1", Color) = (1, 1, 1, 1)
         [Sub(_HL)] _roughness ("Roughness：粗糙度", Range(0.02, 1)) = 0.5
@@ -59,12 +54,12 @@ Shader "JNGO/Lit"
         [SubPowerSlider(_HL, 5)]_HighColorPointInt1 ("PointInt1：点光强度", Range(0, 1)) = 0.005
         [HideInInspector]_HighLightStep1 ("Step1：阈值", Range(0, 3)) = 0.99
         [HideInInspector]_HighLightFeather1 ("Feather1：羽化", Range(0.001, 3)) = 0.001
-        [SubToggle(_HL)] _Enable_PBR_Specular ("PBR Specular", float) = 0 // 启用后只有上面的参数有效
-        [Sub(_HL)] _HighColorIntOnShadow1 ("Int On Shadow1：阴影中强度", Range(0, 1)) = 0.3
-        [Sub(_HL)] [HDR] _HighColor2 ("Phong High Color2", Color) = (1, 1, 1, 1)
-        [SubPowerSlider(_HL, 2)]_HighColorInt2 ("Int2：强度", Range(0, 1)) = 0
-        [SubPowerSlider(_HL, 2)]_HighLightPower2 ("power：范围", Range(0, 1000)) = 888
-        [Sub(_HL)]_HighColorIntOnShadow2 ("Int On Shadow2：阴影中强度", Range(0, 1)) = 0.3
+        // _HL_NPR
+        [Sub(_HL_HL_NPR)] _HighColorIntOnShadow1 ("Int On Shadow1：阴影中强度", Range(0, 1)) = 0.3
+        [Sub(_HL_HL_NPR)] [HDR] _HighColor2 ("Phong High Color2", Color) = (1, 1, 1, 1)
+        [SubPowerSlider(_HL_HL_NPR, 2)]_HighColorInt2 ("Int2：强度", Range(0, 1)) = 0
+        [SubPowerSlider(_HL_HL_NPR, 2)]_HighLightPower2 ("power：范围", Range(0, 1000)) = 888
+        [Sub(_HL_HL_NPR)]_HighColorIntOnShadow2 ("Int On Shadow2：阴影中强度", Range(0, 1)) = 0.3
         
         
         [Main(MatCap)]
@@ -81,7 +76,7 @@ Shader "JNGO/Lit"
         
         [Main(Rim)]
         _RimLight_Enable ("RimLight", float) = 0
-
+        
         [Title(Rim, Bright Side)]
         [Sub(Rim)] [HDR] _RimLightColor ("RimLight Color：边缘光", Color) = (1, 1, 1, 1)
         [Sub(Rim)] _RimLightIntensity ("Int：强度", Range(0, 1)) = 1
@@ -90,13 +85,13 @@ Shader "JNGO/Lit"
         [Sub(Rim)] [HDR] _RimLightColor2 ("RimLight Color2：边缘光", Color) = (1, 1, 1, 1)
         [Sub(Rim)] _RimLightIntensity2 ("Int2：强度", Range(0, 1)) = 1
         [Sub(Rim)] _RimLightBlend2 ("Blend2：混合固有色", Range(0, 1)) = 0.5
-
+        
         [Title(Rim, Rim Setting)]
         [SubPowerSlider(Rim, 5)] _RimLightFeather ("Feather：羽化", Range(0.0001, 1)) = 0.005
         [SubPowerSlider(Rim, 1.5)] _RimLightWidth ("Width：宽度", Range(0, 1)) = 0.3
         [SubPowerSlider(Rim, 0.35)] _RimLightLength ("Length：长度", Range(0, 10)) = 7
         [SubPowerSlider(Rim, 2)] _RimLightLevel ("Level：强度偏移", Range(-1, 1)) = 0
-
+        
         [Title(Rim, Add Rim)]
         [Sub(Rim)] [HDR] _RimLightColor3 ("Color2：额外边缘光", Color) = (0, 0, 0, 1)
         [Sub(Rim)] _RimLightIntensity3 ("Int：强度", Range(0, 1)) = 0
@@ -139,6 +134,7 @@ Shader "JNGO/Lit"
         [SubPowerSlider(OutLine, 1.7)] _Outline_Lightness ("Lightness：明度", Range(-1, 1)) = 0
         
         
+
         [HideInInspector]_BaseColor ("BaseColor", Color) = (1, 1, 1, 1)
         [HideInInspector]_BaseColorMap ("BaseColorMap", 2D) = "white" { }
         
@@ -281,9 +277,8 @@ Shader "JNGO/Lit"
             #pragma multi_compile SHADOW_HIGH SHADOW_LOW SHADOW_MEDIUM
             #pragma multi_compile USE_FPTL_LIGHTLIST USE_CLUSTERED_LIGHTLIST
             
-            #pragma shader_feature_local _ _HSV_OTColor
             #pragma shader_feature_local _ _ENABLE_HIGHLIGHT_ON
-            #pragma shader_feature_local _ _ENABLE_PBR_SPECULAR_ON
+            #pragma shader_feature_local _HL_NPR _HL_PBR
             #pragma shader_feature_local _ _RIMLIGHT_ENABLE_ON
             #pragma shader_feature_local _ _MATCAP_ENABLE_ON
             #pragma shader_feature_local _ _EMISSIVE_ENABLE_ON
