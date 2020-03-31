@@ -3,9 +3,7 @@ Shader "JTRP/DrawerTest"
     Properties
     {
         _MainTex ("Color Map", 2D) = "white" { }
-        
         _Color ("Color", Color) = (1, 1, 1, 1)
-        
         
         
         [Tex(_, _group81Color)]  _group3 ("g3", 2D) = "white" { }

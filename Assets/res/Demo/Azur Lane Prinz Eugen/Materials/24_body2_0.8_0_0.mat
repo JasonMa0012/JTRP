@@ -274,7 +274,7 @@ Material:
     - _LightColorBlend: 1
     - _LightColorIntensity: 0.15
     - _LinkDetailsWithBase: 0
-    - _MatCap: 0.1
+    - _MatCap: 0.09999999
     - _MatCap_Enable: 0
     - _MaterialID: 1
     - _Metallic: 1
@@ -303,9 +303,9 @@ Material:
     - _RimLightBlend: 1
     - _RimLightBlend2: 0
     - _RimLightBlend3: 0
-    - _RimLightFeather: 0.045
+    - _RimLightFeather: 0.045000006
     - _RimLightFeather2: 0.005
-    - _RimLightFeather3: 0.005
+    - _RimLightFeather3: 0.0050000013
     - _RimLightIntInShadow: 0.5
     - _RimLightIntInShadow2: 1
     - _RimLightIntensity: 0.661

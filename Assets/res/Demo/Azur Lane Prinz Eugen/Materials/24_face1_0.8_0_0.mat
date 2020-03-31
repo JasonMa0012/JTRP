@@ -295,7 +295,7 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PointLightColorIntensity: 0.5
+    - _PointLightColorIntensity: 0.38
     - _PointLightFeather: 0.18
     - _PointLightStep: 0.7
     - _ReceivesSSR: 1
