@@ -106,6 +106,44 @@ namespace JTRP.ShaderDrawer
             return value;
         }
 
+        public static void PowerSlider(MaterialProperty prop, float power, Rect position, GUIContent label)
+        {
+            int controlId = GUIUtility.GetControlID("EditorSliderKnob".GetHashCode(), FocusType.Passive, position);
+            float left = prop.rangeLimits.x;
+            float right = prop.rangeLimits.y;
+            float start = left;
+            float end = right;
+            float value = prop.floatValue;
+            float originValue = prop.floatValue;
+
+            if ((double)power != 1.0)
+            {
+                start = Func.PowPreserveSign(start, 1f / power);
+                end = Func.PowPreserveSign(end, 1f / power);
+                value = Func.PowPreserveSign(value, 1f / power);
+            }
+
+            EditorGUI.BeginChangeCheck();
+
+            var labelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 0;
+
+            Rect position2 = EditorGUI.PrefixLabel(position, label);
+            position2 = new Rect(position2.x, position2.y, position2.width - EditorGUIUtility.fieldWidth - 5, position2.height);
+
+            if (position2.width >= 50f)
+                value = GUI.Slider(position2, value, 0.0f, start, end, GUI.skin.horizontalSlider, !EditorGUI.showMixedValue ? GUI.skin.horizontalSliderThumb : (GUIStyle)"SliderMixed", true, controlId);
+
+            if ((double)power != 1.0)
+                value = Func.PowPreserveSign(value, power);
+
+            position.xMin += position.width - SubDrawer.propRight;
+            value = EditorGUI.FloatField(position, value);
+
+            EditorGUIUtility.labelWidth = labelWidth;
+            if (value != originValue)
+                prop.floatValue = Mathf.Clamp(value, Mathf.Min(left, right), Mathf.Max(left, right));
+        }
         public static MaterialProperty[] GetProperties(MaterialEditor editor)
         {
             if (editor.customShaderGUI != null && editor.customShaderGUI is LWGUI)

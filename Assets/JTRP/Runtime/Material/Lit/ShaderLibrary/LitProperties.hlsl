@@ -14,6 +14,7 @@ SAMPLER(sampler_NormalMap);
 TEXTURE2D(_MatCapNormalMap);
 SAMPLER(sampler_MatCapNormalMap);
 TEXTURE2D(_ShadowMap);
+TEXTURE2D(_ShadowColorMap);
 SAMPLER(sampler_ShadowMap);
 TEXTURE2D(_LightMap);
 SAMPLER(sampler_LightMap);

@@ -3,6 +3,8 @@ Shader "JTRP/Lit"
     Properties
     {
         [Enum(OFF, 0, FRONT, 1, BACK, 2)] _CullMode ("Cull Mode：裁剪", int) = 2  //OFF/FRONT/BACK
+        [Queue] _RenderQueue ( "Queue", int) = 2000
+        [Toggle(_)] _ZWrite ("ZWrite", Float) = 1.0
         
         
         [Title(_, Diffuse)]
@@ -11,7 +13,7 @@ Shader "JTRP/Lit"
         _AddColorIntensity ("Add Int", Range(0, 1)) = 0
         [HDR]_AddColor ("Add Color", Color) = (0, 0, 0, 1)
         
-        [Header(Light Setting)][Space(5)] 
+        [Header(Light Setting)][Space(5)]
         [PowerSlider(3)] _LightColorIntensity ("Light Int：平行光强度", Range(0, 1)) = 0.15
         _SkyColorIntensity ("Sky Int：天空盒强度", Range(0, 1)) = 0.75
         _LightColorBlend ("Blend：灯光混合固有色", Range(0, 1)) = 1
@@ -28,7 +30,8 @@ Shader "JTRP/Lit"
         _shadow ("Shadow", float) = 0
         [Tex(_shadow)] _ShadowMap ("ShadowMap (RGBA)", 2D) = "black" { }
         [Title(_shadow, 1st Shadow)]
-        [Sub(_shadow)]_ShadowMapColor ("Color", Color) = (1, 1, 1, 1)
+        [Tex(_shadow, _ShadowMapColor)]_ShadowColorMap ("ShadowColorMap (RGB)", 2D) = "white" { }
+        [HideInInspector]_ShadowMapColor ("Color", Color) = (1, 1, 1, 1)
         [Sub(_shadow)]_ShadowIntensity ("Int：强度", Range(0, 1)) = 0.6 // 降低强度提高浓度有助于减少光照探针权重、提高固有色纯度
         [Sub(_shadow)]_Shadow_Power ("Power：浓度", Range(0, 1)) = 0.5
         [Sub(_shadow)]_Shadow_Step ("Step：阈值", Range(0, 1)) = 0.5
@@ -57,7 +60,7 @@ Shader "JTRP/Lit"
         // _HL_NPR
         [Sub(_HL_HL_NPR)] _HighColorIntOnShadow1 ("Int On Shadow1：阴影中强度", Range(0, 1)) = 0.3
         [Sub(_HL_HL_NPR)] [HDR] _HighColor2 ("Phong High Color2", Color) = (1, 1, 1, 1)
-        [SubPowerSlider(_HL_HL_NPR, 2)]_HighColorInt2 ("Int2：强度", Range(0, 1)) = 0
+        [SubPowerSlider(_HL_HL_NPR, 2)]_HighColorInt2 ("Int2：强度", Range(0, 1)) = 1
         [SubPowerSlider(_HL_HL_NPR, 2)]_HighLightPower2 ("power：范围", Range(0, 1000)) = 888
         [Sub(_HL_HL_NPR)]_HighColorIntOnShadow2 ("Int On Shadow2：阴影中强度", Range(0, 1)) = 0.3
         
@@ -134,7 +137,7 @@ Shader "JTRP/Lit"
         [SubPowerSlider(OutLine, 1.7)] _Outline_Lightness ("Lightness：明度", Range(-1, 1)) = 0
         
         
-
+        
         [HideInInspector]_BaseColor ("BaseColor", Color) = (1, 1, 1, 1)
         [HideInInspector]_BaseColorMap ("BaseColorMap", 2D) = "white" { }
         
@@ -149,7 +152,7 @@ Shader "JTRP/Lit"
         [HideInInspector] _DstBlend ("__dst", Float) = 0.0
         [HideInInspector] _AlphaSrcBlend ("__alphaSrc", Float) = 1.0
         [HideInInspector] _AlphaDstBlend ("__alphaDst", Float) = 0.0
-        [HideInInspector][ToggleUI] _ZWrite ("__zw", Float) = 1.0
+        // [HideInInspector][ToggleUI] _ZWrite ("__zw", Float) = 1.0
         // [HideInInspector] _CullMode ("__cullmode", Float) = 2.0
         [HideInInspector] _CullModeForward ("__cullmodeForward", Float) = 2.0 // This mode is dedicated to Forward to correctly handle backface then front face rendering thin transparent
         // [Enum(UnityEditor.Rendering.HighDefinition.TransparentCullMode)] _TransparentCullMode ("_TransparentCullMode", Int) = 2 // Back culling by default
@@ -236,7 +239,7 @@ Shader "JTRP/Lit"
                 Pass Replace
             }
             
-            ZWrite On
+            ZWrite [_ZWrite]
             
             HLSLPROGRAM
             
@@ -270,6 +273,7 @@ Shader "JTRP/Lit"
             Name "Forward"
             Tags { "LightMode" = "ForwardOnly" }// This will be only for transparent object based on the RenderQueue index
             Cull [_CullMode]
+            ZWrite [_ZWrite]
             
             HLSLPROGRAM
             
@@ -307,6 +311,7 @@ Shader "JTRP/Lit"
         {
             Name "Outline"
             Cull Front
+            ZWrite [_ZWrite]
             
             HLSLPROGRAM
             

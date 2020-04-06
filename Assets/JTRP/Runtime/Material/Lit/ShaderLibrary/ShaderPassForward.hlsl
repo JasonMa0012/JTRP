@@ -48,6 +48,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     float4 _MainTex_var = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, context.uv0);
     float4 _ShadowMap_var = SAMPLE_TEXTURE2D(_ShadowMap, sampler_ShadowMap, context.uv0);
+    float4 _ShadowColorMap_var = SAMPLE_TEXTURE2D(_ShadowColorMap, sampler_ShadowMap, context.uv0);
     float4 _LightMap_var = SAMPLE_TEXTURE2D(_LightMap, sampler_LightMap, context.uv0);
     float3 normalMap = UnpackNormalmapRGorAG(SAMPLE_TEXTURE2D_LOD(_NormalMap, sampler_NormalMap, context.uv0, 0), _NormalScale);
     
@@ -64,7 +65,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     PointLightLoop(context, posInput, builtinData, _PointLightColorIntensity * _LightMap_var.a, _LightMap_var.b + _HighColorLevel);
     
-    context.diffuse = StdToonDiffuseLightingModel(context, _ShadowIntensity * (1 - _ShadowMap_var.r), _ShadowMapColor.rgb);
+    context.diffuse = StdToonDiffuseLightingModel(context, _ShadowIntensity * (1 - _ShadowMap_var.r), _ShadowColorMap_var.rgb * _ShadowMapColor.rgb);
     
     context.specular = max(context.highLightColor,
     GetHighLight(context.N, context.V, context.L, context.dirLightColor, context.shadowStep, context.roughness, _HighColorInt1, _HighColorInt2)

@@ -62,8 +62,8 @@ namespace JTRP.ShaderDrawer
     /// </summary>
     public class SubDrawer : MaterialPropertyDrawer
     {
-        public const int propRight = 80;
-        public const int propHeight = 20;
+        public static readonly int propRight = 80;
+        public static readonly int propHeight = 20;
         protected string group = "";
         protected float height;
         protected bool needShow => Func.NeedShow(group);
@@ -192,21 +192,35 @@ namespace JTRP.ShaderDrawer
 
         public override void DrawProp(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
         {
-            var r = EditorGUILayout.GetControlRect(true);
+            EditorGUI.ColorField(new Rect(-999, 0, 0, 0), new Color(0, 0, 0, 0));
+
+            var r = EditorGUILayout.GetControlRect();
+            MaterialProperty p = null;
             if (extraPropName != "" && extraPropName != "_")
+                p = LWGUI.FindProp(extraPropName, props, true);
+
+            if (p != null)
             {
-                var p = LWGUI.FindProp(extraPropName, props, true);
-                if (p != null)
+                Rect rect = Rect.zero;
+                if (p.type == MaterialProperty.PropType.Range)
                 {
-                    EditorGUI.showMixedValue = p.hasMixedValue;
-                    editor.ShaderProperty(r, p, " ");
+                    var w = EditorGUIUtility.labelWidth;
+                    EditorGUIUtility.labelWidth = 0;
+                    rect = MaterialEditor.GetRectAfterLabelWidth(r);
+                    EditorGUIUtility.labelWidth = w;
                 }
-                EditorGUI.showMixedValue = prop.hasMixedValue;
+                else
+                    rect = MaterialEditor.GetRectAfterLabelWidth(r);
+
                 editor.TexturePropertyMiniThumbnail(r, prop, label.text, label.tooltip);
+
+                var i = EditorGUI.indentLevel;
+                EditorGUI.indentLevel = 0;
+                editor.ShaderProperty(rect, p, string.Empty);
+                EditorGUI.indentLevel = i;
             }
             else
             {
-                EditorGUI.ColorField(new Rect(-999, 0, 0, 0), new Color(0, 0, 0, 0));
                 EditorGUI.showMixedValue = prop.hasMixedValue;
                 editor.TexturePropertyMiniThumbnail(r, prop, label.text, label.tooltip);
             }
@@ -338,49 +352,41 @@ namespace JTRP.ShaderDrawer
             this.power = Mathf.Clamp(power, 0, float.MaxValue);
         }
         protected override bool matchPropType => prop.type == MaterialProperty.PropType.Range;
-        private static int s_SliderKnobHash = "EditorSliderKnob".GetHashCode();
         float power;
 
         public override void DrawProp(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
         {
-            int controlId = GUIUtility.GetControlID(s_SliderKnobHash, FocusType.Passive, position);
-
-            float left = prop.rangeLimits.x;
-            float right = prop.rangeLimits.y;
-            float start = left;
-            float end = right;
-            float value = prop.floatValue;
-            float originValue = prop.floatValue;
-
-            if ((double)power != 1.0)
-            {
-                start = Func.PowPreserveSign(start, 1f / power);
-                end = Func.PowPreserveSign(end, 1f / power);
-                value = Func.PowPreserveSign(value, 1f / power);
-            }
-
-            float l = EditorGUIUtility.labelWidth * 0.47f;// 宽度
-            Rect position1 = EditorGUILayout.GetControlRect();
-            Rect position2 = new Rect(position1);
-
-            position2.xMin += l;
-            position2.xMax -= propRight - 10;
-
-            EditorGUI.BeginChangeCheck();
             EditorGUI.showMixedValue = prop.hasMixedValue;
-
-            EditorGUI.PrefixLabel(position1, label);
-            value = GUI.Slider(position2, value, 0.0f, start, end, GUI.skin.horizontalSlider, !EditorGUI.showMixedValue ? GUI.skin.horizontalSliderThumb : (GUIStyle)"SliderMixed", true, controlId);
-
-            if ((double)power != 1.0)
-                value = Func.PowPreserveSign(value, power);
-
-            position1.xMin += position1.width - propRight;
-            value = EditorGUI.FloatField(position1, value);
-
-            if (value != originValue)
-                prop.floatValue = Mathf.Clamp(value, Mathf.Min(left, right), Mathf.Max(left, right));
+            Func.PowerSlider(prop, power, EditorGUILayout.GetControlRect(), label);
             EditorGUI.showMixedValue = false;
+        }
+    }
+
+    public class QueueDrawer : MaterialPropertyDrawer
+    {
+        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
+        {
+            return 0;
+        }
+
+        public override void OnGUI(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
+        {
+            EditorGUI.BeginChangeCheck();
+            editor.FloatProperty(prop, label.text);
+            int queue = (int)prop.floatValue;
+            // var rect = EditorGUILayout.GetControlRect();
+            // EditorGUI.showMixedValue = prop.hasMixedValue;
+            // int queue = EditorGUI.IntField(rect, label, (int)prop.floatValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                queue = Mathf.Clamp(queue, 1000, 5000);
+                prop.floatValue = queue;
+                foreach (Material m in editor.targets)
+                {
+                    m.renderQueue = queue;
+                }
+            }
+            // EditorGUI.showMixedValue = false;
         }
     }
 

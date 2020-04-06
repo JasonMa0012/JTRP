@@ -137,6 +137,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadowColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -300,6 +304,7 @@ Material:
     - _PointLightStep: 0.7
     - _ReceivesSSR: 1
     - _RefractionModel: 0
+    - _RenderQueue: 2000
     - _RimLightBlend: 1
     - _RimLightBlend2: 0
     - _RimLightBlend3: 0
