@@ -233,7 +233,7 @@ Material:
     - _LightColorBlend: 1
     - _LightColorIntensity: 0.15
     - _LinkDetailsWithBase: 1
-    - _MatCap: 0.1
+    - _MatCap: 0.09999999
     - _MatCap_Enable: 0
     - _MaterialID: 1
     - _Metallic: 0
@@ -276,7 +276,7 @@ Material:
     - _ShadowIntensity: 0.6
     - _ShadowIntensity2: -0.5
     - _Shadow_Feather: 0.0001
-    - _Shadow_Feather2: 0.001
+    - _Shadow_Feather2: 0.0009999999
     - _Shadow_Power: 0.5
     - _Shadow_Step: 0.5
     - _Shadow_Step2: 0.2

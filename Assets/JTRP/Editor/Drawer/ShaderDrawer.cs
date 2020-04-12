@@ -34,7 +34,8 @@ namespace JTRP.ShaderDrawer
             var value = prop.floatValue == 1.0f;
             EditorGUI.showMixedValue = prop.hasMixedValue;
             string g = group != "" ? group : prop.name;
-            show = ((style == 1 || style == 3) && !GUIData.group.ContainsKey(g)) ? true : show;
+            var lastShow = GUIData.group.ContainsKey(g) ? GUIData.group[g] : true;
+            show = ((style == 1 || style == 3) && lastShow) ? true : show;
 
             bool result = Func.Foldout(ref show, value, style == 0 || style == 1, label.text);
             EditorGUI.showMixedValue = false;
