@@ -59,7 +59,7 @@ namespace JTRP.ShaderDrawer
 
     /// <summary>
     /// 在折叠组内以默认形式绘制属性
-    /// group：对应折叠组的title，支持后缀KWEnum或SubToggle的KeyWord以根据enum显示
+    /// group：父折叠组的group key，支持后缀KWEnum或SubToggle的KeyWord以根据enum显示
     /// </summary>
     public class SubDrawer : MaterialPropertyDrawer
     {
@@ -363,6 +363,9 @@ namespace JTRP.ShaderDrawer
         }
     }
 
+    /// <summary>
+    /// 绘制float以更改Render Queue
+    /// </summary>
     public class QueueDrawer : MaterialPropertyDrawer
     {
         public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
@@ -375,9 +378,6 @@ namespace JTRP.ShaderDrawer
             EditorGUI.BeginChangeCheck();
             editor.FloatProperty(prop, label.text);
             int queue = (int)prop.floatValue;
-            // var rect = EditorGUILayout.GetControlRect();
-            // EditorGUI.showMixedValue = prop.hasMixedValue;
-            // int queue = EditorGUI.IntField(rect, label, (int)prop.floatValue);
             if (EditorGUI.EndChangeCheck())
             {
                 queue = Mathf.Clamp(queue, 1000, 5000);
@@ -387,7 +387,6 @@ namespace JTRP.ShaderDrawer
                     m.renderQueue = queue;
                 }
             }
-            // EditorGUI.showMixedValue = false;
         }
     }
 
