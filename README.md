@@ -1,8 +1,8 @@
 # Jason Ma Toon Render Pipeline (JTRP)
 
-- [Lit Shader](#LitShader)
+- [Lit Shader](#lit-shader)
 - [ModelOutlineImporter](#平滑法线导入工具ModelOutlineImporter)
-- [Light Weight ShaderGUI](#LightWeightShaderGUI)
+- [Light Weight ShaderGUI](#light-weight-shadergui)
 
 这是一个Unity HDRP下卡通渲染管线，我会将学习到的NPR技术不断完善到这个管线中。
 
