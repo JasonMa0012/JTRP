@@ -7,7 +7,7 @@
 这是一个Unity HDRP下卡通渲染管线，我会将学习到的NPR技术不断完善到这个管线中。
 
 - 目前仍是预览版，只包含最基础的功能（Lit Shader、平滑法线导入工具、LightWeightGUI）
-- 开发环境：Unity 2019.3.5+、HDRP 7.31+
+- 开发环境：Unity 2019.3.5+、HDRP 7.31+、[其他依赖](https://github.com/Jason-Ma-233/JasonMaToonRenderPipeline/blob/master/Packages/manifest.json)
 - 感谢[UTS](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)、[TCP](https://assetstore.unity.com/packages/vfx/shaders/toony-colors-pro-2-8105)、HDRP等项目给予的启发
 
 ## Feature
@@ -47,9 +47,7 @@
 
 ### 平滑法线导入工具（ModelOutlineImporter）
 
-将需要导入法线的模型名称加上后缀名：“**_ol**”即可开始自动导入Outline Normal。
-
-Lit的Outline需与此工具配套使用，详情可以参考[此文章](https://zhuanlan.zhihu.com/p/107664564)。
+将需要导入法线的模型名称加上后缀名：“**_ol**”即可开始自动导入Outline Normal。导入过程将复制一份前缀@@@的模型副本，应用平滑算法后将法线转换后导入原模型的顶点色，之后自动删除副本，Ctrl+R刷新Project视图即可。Lit的Outline需与此工具配套使用，详情可以参考[此文章](https://zhuanlan.zhihu.com/p/107664564)。
 
 ### Light Weight ShaderGUI
 
