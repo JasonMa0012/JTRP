@@ -47,13 +47,15 @@
 
 ### 平滑法线导入工具（ModelOutlineImporter）
 
-将需要导入法线的模型名称加上后缀名：“**_ol**”即可开始自动导入Outline Normal。导入过程将复制一份前缀@@@的模型副本，应用平滑算法后将法线转换后导入原模型的顶点色，之后自动删除副本，Ctrl+R刷新Project视图即可。Lit的Outline需与此工具配套使用，详情可以参考[此文章](https://zhuanlan.zhihu.com/p/107664564)。
+![](README.assets/Snipaste_2020-04-14_22-30-12.png)
+
+一般的Backface Outline由于是沿法线挤出，会在硬表面模型上产生断裂，为了全自动地解决这些问题我开发了平滑的描边法线导入工具。将需要导入平滑法线的模型名称加上后缀名：“**_ol**”即可开始自动用Job System计算并导入Outline Normal。导入过程将复制一份前缀“@@@”的模型副本，应用平滑算法后将法线转换后导入原模型的顶点色，之后自动删除副本，Ctrl+R刷新Project视图即可。Lit的Outline需与此工具配套使用，详情和实现可以参考[此文章](https://zhuanlan.zhihu.com/p/107664564)。
 
 ### Light Weight ShaderGUI
 
 ![](README.assets/LWGUI.png)
 
-LWGUI是一般ShaderGUI的替代方案，为了解决“一千行Shader，两千行GUI”而生。为了写最少的代码并保持灵活易用而扩展Custom Drawer，在Shader Property前加上前缀实现各种自定义ShaderGUI，Shader末尾需要添加`CustomEditor "JTRP.ShaderDrawer.LWGUI"`
+LWGUI是一般ShaderGUI的替代方案，为了解决“一千行Shader，两千行GUI”而生。为了写最少的代码并保持灵活易用而扩展Custom Drawer，在Shader Property前加上前缀实现各种自定义ShaderGUI。使用时无需写一行ShaderGUI即可实现自定义排版，写Shader的同时进行排版，不同Shader互不相干。Shader末尾需要添加`CustomEditor "JTRP.ShaderDrawer.LWGUI"`，更多信息和自行扩展LWGUI请看[文章](https://zhuanlan.zhihu.com/p/129289103)。
 
 **Function List**
 
