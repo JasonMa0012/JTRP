@@ -10,7 +10,7 @@ Material:
   m_Name: 24_body2_0.8_0_0
   m_Shader: {fileID: 4800000, guid: dd87fc42f22ec9c4ba9c126b90525ea3, type: 3}
   m_ShaderKeywords: _ENABLE_HIGHLIGHT_ON _HL_NPR _HSV_OTColor _NORMALMAP _NORMALMAP_TANGENT_SPACE
-    _OUTLINE_ENABLE_ON _RIMLIGHT_ENABLE_ON
+    _OUTLINE_ENABLE_ON _RIMLIGHT_ENABLE_ON _RIM_SS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -49,7 +49,35 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DecalColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap5:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap6:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailColorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -125,6 +153,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 10e351a5d7affa542b0083c993586e1e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap00:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -197,8 +229,10 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
+    - _DecalColorMask: 1
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
+    - _DetailColorMask: 1
     - _DetailNormalMapScale: 1
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
@@ -245,7 +279,6 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _Enable_HighLight: 1
-    - _Enable_PBR_Specular: 0
     - _EnergyConservingSpecularColor: 1
     - _GlossMapScale: 0.364
     - _Glossiness: 0.5
@@ -260,12 +293,12 @@ Material:
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
-    - _HighColorInt1: 0.72413427
+    - _HighColorInt1: 0.762
     - _HighColorInt2: 0.44099998
     - _HighColorIntOnShadow1: 0.3
     - _HighColorIntOnShadow2: 0.3
     - _HighColorLevel: 0
-    - _HighColorPointInt1: 0.01327308
+    - _HighColorPointInt1: 0.007000001
     - _HighColorPointInt2: 0
     - _HighLightFeather1: 0.005
     - _HighLightPower2: 36
@@ -278,15 +311,17 @@ Material:
     - _LightColorBlend: 1
     - _LightColorIntensity: 0.15
     - _LinkDetailsWithBase: 0
-    - _MatCap: 0.09999999
+    - _MatCap: 0.1
     - _MatCap_Enable: 0
     - _MaterialID: 1
     - _Metallic: 1
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
+    - _NormalScale00: 1
     - _OcclusionStrength: 1
     - _Offset_Z: 0
+    - _OriginNormal: 0
     - _OutLine_Enable: 1
     - _Outline_Blend: 1
     - _Outline_Lightness: -0
@@ -305,32 +340,36 @@ Material:
     - _ReceivesSSR: 1
     - _RefractionModel: 0
     - _RenderQueue: 2000
-    - _RimLightBlend: 1
+    - _RimLightBlend: 0.853
     - _RimLightBlend2: 0
     - _RimLightBlend3: 0
+    - _RimLightBlendPoint: 0.35
+    - _RimLightBlendPoint2: 0.35
     - _RimLightFeather: 0.045000006
     - _RimLightFeather2: 0.005
     - _RimLightFeather3: 0.0050000013
     - _RimLightIntInShadow: 0.5
     - _RimLightIntInShadow2: 1
-    - _RimLightIntensity: 0.661
+    - _RimLightIntensity: 1
     - _RimLightIntensity2: 0
     - _RimLightIntensity3: 0
-    - _RimLightLength: 8.47
+    - _RimLightLength: 7
     - _RimLightLength2: 10
     - _RimLightLength3: 10
     - _RimLightLevel: 0
-    - _RimLightWidth: 0.514
+    - _RimLightSNBlend: 0
+    - _RimLightWidth: 0.33609027
     - _RimLightWidth2: 0.3
     - _RimLightWidth3: 0.3
     - _RimLight_Enable: 1
+    - _RimLight_Mode: 1
     - _SSRefractionProjectionModel: 0
     - _ShadowColorBlend2: 0.8
     - _ShadowIntensity: 0.6
     - _ShadowIntensity2: -0.5
     - _ShadowSkinIntensity: 0.5
-    - _Shadow_Feather: 0.049999986
-    - _Shadow_Feather2: 0.0009999999
+    - _Shadow_Feather: 0.026
+    - _Shadow_Feather2: 0.001
     - _Shadow_Lightness: 0
     - _Shadow_Power: 0.5
     - _Shadow_Purity: 0.502
@@ -383,7 +422,9 @@ Material:
     - _ZTestModeDistortion: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _roughness: 0.723
+    - _dnd: 0
+    - _enable_selfshadow: 1
+    - _roughness: 0.5
     - _shadow: 0
     m_Colors:
     - _AddColor: {r: 0, g: 0, b: 0, a: 1}
@@ -403,7 +444,7 @@ Material:
     - _Emissive_ColorA2: {r: 1, g: 1, b: 1, a: 1}
     - _Emissive_ColorB1: {r: 1, g: 1, b: 1, a: 1}
     - _Emissive_ColorB2: {r: 1, g: 1, b: 1, a: 1}
-    - _HighColor1: {r: 2.828427, g: 2.828427, b: 2.828427, a: 1}
+    - _HighColor1: {r: 1, g: 1, b: 1, a: 1}
     - _HighColor2: {r: 1, g: 1, b: 1, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
@@ -413,10 +454,11 @@ Material:
     - _OColor3: {r: 0, g: 0, b: 1, a: 1}
     - _OColor4: {r: 0, g: 0, b: 0, a: 1}
     - _Outline_Color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-    - _RimLightColor: {r: 3.2111173, g: 3.2111173, b: 3.2111173, a: 1}
+    - _RimLightColor: {r: 2, g: 2, b: 2, a: 1}
     - _RimLightColor2: {r: 0, g: 0, b: 0, a: 1}
     - _RimLightColor3: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowColor2: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowFixedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
     - _SkinColor: {r: 1, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

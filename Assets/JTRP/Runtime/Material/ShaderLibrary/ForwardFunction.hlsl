@@ -1,14 +1,46 @@
 
-float GetShadowStep(float halfLambert, float step, float feather, float maxValue = 0)
+
+
+
+
+float GetShadowStep(float halfLambert, float step, float feather, float maxValue = 0, float selfShadow = 1)
 {
     return //       阴影 -0.5 ~ 0.5 亮面   / 锐利 0.0001 ~ 1 平滑
-    saturate(max(1.0 - (halfLambert - (step - feather)) / feather, maxValue));
+    saturate(max((step - halfLambert * selfShadow) / feather, maxValue));
+}
+
+float StepAntiAliasing(float x, float y)
+{
+    float v = x - y;
+    return saturate(v / fwidth(v));//fwidth(x) = abs(ddx(x) + ddy(x))
+}
+
+float2 GetWHRatio()
+{
+    return float2(_ScreenParams.y / _ScreenParams.x, 1);
+}
+
+float GetSSRimScale(float z)
+{
+    float w = (1.0 / (pow(z, 1.5) + 0.75)) * _ScreenParams.y / 1080;
+    return w < 0.01 ? 0: w;
+}
+float GetOutLineScale(float z, float nPower = 0.8, float fPower = 0.1)
+{
+    return pow(z, z < 1 ?nPower: fPower);
+}
+
+float3 GetSmoothedWorldNormal(float2 uv7, float3x3 tbn)
+{
+    float3 normal = float3(uv7, 0);
+    normal.z = sqrt(1.0 - saturate(dot(normal.xy, normal.xy)));
+    return mul(normal, tbn);
 }
 
 float3 GetHighLight(float3 color, float halfLambert, float step, float intensity, float feather,
-float shadowMask, float intOnShadow)
+float shadowMask, float intOnShadow, float maxValue = 0)
 {
-    float i = 1 - GetShadowStep(halfLambert, step, feather);
+    float i = max(1 - GetShadowStep(halfLambert, step, feather), maxValue);
     return lerp(color * i, color * i * intOnShadow, shadowMask) * intensity;
 }
 float3 GetPowerHighLight(float3 color, float halfLambert, float power, float intensity,
@@ -56,27 +88,6 @@ float rimLightLength, float rimLightWidth, float rimLightFeather, float3 baseCol
     return light * lerp(1, baseColor, blend);
 }
 
-float3 GetRimLight(float3 V, float3 N, float3 baseColor, float halfLambert, float shadowStep, float mask)
-{
-    #if defined(_RIMLIGHT_ENABLE_ON)
-        
-        float3 rimColor = GetRimLight(V, N, halfLambert, _RimLightLength, _RimLightWidth,
-        _RimLightFeather, baseColor, _RimLightBlend) * (1 - shadowStep) * _RimLightIntensity;// 亮面
-        
-        float3 rimColor2 = GetRimLight(V, N, 1 - halfLambert, _RimLightLength, _RimLightWidth,
-        _RimLightFeather, baseColor, _RimLightBlend2) * shadowStep * _RimLightIntensity2;// 暗面
-        
-        float3 rimAddColor = _RimLightIntensity3?
-        GetRimLight(V, N, halfLambert, _RimLightLength3, _RimLightWidth3,
-        _RimLightFeather3, baseColor, _RimLightBlend3) * _RimLightIntensity3
-        : (float3)0;
-        
-        mask = saturate(mask + _RimLightLevel);
-        return Max3(_RimLightColor.rgb * rimColor * mask, _RimLightColor2.rgb * rimColor2 * mask, _RimLightColor3.rgb * rimAddColor);
-    #else
-        return(float3)0;
-    #endif
-}
 
 float2 RotateUV(float2 _uv, float _radian, float2 _piv, float _time)
 {
@@ -132,6 +143,14 @@ float3 UnpackNormalRG(float2 packedNormal, real scale = 1.0)
     return normal;
 }
 
+float4 ComputeScreenPos(float4 pos, float projectionSign)
+{
+    float4 o = pos * 0.5f;
+    o.xy = float2(o.x, o.y * projectionSign) + o.w;
+    o.zw = pos.zw;
+    return o;
+}
+
 float3 GetShadowColor(float3 color, float shadowPower)
 {
     shadowPower = max(1, shadowPower);
@@ -160,7 +179,7 @@ float3 GetMatCap(float3 V, float3 lightColor, float2 uv, float shadowStep, float
         float _Camera_Dir = _Camera_Right.y < 0 ? - 1: 1;
         float _Rot_MatCapUV_var_ang = - (_Camera_Dir * _Camera_Roll);
         
-        float3 _NormalMapForMatCap_var = SAMPLE_TEXTURE2D(_MatCapNormalMap, sampler_MatCapNormalMap, TRANSFORM_TEX(uv, _MatCapNormalMap)) * _BumpScaleMatcap;
+        float3 _NormalMapForMatCap_var = SAMPLE_TEXTURE2D(_MatCapNormalMap, sampler_MatCapNormalMap, TRANSFORM_TEX(uv, _MatCapNormalMap)).rgb * _BumpScaleMatcap;
         //v.2.0.5: MatCap with camera skew correction
         float3 viewNormal = (mul(UNITY_MATRIX_V, float4(normalize(N + _NormalMapForMatCap_var.rgb), 0))).rgb;
         float3 NormalBlend_MatcapUV_Detail = viewNormal.rgb * float3(-1, -1, 1);

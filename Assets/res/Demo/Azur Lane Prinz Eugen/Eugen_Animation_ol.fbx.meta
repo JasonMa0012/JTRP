@@ -113,7 +113,7 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -150,7 +150,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips:
-  - 9d5a37e9fad5e4942a4d401e4e06a0f9
+  - 247b8690b4dfd8941bce030c6d6d89e5
   importAnimation: 1
   humanDescription:
     serializedVersion: 3

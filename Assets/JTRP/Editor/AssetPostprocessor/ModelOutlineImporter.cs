@@ -50,21 +50,15 @@ namespace JTRP.CustomAssetPostprocessor
             [ReadOnly] public NativeArray<Vector4> tangents;
             [NativeDisableContainerSafetyRestriction]
             [ReadOnly] public NativeArray<UnsafeHashMap<Vector3, Vector3>> result;
-            [ReadOnly] public bool existColors;
-            [ReadOnly] public bool isFace;
-            public NativeArray<Color> colors;
-            [WriteOnly] public NativeArray<Vector2> uv2;
+            [WriteOnly] public NativeArray<Vector2> uv8;
 
-            public BakeNormalJob(NativeArray<Vector3> vertrx, NativeArray<Vector3> normals, NativeArray<Vector4> tangents, NativeArray<UnsafeHashMap<Vector3, Vector3>> result, bool existColors, bool isFace, NativeArray<Color> colors, NativeArray<Vector2> uv2)
+            public BakeNormalJob(NativeArray<Vector3> vertrx, NativeArray<Vector3> normals, NativeArray<Vector4> tangents, NativeArray<UnsafeHashMap<Vector3, Vector3>> result, NativeArray<Vector2> uv8)
             {
                 this.vertrx = vertrx;
                 this.normals = normals;
                 this.tangents = tangents;
                 this.result = result;
-                this.existColors = existColors;
-                this.isFace = isFace;
-                this.colors = colors;
-                this.uv2 = uv2;
+                this.uv8 = uv8;
             }
 
             void IJobParallelFor.Execute(int index)
@@ -79,35 +73,18 @@ namespace JTRP.CustomAssetPostprocessor
                 }
                 smoothedNormals = smoothedNormals.normalized;
 
-                var binormal = (Vector3.Cross(normals[index], tangents[index]) * tangents[index].w).normalized;
+                var bitangent = (Vector3.Cross(normals[index], tangents[index]) * tangents[index].w).normalized;
 
                 var tbn = new Matrix4x4(
                     tangents[index],
-                    binormal,
+                    bitangent,
                     normals[index],
                     Vector4.zero);
                 tbn = tbn.transpose;
 
-                // var bakedNormal = tbn.MultiplyVector(smoothedNormals).normalized;
-                var bakedNormal = tbn.MultiplyVector(smoothedNormals).normalized * (existColors ? colors[index].b : 1);
-
-                Color color = new Color();
-                color.r = (bakedNormal.x * 0.5f) + 0.5f;
-                color.g = (bakedNormal.y * 0.5f) + 0.5f;
-                // color.b = existColors ? colors[index].b : 1;
-                color.b = (bakedNormal.z * 0.5f) + 0.5f;
-                color.a = existColors ? colors[index].a : 1;
-
-                if (isFace)
-                {
-                    var forwardNormal = tbn.MultiplyVector(Vector3.forward).normalized;
-                    Vector2 newUV = new Vector2();
-                    newUV.x = (forwardNormal.x * 0.5f) + 0.5f;
-                    newUV.y = (forwardNormal.y * 0.5f) + 0.5f;
-                    uv2[index] = newUV;
-                }
-
-                colors[index] = color;
+                var bakedNormal = tbn.MultiplyVector(smoothedNormals).normalized;
+                Vector2 newUV = new Vector2(bakedNormal.x, bakedNormal.y);
+                uv8[index] = newUV;
             }
         }
 
@@ -159,12 +136,28 @@ namespace JTRP.CustomAssetPostprocessor
         }
         Dictionary<string, Mesh> GetMesh(GameObject go)
         {
+            void AddMesh(Dictionary<string, Mesh> dictionary, string name, Mesh mesh)
+            {
+                if (dictionary.ContainsKey(name))
+                    LogWarning($"模型名称'{name}'重复！");
+                else
+                    dictionary.Add(name, mesh);
+            }
             Dictionary<string, Mesh> dic = new Dictionary<string, Mesh>();
             foreach (var item in go.GetComponentsInChildren<MeshFilter>())
-                dic.Add(item.name, item.sharedMesh);
-            if (dic.Count == 0)
-                foreach (var item in go.GetComponentsInChildren<SkinnedMeshRenderer>())
-                    dic.Add(item.name, item.sharedMesh);
+                AddMesh(dic, item.name, item.sharedMesh);
+
+            var mf = go.GetComponent<MeshFilter>();
+            if (mf != null)
+                AddMesh(dic, mf.name.Replace("@", ""), mf.sharedMesh);
+
+            foreach (var item in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+                AddMesh(dic, item.name, item.sharedMesh);
+
+            var smr = go.GetComponent<SkinnedMeshRenderer>();
+            if (smr != null)
+                AddMesh(dic, smr.name.Replace("@", ""), smr.sharedMesh);
+
             return dic;
         }
         void ComputeSmoothedNormalByJob(Mesh smoothedMesh, Mesh originalMesh, int maxOverlapvertices = 20)
@@ -180,34 +173,22 @@ namespace JTRP.CustomAssetPostprocessor
             NativeArray<Vector3> normalsO = new NativeArray<Vector3>(originalMesh.normals, Allocator.Persistent),
                 vertrxO = new NativeArray<Vector3>(originalMesh.vertices, Allocator.Persistent);
             var tangents = new NativeArray<Vector4>(originalMesh.tangents, Allocator.Persistent);
-            var colors = new NativeArray<Color>(ovc, Allocator.Persistent);
-            var uv2 = new NativeArray<Vector2>(ovc, Allocator.Persistent);
+            var uv8 = new NativeArray<Vector2>(ovc, Allocator.Persistent);
 
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = new UnsafeHashMap<Vector3, Vector3>(svc, Allocator.Persistent);
                 resultParallel[i] = result[i].AsParallelWriter();
             }
-            bool existColors = originalMesh.colors.Length == ovc;
-            bool isFace = originalMesh.name.Contains("face") || originalMesh.name.Contains("Face");
-            if (existColors)
-                colors.CopyFrom(originalMesh.colors);
 
             CollectNormalJob collectNormalJob = new CollectNormalJob(normals, vertrx, resultParallel);
-            BakeNormalJob normalBakeJob = new BakeNormalJob(
-                vertrxO, normalsO, tangents, result, existColors, isFace, colors, uv2);
+            BakeNormalJob normalBakeJob = new BakeNormalJob(vertrxO, normalsO, tangents, result, uv8);
 
-            normalBakeJob.Schedule(ovc, 100, collectNormalJob.Schedule(svc, 100)).Complete();
+            normalBakeJob.Schedule(ovc, 8, collectNormalJob.Schedule(svc, 100)).Complete();
 
-            var c = new Color[ovc];
-            colors.CopyTo(c);
-            originalMesh.colors = c;
-            if (isFace)
-            {
-                var _uv2 = new Vector2[ovc];
-                uv2.CopyTo(_uv2);
-                originalMesh.uv2 = _uv2;
-            }
+            var _uv8 = new Vector2[ovc];
+            uv8.CopyTo(_uv8);
+            originalMesh.uv8 = _uv8;
 
             normals.Dispose();
             vertrx.Dispose();
@@ -217,8 +198,7 @@ namespace JTRP.CustomAssetPostprocessor
             normalsO.Dispose();
             vertrxO.Dispose();
             tangents.Dispose();
-            colors.Dispose();
-            uv2.Dispose();
+            uv8.Dispose();
         }
     }
 

@@ -45,6 +45,11 @@ namespace JTRP.ShaderDrawer
                 prop.floatValue = result ? 1.0f : 0.0f;
                 Func.SetShaderKeyWord(editor.targets, Func.GetKeyWord(keyWord, prop.name), result);
             }
+            else// 有时会出现toggle激活key却未激活的情况
+            {
+                if (!prop.hasMixedValue)
+                    Func.SetShaderKeyWord(editor.targets, Func.GetKeyWord(keyWord, prop.name), result);
+            }
 
             if (GUIData.group.ContainsKey(g))
             {
@@ -328,6 +333,11 @@ namespace JTRP.ShaderDrawer
             {
                 prop.floatValue = value ? 1.0f : 0.0f;
                 Func.SetShaderKeyWord(editor.targets, k, value);
+            }
+            else
+            {
+                if (!prop.hasMixedValue)
+                    Func.SetShaderKeyWord(editor.targets, k, value);
             }
             if (GUIData.keyWord.ContainsKey(k))
             {

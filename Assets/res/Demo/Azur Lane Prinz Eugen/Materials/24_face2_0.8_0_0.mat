@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: 24_face2_0.8_0_0
   m_Shader: {fileID: 4800000, guid: dd87fc42f22ec9c4ba9c126b90525ea3, type: 3}
-  m_ShaderKeywords: _ENABLE_HIGHLIGHT_ON _HL_NPR _HSV_OTColor _NORMALMAP _NORMALMAP_TANGENT_SPACE
-    _OUTLINE_ENABLE_ON _RIMLIGHT_ENABLE_ON
+  m_ShaderKeywords: _HSV_OTColor _NORMALMAP _NORMALMAP_TANGENT_SPACE _OUTLINE_ENABLE_ON
+    _RIMLIGHT_ENABLE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -49,7 +49,35 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DecalColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap5:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalColorMap6:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailColorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -125,6 +153,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7bd36e3eb8ec2374a884f3dfe0f9da02, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap00:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -193,8 +225,10 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
+    - _DecalColorMask: 1
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
+    - _DetailColorMask: 1
     - _DetailNormalMapScale: 1
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
@@ -240,8 +274,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
-    - _Enable_HighLight: 1
-    - _Enable_PBR_Specular: 0
+    - _Enable_HighLight: 0
     - _EnergyConservingSpecularColor: 1
     - _GlossMapScale: 0
     - _Glossiness: 0.5
@@ -257,11 +290,11 @@ Material:
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
     - _HighColorInt1: 1
-    - _HighColorInt2: 0.44099998
+    - _HighColorInt2: 0.441
     - _HighColorIntOnShadow1: 0.3
     - _HighColorIntOnShadow2: 0.3
     - _HighColorLevel: 0
-    - _HighColorPointInt1: 0.007000001
+    - _HighColorPointInt1: 0.007
     - _HighColorPointInt2: 0
     - _HighLightFeather1: 0.01
     - _HighLightPower2: 36
@@ -272,7 +305,7 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LightColorBlend: 1
-    - _LightColorIntensity: 0.12
+    - _LightColorIntensity: 0.15
     - _LinkDetailsWithBase: 0
     - _MatCap: 0.1
     - _MatCap_Enable: 0
@@ -281,13 +314,14 @@ Material:
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
+    - _NormalScale00: 1
     - _OcclusionStrength: 1
     - _Offset_Z: 0
     - _OutLine_Enable: 1
     - _Outline_Blend: 1
     - _Outline_Lightness: -0
     - _Outline_Lod: 1
-    - _Outline_Purity: 0.43999997
+    - _Outline_Purity: 0.44
     - _Outline_Width: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -295,11 +329,12 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PointLightColorIntensity: 0.38
+    - _PointLightColorIntensity: 1
     - _PointLightFeather: 0.18
     - _PointLightStep: 0.7
     - _ReceivesSSR: 1
     - _RefractionModel: 0
+    - _RenderQueue: 2000
     - _RimLightBlend: 1
     - _RimLightBlend2: 0
     - _RimLightBlend3: 0
@@ -324,8 +359,8 @@ Material:
     - _ShadowIntensity: 0.6
     - _ShadowIntensity2: -0.5
     - _ShadowSkinIntensity: 0.5
-    - _Shadow_Feather: 0.049999986
-    - _Shadow_Feather2: 0.0009999999
+    - _Shadow_Feather: 0.196
+    - _Shadow_Feather2: 0.001
     - _Shadow_Lightness: 0
     - _Shadow_Power: 0.5
     - _Shadow_Purity: 0.502
@@ -378,6 +413,7 @@ Material:
     - _ZTestModeDistortion: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
+    - _dnd: 0
     - _roughness: 0.5
     - _shadow: 0
     m_Colors:

@@ -5,6 +5,7 @@ struct VertexInput
     float4 tangent: TANGENT;
     float2 texcoord0: TEXCOORD0;
     float2 texcoord1: TEXCOORD1;
+    float2 texcoord7: TEXCOORD7;
     float4 color: COLOR0;
 };
 struct VertexOutput
@@ -36,8 +37,11 @@ VertexOutput vert(VertexInput v)
     o.bitangentDir = normalize(cross(o.normalDir, o.tangentDir) * v.tangent.w);
     float3x3 tangentTransform = float3x3(o.tangentDir, o.bitangentDir, o.normalDir);
     
-    float3 _BakedNormal_var = v.color.rgb * 2 - 1;
-    float3 _BakedNormalDir = normalize(mul(_BakedNormal_var, tangentTransform));
+    #ifdef _ORIGINNORMAL_ON
+        float3 _BakedNormalDir = o.normalDir;
+    #else
+        float3 _BakedNormalDir = GetSmoothedWorldNormal(v.texcoord7, tangentTransform);
+    #endif
     
     #if defined(UNITY_REVERSED_Z)
         //v.2.0.4.2 (DX)
@@ -50,27 +54,26 @@ VertexOutput vert(VertexInput v)
     float3 posWS = TransformObjectToWorld(v.vertex.xyz);
     
     float distance = length(GetWorldSpaceViewDir(posWS));
-    float Set_Outline_Width = _Outline_Width * 0.002 * length(_BakedNormalDir) * pow(distance, distance < 1 ?0.8: 0.1);
+    float Set_Outline_Width = _Outline_Width * 0.002 * v.color.g * GetOutLineScale(distance);
+    
+    float2 whRatio = GetWHRatio();
     
     o.pos = TransformWorldToHClip(posWS);
-    o.pos.z = o.pos.z + _Offset_Z * distance * v.color.a;
-    o.pos.xy += normalize(mul(UNITY_MATRIX_VP, float4(_BakedNormalDir, 0)).xy) * Set_Outline_Width;
+    o.pos.z = o.pos.z + _Offset_Z * distance * v.color.r;
+    o.pos.xy += normalize(mul((float3x3)UNITY_MATRIX_VP, _BakedNormalDir).xy) * Set_Outline_Width * whRatio;
     
     return o;
 }
 float4 frag(VertexOutput i): SV_Target
 {
     #ifndef _OUTLINE_ENABLE_ON
-        clip(-1);
+        return(float4)0;
     #endif
-    
-    if (_Outline_Width == 0)
-        clip(-1);
-    
+
     float3 lightColor = _DirectionalLightDatas[0].color.rgb * GetCurrentExposureMultiplier() * _LightColorIntensity;
     float2 Set_UV0 = i.uv0;
     float2 Set_UV1 = i.uv1;
-    float4 _MainTex_var = SAMPLE_TEXTURE2D_LOD(_MainTex, sampler_MainTex, Set_UV0, _Outline_Lod) * _Color;
+    float4 _MainTex_var = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, Set_UV0) * _Color;
     
     float3 Set_BaseColor = _Outline_Color.rgb * lightColor * lerp(1, _MainTex_var.rgb, _Outline_Blend);
     Set_BaseColor = RgbToHsv(Set_BaseColor);

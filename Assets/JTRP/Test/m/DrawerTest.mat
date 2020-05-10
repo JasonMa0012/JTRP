@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: DrawerTest
   m_Shader: {fileID: 4800000, guid: 0de404aebd8fe2c47897ab3409f4fe4e, type: 3}
-  m_ShaderKeywords: KEY1 _GROUP_ON _NORMALMAP_TANGENT_SPACE
+  m_ShaderKeywords: KEY1 _GROUP_ON _KEYWORD _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

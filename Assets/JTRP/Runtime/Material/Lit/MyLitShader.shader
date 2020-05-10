@@ -6,7 +6,6 @@ Shader "JTRP/Lit"
         [Queue] _RenderQueue ( "Queue", int) = 2000
         [Toggle(_)] _ZWrite ("ZWrite", Float) = 1.0
         
-        
         [Title(_, Diffuse)]
         [Tex(_, _Color)] _MainTex ("ColorMap (RGB)", 2D) = "white" { }
         [HideInInspector] _Color ("Color", Color) = (1, 1, 1, 1)
@@ -18,8 +17,8 @@ Shader "JTRP/Lit"
         _SkyColorIntensity ("Sky Int：天空盒强度", Range(0, 1)) = 0.75
         _LightColorBlend ("Blend：灯光混合固有色", Range(0, 1)) = 1
         _PointLightColorIntensity ("Point Light Int：点光照明强度", Range(0, 1)) = 1
-        _PointLightStep ("Point Light Step：阈值", Range(0, 2)) = 0.7
-        [PowerSlider(4)] _PointLightFeather ("Point Light Feather：羽化", Range(0.0001, 1)) = 1.45
+        _PointLightStep ("Point Light Step：阈值", Range(0, 2)) = 0.6
+        [PowerSlider(4)] _PointLightFeather ("Point Light Feather：羽化", Range(0.0001, 1)) = 0.001
         
         
         [Title(_, Normal)]
@@ -29,12 +28,14 @@ Shader "JTRP/Lit"
         [Main(_shadow, _, 2)]
         _shadow ("Shadow", float) = 0
         [Tex(_shadow)] _ShadowMap ("ShadowMap (RGBA)", 2D) = "black" { }
+        [Sub(_shadow)] _ShadowFixedColor ("Color：固有阴影颜色", Color) = (0.5, 0.5, 0.5, 1)
+        [SubToggle(_shadow, _ENABLE_SELFSHADOW)] _enable_selfshadow ("Enable Self Shadow", float) = 1
         [Title(_shadow, 1st Shadow)]
         [Tex(_shadow, _ShadowMapColor)]_ShadowColorMap ("ShadowColorMap (RGB)", 2D) = "white" { }
         [HideInInspector]_ShadowMapColor ("Color", Color) = (1, 1, 1, 1)
         [Sub(_shadow)]_ShadowIntensity ("Int：强度", Range(0, 1)) = 0.6 // 降低强度提高浓度有助于减少光照探针权重、提高固有色纯度
         [Sub(_shadow)]_Shadow_Power ("Power：浓度", Range(0, 1)) = 0.5
-        [Sub(_shadow)]_Shadow_Step ("Step：阈值", Range(0, 1)) = 0.5
+        [Sub(_shadow)]_Shadow_Step ("Step：阈值", Range(0, 1)) = 0.55
         [SubPowerSlider(_shadow, 6)] _Shadow_Feather ("Feather：羽化", Range(0.0001, 1)) = 0.0001
         [Title(_shadow, 2st Shadow)]
         [Sub(_shadow)][HDR] _ShadowColor2 ("Color", Color) = (0, 0, 0, 1)
@@ -61,6 +62,7 @@ Shader "JTRP/Lit"
         [Sub(_HL_HL_NPR)] _HighColorIntOnShadow1 ("Int On Shadow1：阴影中强度", Range(0, 1)) = 0.3
         [Sub(_HL_HL_NPR)] [HDR] _HighColor2 ("Phong High Color2", Color) = (1, 1, 1, 1)
         [SubPowerSlider(_HL_HL_NPR, 2)]_HighColorInt2 ("Int2：强度", Range(0, 1)) = 1
+        [SubPowerSlider(_HL_HL_NPR, 5)]_HighColorPointInt2 ("PointInt2：点光强度", Range(0, 1)) = 0.005
         [SubPowerSlider(_HL_HL_NPR, 2)]_HighLightPower2 ("power：范围", Range(0, 1000)) = 888
         [Sub(_HL_HL_NPR)]_HighColorIntOnShadow2 ("Int On Shadow2：阴影中强度", Range(0, 1)) = 0.3
         
@@ -79,21 +81,27 @@ Shader "JTRP/Lit"
         
         [Main(Rim)]
         _RimLight_Enable ("RimLight", float) = 0
+        [KWEnum(Rim, Normal, _Rim_Normal, Screen Space, _Rim_SS)]
+        _RimLight_Mode ("HighLight Mode", float) = 0
         
-        [Title(Rim, Bright Side)]
+        [Title(Rim_Rim_Normal, Bright Side)]
         [Sub(Rim)] [HDR] _RimLightColor ("RimLight Color：边缘光", Color) = (1, 1, 1, 1)
         [Sub(Rim)] _RimLightIntensity ("Int：强度", Range(0, 1)) = 1
         [Sub(Rim)] _RimLightBlend ("Blend：混合固有色", Range(0, 1)) = 0.5
-        [Title(Rim, Dark Side)]
-        [Sub(Rim)] [HDR] _RimLightColor2 ("RimLight Color2：边缘光", Color) = (1, 1, 1, 1)
-        [Sub(Rim)] _RimLightIntensity2 ("Int2：强度", Range(0, 1)) = 1
-        [Sub(Rim)] _RimLightBlend2 ("Blend2：混合固有色", Range(0, 1)) = 0.5
+        [Sub(Rim)] _RimLightBlendPoint ("Blend Point：混合点光", Range(0, 1)) = 0.35
+        [Title(Rim_Rim_Normal, Dark Side)]
+        [Sub(Rim_Rim_Normal)] [HDR] _RimLightColor2 ("RimLight Color2：边缘光", Color) = (1, 1, 1, 1)
+        [Sub(Rim_Rim_Normal)] _RimLightIntensity2 ("Int2：强度", Range(0, 1)) = 1
+        [Sub(Rim_Rim_Normal)] _RimLightBlend2 ("Blend2：混合固有色", Range(0, 1)) = 0.5
+        [Sub(Rim_Rim_Normal)] _RimLightBlendPoint2 ("Blend Point2：混合点光", Range(0, 1)) = 0.35
         
         [Title(Rim, Rim Setting)]
         [SubPowerSlider(Rim, 5)] _RimLightFeather ("Feather：羽化", Range(0.0001, 1)) = 0.005
         [SubPowerSlider(Rim, 1.5)] _RimLightWidth ("Width：宽度", Range(0, 1)) = 0.3
         [SubPowerSlider(Rim, 0.35)] _RimLightLength ("Length：长度", Range(0, 10)) = 7
         [SubPowerSlider(Rim, 2)] _RimLightLevel ("Level：强度偏移", Range(-1, 1)) = 0
+        [Sub(Rim_Rim_SS)] _RimLightIntInShadow ("Int：暗面强度", Range(0, 1)) = 0.35
+        [Sub(Rim_Rim_SS)] _RimLightSNBlend ("Blend：混合平滑法线", Range(0, 1)) = 0.5
         
         [Title(Rim, Add Rim)]
         [Sub(Rim)] [HDR] _RimLightColor3 ("Color2：额外边缘光", Color) = (0, 0, 0, 1)
@@ -129,13 +137,12 @@ Shader "JTRP/Lit"
         [Main(OutLine)]
         _OutLine_Enable ("OutLine", float) = 1
         [Sub(OutLine)] _Outline_Color ("Outline Color", Color) = (0.5, 0.5, 0.5, 1)
-        [Sub(OutLine)] _Outline_Width ("Width：宽度", float) = 0
+        [Sub(OutLine)] _Outline_Width ("Width：宽度", float) = 2
+        [SubToggle(OutLine)] _OriginNormal ("Origin Normal：原始法线", float) = 0
         [Sub(OutLine)] _Offset_Z ("Offset Z：深度偏移", float) = 0
         [Sub(OutLine)] _Outline_Blend ("Blend：颜色混合", Range(0, 1)) = 1
-        [SubPowerSlider(OutLine, 1.7)] _Outline_Lod ("Blur：模糊", Range(0, 100)) = 1
         [SubPowerSlider(OutLine, 1.7)] _Outline_Purity ("Purity：纯度", Range(-1, 1)) = 0
         [SubPowerSlider(OutLine, 1.7)] _Outline_Lightness ("Lightness：明度", Range(-1, 1)) = 0
-        
         
         
         [HideInInspector]_BaseColor ("BaseColor", Color) = (1, 1, 1, 1)
@@ -152,7 +159,7 @@ Shader "JTRP/Lit"
         [HideInInspector] _DstBlend ("__dst", Float) = 0.0
         [HideInInspector] _AlphaSrcBlend ("__alphaSrc", Float) = 1.0
         [HideInInspector] _AlphaDstBlend ("__alphaDst", Float) = 0.0
-        // [HideInInspector][ToggleUI] _ZWrite ("__zw", Float) = 1.0
+
         // [HideInInspector] _CullMode ("__cullmode", Float) = 2.0
         [HideInInspector] _CullModeForward ("__cullmodeForward", Float) = 2.0 // This mode is dedicated to Forward to correctly handle backface then front face rendering thin transparent
         // [Enum(UnityEditor.Rendering.HighDefinition.TransparentCullMode)] _TransparentCullMode ("_TransparentCullMode", Int) = 2 // Back culling by default
@@ -281,24 +288,16 @@ Shader "JTRP/Lit"
             #pragma multi_compile SHADOW_HIGH SHADOW_LOW SHADOW_MEDIUM
             #pragma multi_compile USE_FPTL_LIGHTLIST USE_CLUSTERED_LIGHTLIST
             
+            #pragma shader_feature_local _ _ENABLE_SELFSHADOW
             #pragma shader_feature_local _ _ENABLE_HIGHLIGHT_ON
             #pragma shader_feature_local _HL_NPR _HL_PBR
             #pragma shader_feature_local _ _RIMLIGHT_ENABLE_ON
             #pragma shader_feature_local _ _MATCAP_ENABLE_ON
             #pragma shader_feature_local _ _EMISSIVE_ENABLE_ON
             
-            #define SHADERPASS SHADERPASS_FORWARD
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/Lighting.hlsl"
-            
-            #define HAS_LIGHTLOOP
-            
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/LightLoop/LightLoopDef.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/LightLoop/LightLoop.hlsl"
-            
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
-            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+            #define ATTRIBUTES_NEED_TEXCOORD7
+            #define VARYINGS_NEED_TEXCOORD7
+
             #include "ShaderLibrary/ShaderPassForward.hlsl"
             
             #pragma vertex Vert
@@ -318,7 +317,7 @@ Shader "JTRP/Lit"
             #pragma multi_compile SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH
             
             #pragma shader_feature_local _ _OUTLINE_ENABLE_ON
-            
+            #pragma shader_feature_local _ _ORIGINNORMAL_ON
             
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/Lighting.hlsl"
             

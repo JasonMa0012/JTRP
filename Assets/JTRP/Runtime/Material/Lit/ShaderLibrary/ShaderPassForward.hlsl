@@ -1,6 +1,17 @@
-#if SHADERPASS != SHADERPASS_FORWARD
-    #error SHADERPASS_is_not_correctly_define
-#endif
+
+#define SHADERPASS SHADERPASS_FORWARD
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Material.hlsl"
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/Lighting.hlsl"
+
+#define HAS_LIGHTLOOP
+
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/LightLoop/LightLoopDef.hlsl"
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Lighting/LightLoop/LightLoop.hlsl"
+
+// #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
+#include "../ShaderLibrary/LitSharePass.hlsl"
+#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
 
 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/VertMesh.hlsl"
 #include "../ShaderLibrary/ForwardFunction.hlsl"
@@ -8,7 +19,7 @@
 PackedVaryingsType Vert(AttributesMesh input)
 {
     VaryingsType varyingsType;//VaryingsToPS
-    VaryingsMeshType output;
+    VaryingsMeshType output = (VaryingsMeshType)0;
     
     UNITY_SETUP_INSTANCE_ID(input);
     UNITY_TRANSFER_INSTANCE_ID(input, output);
@@ -24,8 +35,18 @@ PackedVaryingsType Vert(AttributesMesh input)
     output.tangentWS = tangentWS;
     
     output.texCoord0 = input.uv0;
-    output.texCoord1 = input.uv1;
-    output.texCoord2 = input.uv2;
+    #ifdef VARYINGS_NEED_TEXCOORD1
+        output.texCoord1 = input.uv1;
+    #endif
+    #ifdef VARYINGS_NEED_TEXCOORD2
+        output.texCoord2 = input.uv2;
+    #endif
+    #ifdef VARYINGS_NEED_TEXCOORD3
+        output.texCoord3 = input.uv3;
+    #endif
+    #ifdef VARYINGS_NEED_TEXCOORD7
+        output.texCoord7 = input.uv7;
+    #endif
     output.color = input.color;
     
     varyingsType.vmesh = output;
@@ -43,8 +64,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(packedInput);
     input = UnpackVaryingsMeshToFragInputs(packedInput.vmesh);
     
-    context.uv0 = input.texCoord0.xy;
-    context.uv1 = input.texCoord1.xy;
+    GetUVs(context, input);
     
     float4 _MainTex_var = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, context.uv0);
     float4 _ShadowMap_var = SAMPLE_TEXTURE2D(_ShadowMap, sampler_ShadowMap, context.uv0);
@@ -57,7 +77,8 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     context.roughness = ComputeRoughness((1 - _ShadowMap_var.b) * _roughness);
     PreData(normalMap, _LightColorIntensity, packedInput, input, posInput, builtinData, surfaceData, context);
     
-    context.shadowStep = GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, _ShadowMap_var.a * _ShadowIntensity);
+    context.shadowStep = GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, _ShadowMap_var.a,
+    GetSelfShadow(context, posInput));
     float step2 = GetShadowStep(context.halfLambert, _Shadow_Step2, _Shadow_Feather2);
     
     GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Power * 5 + 1,
@@ -65,7 +86,8 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     PointLightLoop(context, posInput, builtinData, _PointLightColorIntensity * _LightMap_var.a, _LightMap_var.b + _HighColorLevel);
     
-    context.diffuse = StdToonDiffuseLightingModel(context, _ShadowIntensity * (1 - _ShadowMap_var.r), _ShadowColorMap_var.rgb * _ShadowMapColor.rgb);
+    context.diffuse = StdToonDiffuseLightingModel(context, _ShadowIntensity * (1 - _ShadowMap_var.r),
+    _ShadowColorMap_var.rgb * _ShadowMapColor.rgb, _ShadowFixedColor, _ShadowMap_var.a);
     
     context.specular = max(context.highLightColor,
     GetHighLight(context.N, context.V, context.L, context.dirLightColor, context.shadowStep, context.roughness, _HighColorInt1, _HighColorInt2)
@@ -78,7 +100,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     smoothstep(0.55, 1, _ShadowMap_var.g),
     smoothstep(0.45, 0, _ShadowMap_var.g));
     
-    float3 rimColor = GetRimLight(context.V, context.N, context.brightBaseColor, context.halfLambert, context.shadowStep, _LightMap_var.g);
+    float3 rimColor = GetRimLight(context, posInput, input, _LightMap_var.g);
     context.emissive = max(context.emissive, rimColor);
     
     
@@ -89,11 +111,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     outColor = float4(finalCol, 1);
     
-    // float curvature = saturate(length(fwidth(surfaceData.normalWS)) / length(fwidth(input.positionRWS)) * 0.1);
-    // outColor = float4((float3)pow(curvature, 3), 1);
-    
-    
-    // outColor = float4(SampleBakedGI(posInput.positionWS, context.N, input.texCoord1, input.texCoord2) * context.exposure, 1);
+
     
     
     //#region Descrption
@@ -158,7 +176,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     
     //#region FragInputs
-    /*float4 positionSS;        裁剪空间pos
+    /*float4 positionSS;
     float3 positionRWS;       相对摄像机空间位置，w为depth Offset
     float4 texCoord0;
     float4 texCoord1;

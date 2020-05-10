@@ -74,7 +74,8 @@ uniform float _LightColorIntensity;
 uniform float _NormalScale;
 
 uniform float _ShadowIntensity;
-uniform float4 _ShadowMapColor;
+uniform float3 _ShadowFixedColor;
+uniform float3 _ShadowMapColor;
 uniform float _Shadow_Step;
 uniform float _Shadow_Feather;
 uniform float _Shadow_Power;
@@ -94,6 +95,7 @@ float _HighLightFeather1;
 float _HighColorIntOnShadow1;
 uniform float4 _HighColor2;
 float _HighColorInt2;
+float _HighColorPointInt2;
 float _HighLightPower2;
 float _HighColorIntOnShadow2;
 
@@ -108,15 +110,20 @@ uniform float _BumpScaleMatcap;
 uniform float _BlurLevelMatcap;
 
 uniform float _RimLight_Enable;
+uniform uint _RimLight_Mode;
 uniform float4 _RimLightColor;
 uniform float _RimLightIntensity;
 uniform float _RimLightBlend;
+uniform float _RimLightBlendPoint;
 uniform float4 _RimLightColor2;
 uniform float _RimLightIntensity2;
 uniform float _RimLightBlend2;
+uniform float _RimLightBlendPoint2;
 uniform float _RimLightFeather;
 uniform float _RimLightLength;
 uniform float _RimLightWidth;
+uniform float _RimLightIntInShadow;
+uniform float _RimLightSNBlend;
 uniform float4 _RimLightColor3;
 uniform float _RimLightBlend3;
 uniform float _RimLightIntensity3;
@@ -150,7 +157,6 @@ uniform float4 _Outline_Color;
 uniform float _Offset_Z;
 uniform float _Outline_Lightness;
 uniform float _Outline_Purity;
-uniform float _Outline_Lod;
 uniform float _Outline_Blend;
 
 

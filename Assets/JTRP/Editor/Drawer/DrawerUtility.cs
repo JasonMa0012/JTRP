@@ -20,6 +20,7 @@ namespace JTRP.ShaderDrawer
         {
             this.props = props;
             this.materialEditor = materialEditor;
+
             base.OnGUI(materialEditor, props);
         }
         public static MaterialProperty FindProp(string propertyName, MaterialProperty[] properties, bool propertyIsMandatory = false)
@@ -78,6 +79,9 @@ namespace JTRP.ShaderDrawer
 
             var triangleRect = new Rect(rect.x + 4f, rect.y + 8f, 13f, 13f);// 三角
 
+            var clickRect = new Rect(rect);// 点击
+            clickRect.height -= 15f;
+
             var toggleRect = new Rect(triangleRect.x + 20f, triangleRect.y + 0f, 13f, 13f);
 
             var e = Event.current;
@@ -98,7 +102,7 @@ namespace JTRP.ShaderDrawer
                 value = !value;
                 e.Use();
             }
-            else if (e.type == EventType.MouseDown && rect.Contains(e.mousePosition))
+            else if (e.type == EventType.MouseDown && clickRect.Contains(e.mousePosition))
             {
                 display = !display;
                 e.Use();
