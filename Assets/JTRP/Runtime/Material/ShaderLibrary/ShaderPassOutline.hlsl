@@ -13,9 +13,9 @@ struct VertexOutput
     float4 pos: SV_POSITION;
     float2 uv0: TEXCOORD0;
     float2 uv1: TEXCOORD1;
-    float3 normalDir: COLOR0;
-    float3 tangentDir: COLOR1;
-    float3 bitangentDir: COLOR2;
+    // float3 normalDir: COLOR0;
+    // float3 tangentDir: COLOR1;
+    // float3 bitangentDir: COLOR2;
 };
 
 #include "ForwardFunction.hlsl"
@@ -32,13 +32,13 @@ VertexOutput vert(VertexInput v)
     
     o.uv0 = v.texcoord0;
     o.uv1 = v.texcoord1;
-    o.normalDir = TransformObjectToWorldNormal(v.normal);
-    o.tangentDir = normalize(mul(UNITY_MATRIX_M, float4(v.tangent.xyz, 0.0)).xyz);
-    o.bitangentDir = normalize(cross(o.normalDir, o.tangentDir) * v.tangent.w);
-    float3x3 tangentTransform = float3x3(o.tangentDir, o.bitangentDir, o.normalDir);
+    float3 normalDir = TransformObjectToWorldNormal(v.normal);
+    float3 tangentDir = normalize(mul(UNITY_MATRIX_M, float4(v.tangent.xyz, 0.0)).xyz);
+    float3 bitangentDir = normalize(cross(normalDir, tangentDir) * v.tangent.w);
+    float3x3 tangentTransform = float3x3(tangentDir, bitangentDir, normalDir);
     
     #ifdef _ORIGINNORMAL_ON
-        float3 _BakedNormalDir = o.normalDir;
+        float3 _BakedNormalDir = normalDir;
     #else
         float3 _BakedNormalDir = GetSmoothedWorldNormal(v.texcoord7, tangentTransform);
     #endif

@@ -20,14 +20,21 @@ float2 GetWHRatio()
     return float2(_ScreenParams.y / _ScreenParams.x, 1);
 }
 
+float GetScaleWithHight()
+{
+    return _ScreenParams.y / 1080;
+}
+
 float GetSSRimScale(float z)
 {
-    float w = (1.0 / (pow(z, 1.5) + 0.75)) * _ScreenParams.y / 1080;
+    float w = (1.0 / (PositivePow(z + saturate(UNITY_MATRIX_P._m00), 1.5) + 0.75)) * GetScaleWithHight();
+    // w *= pow(UNITY_MATRIX_P._m00, 1.15);
+    w *= lerp(1, UNITY_MATRIX_P._m00, 0.60 * saturate(0.25 * z * z));
     return w < 0.01 ? 0: w;
 }
-float GetOutLineScale(float z, float nPower = 0.8, float fPower = 0.1)
+float GetOutLineScale(float z, float nPower = 1.05, float fPower = 0.2)
 {
-    return pow(z, z < 1 ?nPower: fPower);
+    return pow(z, z < 1 ?nPower: fPower) * lerp(1, UNITY_MATRIX_P._m00, IsPerspectiveProjection() ? 0.60: 1.0);
 }
 
 float3 GetSmoothedWorldNormal(float2 uv7, float3x3 tbn)

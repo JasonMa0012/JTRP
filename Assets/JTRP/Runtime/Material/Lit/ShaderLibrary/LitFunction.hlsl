@@ -39,6 +39,7 @@
         _HighColorInt1 *= intensity;
         _HighColorPointInt1 *= intensity;
         _HighColorInt2 *= intensity;
+        _HighColorPointInt2 *= intensity;
         
         // _PointLightColorIntensity *= roughness * roughness ;
         
@@ -56,6 +57,7 @@
         context.V = GetWorldSpaceNormalizeViewDir(input.positionRWS);
         context.T = input.tangentToWorld[0];
         context.B = input.tangentToWorld[1];
+        context.ON = input.tangentToWorld[2];
         context.N = normalize(TransformTangentToWorld(normalMap, input.tangentToWorld));
         if (_RimLight_Mode == 1)
             context.SN = GetSmoothedWorldNormal(context.uv7, input.tangentToWorld);
@@ -70,7 +72,35 @@
         context.envColor = SampleBakedGI(posInput.positionWS, context.N, input.texCoord1.xy, input.texCoord2.xy) * context.exposure;
         
         context.halfLambert = 0.5 * dot(context.N, context.L) + 0.5;
+        context.ONHalfLambert = 0.5 * dot(lerp(context.ON, context.N, _DiffuseNormalBlend), context.L) + 0.5;
     }
+    void PreData(float dirLightInt, inout PackedVaryingsToPS packedInput, inout FragInputs input, inout PositionInputs posInput,
+    inout BuiltinData builtinData, inout SurfaceData surfaceData, inout LitToonContext context)
+    {
+        input.positionSS.xy = _OffScreenRendering > 0 ?(input.positionSS.xy * _OffScreenDownsampleFactor): input.positionSS.xy;
+        uint2 tileIndex = uint2(input.positionSS.xy) / GetTileSize();
+        // input.positionSS is SV_Position
+        posInput = GetPositionInput(input.positionSS.xy, _ScreenSize.zw, input.positionSS.z, input.positionSS.w, input.positionRWS.xyz, tileIndex);
+        context.V = GetWorldSpaceNormalizeViewDir(input.positionRWS);
+        context.T = input.tangentToWorld[0];
+        context.B = input.tangentToWorld[1];
+        context.N = input.tangentToWorld[2];
+        if (_RimLight_Mode == 1)
+            context.SN = GetSmoothedWorldNormal(context.uv7, input.tangentToWorld);
+        
+        GetSurfaceAndBuiltinData(input, context.V, posInput, surfaceData, builtinData);
+        
+        DirectionalLightData dirLight = _DirectionalLightDatas[0];
+        context.L = -dirLight.forward;
+        context.H = normalize(context.V + context.L);
+        context.exposure = GetCurrentExposureMultiplier();
+        context.dirLightColor = dirLight.color * context.exposure * dirLightInt;
+        context.envColor = SampleBakedGI(posInput.positionWS, context.N, input.texCoord1.xy, input.texCoord2.xy) * context.exposure;
+        
+        context.halfLambert = 0.5 * dot(context.N, context.L) + 0.5;
+    }
+    
+    ///////////// color //////////////
     
     void GetBaseColor(inout LitToonContext context, float3 mainTex, float skyIntensity, float shadowPower,
     float3 shadowColor2, float shadowColorBlend2)
@@ -99,17 +129,18 @@
     }
     
     //////////// lighting ///////////
-    float3 GetHighLight(float3 N, float3 V, float3 L, float3 lightColor, float shadowStep, float roughness, float intensity1 = 1, float intensity2 = 0)
+    float3 GetHighLight(float3 N, float3 V, float3 L, float3 lightColor, float shadowStep, float roughness,
+    float intensity1 = 1, float intensity2 = 0, float maxValue = 0)
     {
         float3 result = 0;
         #ifdef _ENABLE_HIGHLIGHT_ON
             #ifdef _HL_PBR
                 float spec = PBRSpecular(N, V, L, roughness, intensity1);
                 result = spec * lightColor * _HighColor1.rgb * intensity1;
-            #elif _HL_NPR
+            #else
                 float halfLambert = 0.5 * dot(normalize(V + L), N) + 0.5;
                 float3 c1 = GetHighLight(lightColor * _HighColor1.rgb, halfLambert, _HighLightStep1,
-                intensity1, _HighLightFeather1, shadowStep, intensity2? _HighColorIntOnShadow1: 0);
+                intensity1, _HighLightFeather1, shadowStep, intensity2? _HighColorIntOnShadow1: 0, maxValue);
                 float3 c2 = intensity2? GetPowerHighLight(lightColor * _HighColor2.rgb, halfLambert, _HighLightPower2,
                 intensity2, shadowStep, _HighColorIntOnShadow2): (float3)0;
                 result = max(c1, c2);
@@ -121,7 +152,7 @@
     
     DirectLighting ShadeSurface_Punctual(LightLoopContext lightLoopContext,
     PositionInputs posInput, BuiltinData builtinData, //PreLightData preLightData,
-    LightData light, float3 N, float3 V, float roughness)
+    LightData light, LitToonContext context, float roughness)
     {
         DirectLighting lighting;
         ZERO_INITIALIZE(DirectLighting, lighting);
@@ -135,14 +166,15 @@
             float4 lightColor = EvaluateLight_Punctual(lightLoopContext, posInput, light, L, distances);
             lightColor.rgb *= lightColor.a; // 衰减
             
-            float shadow = EvaluateShadow_Punctual(lightLoopContext, posInput, light, builtinData, N, L, distances);
+            float shadow = EvaluateShadow_Punctual(lightLoopContext, posInput, light, builtinData, context.N, L, distances);
+            shadow = step(0.5, shadow);
             lightColor.rgb *= ComputeShadowColor(shadow, light.shadowTint, light.penumbraTint);
             
-            float halfLambert = 0.5 * dot(N, L) + 0.5;
+            float halfLambert = 0.5 * dot(context.ON, L) + 0.5;
             float shadowStep = GetShadowStep(halfLambert, _PointLightStep, _PointLightFeather);
             
             lighting.diffuse = lightColor.rgb * light.diffuseDimmer * (1 - shadowStep);
-            lighting.specular = GetHighLight(N, V, L, lighting.diffuse, shadowStep, roughness, _HighColorPointInt1);
+            lighting.specular = GetHighLight(context.N, context.V, L, lighting.diffuse, shadowStep, roughness, _HighColorPointInt1, _HighColorPointInt2);
         }
         
         return lighting;
@@ -208,7 +240,7 @@
                     {
                         // DirectLighting lighting = EvaluateBSDF_Punctual(context, V, posInput, preLightData, s_lightData, bsdfData, builtinData);
                         DirectLighting lighting = ShadeSurface_Punctual(context, posInput, builtinData, //preLightData,
-                        s_lightData, toonContext.N, toonContext.V, toonContext.roughness);
+                        s_lightData, toonContext, toonContext.roughness);
                         
                         AccumulateDirectLighting(lighting, aggregateLighting);
                     }
@@ -271,11 +303,11 @@
             float2 L_View = normalize(mul((float3x3)UNITY_MATRIX_V, context.L).xy);
             float2 N_View = normalize(mul((float3x3)UNITY_MATRIX_V, lerp(context.N, context.SN, _RimLightSNBlend)).xy);
             float lDotN = saturate(dot(N_View, L_View) + _RimLightLength * 0.1);
-            float2 ssUV = posInput.positionSS + N_View * lDotN * _RimLightWidth * input.color.b * 40 * GetSSRimScale(posInput.linearDepth);
-
-            float depthTex = LoadCameraDepth(clamp(ssUV, 0, _ScreenParams.xy - 1));
-            float depthScene = LinearEyeDepth(depthTex, _ZBufferParams);
-            float depthDiff = depthScene - posInput.linearDepth;
+            float scale = lDotN * _RimLightWidth * input.color.b * 40 * GetSSRimScale(posInput.linearDepth);
+            float2 ssUV1 = clamp(posInput.positionSS + N_View * scale, 0, _ScreenParams.xy - 1);
+            
+            
+            float depthDiff = LinearEyeDepth(LoadCameraDepth(ssUV1), _ZBufferParams) - posInput.linearDepth;
             float intensity = smoothstep(0.24 * _RimLightFeather * posInput.linearDepth, 0.25 * posInput.linearDepth, depthDiff);
             intensity *= lerp(1, _RimLightIntInShadow, context.shadowStep) * _RimLightIntensity * mask;
             

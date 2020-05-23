@@ -10,6 +10,7 @@
         float3 B;// binormal
         float3 N;// normal
         float3 SN;// smoothed normal
+        float3 ON;// original normal
         
         float2 uv0;
         #ifdef VARYINGS_NEED_TEXCOORD1
@@ -36,6 +37,7 @@
         
         float exposure;
         float halfLambert;// 0: dark 1: bright
+        float ONHalfLambert;// 0: dark 1: bright
         float shadowStep;// 0: bright 1: dark
         float roughness;
         

@@ -23,7 +23,8 @@ Shader "JTRP/Lit"
         
         [Title(_, Normal)]
         [Tex(_, _NormalScale)][Normal] _NormalMap ("NormalMap", 2D) = "bump" { }
-        [HideInInspector] _NormalScale ("Normal Scale：深度", Range(-3.0, 3.0)) = 1.0
+        [HideInInspector] _NormalScale ("Normal Scale：深度", Range(0.0, 1.0)) = 1.0
+        _DiffuseNormalBlend ("Diffuse Normal Blend", Range(0.0, 1.0)) = 0.0
         
         [Main(_shadow, _, 2)]
         _shadow ("Shadow", float) = 0
@@ -97,7 +98,7 @@ Shader "JTRP/Lit"
         
         [Title(Rim, Rim Setting)]
         [SubPowerSlider(Rim, 5)] _RimLightFeather ("Feather：羽化", Range(0.0001, 1)) = 0.005
-        [SubPowerSlider(Rim, 1.5)] _RimLightWidth ("Width：宽度", Range(0, 1)) = 0.3
+        [SubPowerSlider(Rim, 1.5)] _RimLightWidth ("Width：宽度", Range(0, 2)) = 0.3
         [SubPowerSlider(Rim, 0.35)] _RimLightLength ("Length：长度", Range(0, 10)) = 7
         [SubPowerSlider(Rim, 2)] _RimLightLevel ("Level：强度偏移", Range(-1, 1)) = 0
         [Sub(Rim_Rim_SS)] _RimLightIntInShadow ("Int：暗面强度", Range(0, 1)) = 0.35
@@ -159,7 +160,7 @@ Shader "JTRP/Lit"
         [HideInInspector] _DstBlend ("__dst", Float) = 0.0
         [HideInInspector] _AlphaSrcBlend ("__alphaSrc", Float) = 1.0
         [HideInInspector] _AlphaDstBlend ("__alphaDst", Float) = 0.0
-
+        
         // [HideInInspector] _CullMode ("__cullmode", Float) = 2.0
         [HideInInspector] _CullModeForward ("__cullmodeForward", Float) = 2.0 // This mode is dedicated to Forward to correctly handle backface then front face rendering thin transparent
         // [Enum(UnityEditor.Rendering.HighDefinition.TransparentCullMode)] _TransparentCullMode ("_TransparentCullMode", Int) = 2 // Back culling by default
@@ -290,14 +291,14 @@ Shader "JTRP/Lit"
             
             #pragma shader_feature_local _ _ENABLE_SELFSHADOW
             #pragma shader_feature_local _ _ENABLE_HIGHLIGHT_ON
-            #pragma shader_feature_local _HL_NPR _HL_PBR
+            #pragma shader_feature_local _ _HL_PBR
             #pragma shader_feature_local _ _RIMLIGHT_ENABLE_ON
             #pragma shader_feature_local _ _MATCAP_ENABLE_ON
             #pragma shader_feature_local _ _EMISSIVE_ENABLE_ON
             
             #define ATTRIBUTES_NEED_TEXCOORD7
             #define VARYINGS_NEED_TEXCOORD7
-
+            
             #include "ShaderLibrary/ShaderPassForward.hlsl"
             
             #pragma vertex Vert

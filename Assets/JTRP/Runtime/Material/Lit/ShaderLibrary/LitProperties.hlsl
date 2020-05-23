@@ -72,6 +72,7 @@ uniform float _PointLightFeather;
 uniform float _LightColorIntensity;
 
 uniform float _NormalScale;
+uniform float _DiffuseNormalBlend;
 
 uniform float _ShadowIntensity;
 uniform float3 _ShadowFixedColor;
