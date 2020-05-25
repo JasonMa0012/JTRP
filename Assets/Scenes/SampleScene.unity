@@ -355,7 +355,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168218571}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.019999983, y: 1.196, z: 1.8103757}
+  m_LocalPosition: {x: 0.019999983, y: 1.196, z: 1.8103762}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 405591765}
@@ -1039,7 +1039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: 183cbd347d25080429f42b520742bbd8, type: 2}
   m_StaticLightingSkyUniqueID: 3
-  m_SkySettings: {fileID: 1026155524}
+  m_SkySettings: {fileID: 660882337}
   m_SkySettingsFromProfile: {fileID: 3309844062123626288, guid: 183cbd347d25080429f42b520742bbd8,
     type: 2}
 --- !u!4 &313761475
@@ -1139,7 +1139,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1026155524
+--- !u!114 &660882337
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1239,7 +1239,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037846703}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.019999983, y: 1.196, z: -0.6870935}
+  m_LocalPosition: {x: 0.019999983, y: 1.196, z: -0.6870936}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 405591765}
@@ -2359,13 +2359,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297650280}
-  m_LocalRotation: {x: -0.0008570819, y: 0.99636173, z: -0.0056583644, w: -0.0850326}
-  m_LocalPosition: {x: 8.555581, y: 1.0091982, z: 17.87796}
+  m_LocalRotation: {x: -0.05147258, y: 0.9256682, z: -0.13523719, w: -0.34957108}
+  m_LocalPosition: {x: 12.935899, y: 4.1822634, z: 8.861259}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.65440744, y: 189.75572, z: -0.04272461}
+  m_LocalEulerAnglesHint: {x: 16.639929, y: 221.37077, z: -0.044433594}
 --- !u!114 &1297650287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3469,7 +3469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059789766}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.5103755, y: 1.196, z: 1.1761879}
+  m_LocalPosition: {x: 2.510376, y: 1.196, z: 1.1761881}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 405591765}
