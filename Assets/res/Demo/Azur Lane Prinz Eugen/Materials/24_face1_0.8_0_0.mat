@@ -8,9 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 24_face1_0.8_0_0
-  m_Shader: {fileID: 4800000, guid: dd87fc42f22ec9c4ba9c126b90525ea3, type: 3}
-  m_ShaderKeywords: _HSV_OTColor _NORMALMAP _NORMALMAP_TANGENT_SPACE _OUTLINE_ENABLE_ON
-    _RIMLIGHT_ENABLE_ON
+  m_Shader: {fileID: 4800000, guid: 076eb252b73aee64292e092556948839, type: 3}
+  m_ShaderKeywords: _HL_NPR _HSV_OTColor _NORMALMAP _NORMALMAP_TANGENT_SPACE _OUTLINE_ENABLE_ON
+    _RIMLIGHT_ENABLE_ON _RIM_SS _SKIN_MODE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -169,6 +169,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadowColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowMap:
         m_Texture: {fileID: 2800000, guid: 9dca694fd1c3c0541835c7762da24d71, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -232,6 +236,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DetailNormalScale: 1
     - _DetailSmoothnessScale: 1
+    - _DiffuseNormalBlend: 0
     - _DiffusionProfile: 0
     - _DiffusionProfileHash: 0
     - _DisplacementLockObjectScale: 1
@@ -276,6 +281,7 @@ Material:
     - _EnableGeometricSpecularAA: 0
     - _Enable_HighLight: 0
     - _EnergyConservingSpecularColor: 1
+    - _FaceShadowStep: 0
     - _GlossMapScale: 0
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -290,11 +296,11 @@ Material:
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
     - _HighColorInt1: 1
-    - _HighColorInt2: 0.441
+    - _HighColorInt2: 0.44099998
     - _HighColorIntOnShadow1: 0.3
     - _HighColorIntOnShadow2: 0.3
     - _HighColorLevel: 0
-    - _HighColorPointInt1: 0.007
+    - _HighColorPointInt1: 0.007000001
     - _HighColorPointInt2: 0
     - _HighLightFeather1: 0.01
     - _HighLightPower2: 36
@@ -317,11 +323,12 @@ Material:
     - _NormalScale00: 1
     - _OcclusionStrength: 1
     - _Offset_Z: 0
+    - _OriginNormal: 0
     - _OutLine_Enable: 1
     - _Outline_Blend: 1
     - _Outline_Lightness: -0
     - _Outline_Lod: 1
-    - _Outline_Purity: 0.44
+    - _Outline_Purity: 0.43999997
     - _Outline_Width: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -338,34 +345,43 @@ Material:
     - _RimLightBlend: 1
     - _RimLightBlend2: 0
     - _RimLightBlend3: 0
-    - _RimLightFeather: 0.045
+    - _RimLightBlendPoint: 0.35
+    - _RimLightBlendPoint2: 0.35
+    - _RimLightFeather: 0.045000006
     - _RimLightFeather2: 0.005
-    - _RimLightFeather3: 0.005
+    - _RimLightFeather3: 0.0050000013
     - _RimLightIntInShadow: 0.5
     - _RimLightIntInShadow2: 1
-    - _RimLightIntensity: 1
+    - _RimLightIntensity: 0.312
     - _RimLightIntensity2: 0
     - _RimLightIntensity3: 0
     - _RimLightLength: 8.47
     - _RimLightLength2: 10
     - _RimLightLength3: 10
     - _RimLightLevel: 0
-    - _RimLightWidth: 0.514
+    - _RimLightSNBlend: 0.5
+    - _RimLightWidth: 0.18357241
     - _RimLightWidth2: 0.3
     - _RimLightWidth3: 0.3
     - _RimLight_Enable: 1
+    - _RimLight_Mode: 1
     - _SSRefractionProjectionModel: 0
     - _ShadowColorBlend2: 0.8
     - _ShadowIntensity: 0.6
     - _ShadowIntensity2: -0.5
+    - _ShadowMode: 0
     - _ShadowSkinIntensity: 0.5
-    - _Shadow_Feather: 0.196
-    - _Shadow_Feather2: 0.001
+    - _Shadow_DepthThreshold: 0
+    - _Shadow_Feather: 0.19600002
+    - _Shadow_Feather2: 0.0009999999
+    - _Shadow_Gamma: 0.74999994
     - _Shadow_Lightness: 0
     - _Shadow_Power: 0.5
     - _Shadow_Purity: 0.502
+    - _Shadow_Scale: 1.1999999
     - _Shadow_Step: 0.42
     - _Shadow_Step2: 0.2
+    - _Shadow_Width: 1
     - _SkyColorIntensity: 1
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 0
@@ -414,6 +430,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _dnd: 0
+    - _enable_selfshadow: 0
     - _roughness: 0.5
     - _shadow: 0
     m_Colors:
@@ -434,6 +451,7 @@ Material:
     - _Emissive_ColorA2: {r: 1, g: 1, b: 1, a: 1}
     - _Emissive_ColorB1: {r: 1, g: 1, b: 1, a: 1}
     - _Emissive_ColorB2: {r: 1, g: 1, b: 1, a: 1}
+    - _FaceForward: {r: 0, g: -1, b: -0.000000059604645, a: 0}
     - _HighColor1: {r: 1, g: 1, b: 1, a: 1}
     - _HighColor2: {r: 1, g: 1, b: 1, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
@@ -448,6 +466,7 @@ Material:
     - _RimLightColor2: {r: 0, g: 0, b: 0, a: 1}
     - _RimLightColor3: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowColor2: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowFixedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
     - _SkinColor: {r: 1, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
