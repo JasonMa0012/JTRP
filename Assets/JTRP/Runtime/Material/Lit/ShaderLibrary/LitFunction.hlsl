@@ -123,7 +123,7 @@
         float3 diffuse = lerp(context.brightBaseColor, context.darkBaseColor, context.shadowStep * shadowIntensity);
         
         diffuse *= lerp(1, shadowColor, context.shadowStep);
-        diffuse *= lerp(1, fixedShadowColor, fixedShadowInt);
+        diffuse *= lerp(1, fixedShadowColor, fixedShadowInt * smoothstep(0.75, 1, context.shadowStep));
         
         return diffuse + ToonLightColorAddMode(context.brightBaseColor, context.pointLightColor);
     }
