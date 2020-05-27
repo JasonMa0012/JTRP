@@ -366,7 +366,7 @@ Material:
     - _RimLight_Mode: 1
     - _SSRefractionProjectionModel: 0
     - _ShadowColorBlend2: 0.8
-    - _ShadowIntensity: 0.6
+    - _ShadowIntensity: 0.547
     - _ShadowIntensity2: -0.5
     - _ShadowSkinIntensity: 0.5
     - _Shadow_Feather: 0.025999999

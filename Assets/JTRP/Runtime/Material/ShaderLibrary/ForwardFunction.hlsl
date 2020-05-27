@@ -3,10 +3,10 @@
 
 
 
-float GetShadowStep(float halfLambert, float step, float feather, float maxValue = 0, float selfShadow = 1)
+float GetShadowStep(float halfLambert, float step, float feather, float selfShadow = 1)
 {
     return //       阴影 -0.5 ~ 0.5 亮面   / 锐利 0.0001 ~ 1 平滑
-    saturate(max((step - halfLambert * selfShadow) / feather, maxValue));
+    saturate((step - halfLambert * selfShadow) / feather);
 }
 
 float StepAntiAliasing(float x, float y)

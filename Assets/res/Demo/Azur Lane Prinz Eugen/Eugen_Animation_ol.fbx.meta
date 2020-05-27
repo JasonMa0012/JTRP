@@ -36,22 +36,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 24_face2_0.8_0_0
-    second: {fileID: 2100000, guid: d781805a4093c674b823a2c0c75a6af6, type: 2}
+    second: {fileID: 2100000, guid: ebee5ede6591a4848b1da049ecea6e4c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 24_face3_0.8_0_0
-    second: {fileID: 2100000, guid: 5873b83b17899d440afe499f07c0a471, type: 2}
+    second: {fileID: 2100000, guid: e572310dc68eab6429825160edb94c6b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 24_face4_0.8_0_0
-    second: {fileID: 2100000, guid: a52ef5ff222444d48b9853c961ad6497, type: 2}
+    second: {fileID: 2100000, guid: 2c6afa01ed5b06740b4cbc17db14fea0, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: 24_face5_0.8_0_0
-    second: {fileID: 2100000, guid: be330c8918a56064d9689dd443a96c01, type: 2}
+    second: {fileID: 2100000, guid: 5e8fcd29f1013a949b9f6aaa6fc10830, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -150,7 +150,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips:
-  - 247b8690b4dfd8941bce030c6d6d89e5
+  - b4399b073b5f72a4ab111576a625fcd0
   importAnimation: 1
   humanDescription:
     serializedVersion: 3

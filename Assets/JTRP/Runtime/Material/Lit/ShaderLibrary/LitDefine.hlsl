@@ -39,6 +39,7 @@
         float halfLambert;// 0: dark 1: bright
         float ONHalfLambert;// 0: dark 1: bright
         float shadowStep;// 0: bright 1: dark
+        float OShadowStep;// original shadowStep (without fixed shadow or self shadow)
         float roughness;
         
         float3 diffuse;

@@ -329,8 +329,8 @@ Shader "JTRP/Lit Skin"
                 #ifdef _FACE_MODE
                     context.shadowStep = GetDFFaceShadowStep(_FaceForward, context.L, _Shadow_Gamma, context.uv0.xy, _FaceShadowStep, _Shadow_Scale);
                 #else
-                    context.shadowStep = GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, _ShadowMap_var.a * _ShadowIntensity,
-                    GetSelfShadow(context, posInput));
+                    context.shadowStep = max(_ShadowMap_var.a,
+                    GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, GetSelfShadow(context, posInput)));
                 #endif
                 
                 context.shadowStep = Max3(context.shadowStep, _ShadowMap_var.a, GetHairShadow(context, posInput, input));

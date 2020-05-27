@@ -77,8 +77,8 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     context.roughness = ComputeRoughness((1 - _ShadowMap_var.b) * _roughness);
     PreData(normalMap, _LightColorIntensity, packedInput, input, posInput, builtinData, surfaceData, context);
     
-    context.shadowStep = GetShadowStep(context.ONHalfLambert, _Shadow_Step, _Shadow_Feather, _ShadowMap_var.a,
-    GetSelfShadow(context, posInput));
+    context.OShadowStep = GetShadowStep(context.ONHalfLambert, _Shadow_Step, _Shadow_Feather, GetSelfShadow(context, posInput));
+    context.shadowStep = max(_ShadowMap_var.a, context.OShadowStep);
     float step2 = GetShadowStep(context.ONHalfLambert, _Shadow_Step2, _Shadow_Feather2);
     
     GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Power * 5 + 1,
@@ -111,7 +111,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     
     outColor = float4(finalCol, 1);
     
-
+    
     
     
     //#region Descrption
