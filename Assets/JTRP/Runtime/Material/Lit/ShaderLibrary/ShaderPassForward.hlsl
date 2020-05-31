@@ -73,6 +73,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     float3 normalMap = UnpackNormalmapRGorAG(SAMPLE_TEXTURE2D_LOD(_NormalMap, sampler_NormalMap, context.uv0, 0), _NormalScale);
     
     AlphaGammaCorrection(_MainTex_var.a, _ShadowMap_var.a, _LightMap_var.a);
+    _MainTex_var.rgb = ShiftColorPurity(_MainTex_var.rgb, _Purity);
     
     context.roughness = ComputeRoughness((1 - _ShadowMap_var.b) * _roughness);
     PreData(normalMap, _LightColorIntensity, packedInput, input, posInput, builtinData, surfaceData, context);
@@ -81,7 +82,7 @@ void Frag(PackedVaryingsToPS packedInput, out float4 outColor: SV_Target0)
     context.shadowStep = max(_ShadowMap_var.a, context.OShadowStep);
     float step2 = GetShadowStep(context.ONHalfLambert, _Shadow_Step2, _Shadow_Feather2);
     
-    GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Power * 5 + 1,
+    GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Purity,
     step2 * _ShadowColor2.rgb * _ShadowIntensity2, _ShadowColorBlend2);
     
     PointLightLoop(context, posInput, builtinData, _PointLightColorIntensity * _LightMap_var.a, _LightMap_var.b + _HighColorLevel);

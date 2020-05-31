@@ -55,31 +55,31 @@ namespace JTRP.ShaderDrawer
 
         public static bool Foldout(ref bool display, bool value, bool hasToggle, string title)
         {
-            var style = new GUIStyle("ShurikenModuleTitle");// 背景
+            var style = new GUIStyle("ShurikenModuleTitle");// BG
             style.font = EditorStyles.boldLabel.font;
             style.fontSize = EditorStyles.boldLabel.fontSize + 3;
             style.border = new RectOffset(15, 7, 4, 4);
             style.fixedHeight = 30;
             style.contentOffset = new Vector2(50f, 0f);
 
-            var rect = GUILayoutUtility.GetRect(16f, 25f, style);// 范围
+            var rect = GUILayoutUtility.GetRect(16f, 25f, style);// Box
             rect.yMin -= 10;
             rect.yMax += 10;
             GUI.Box(rect, "", style);
 
-            GUIStyle titleStyle = new GUIStyle(EditorStyles.boldLabel);// 字体
+            GUIStyle titleStyle = new GUIStyle(EditorStyles.boldLabel);// Font
             titleStyle.fontSize += 2;
 
             EditorGUI.PrefixLabel(
                 new Rect(
                     hasToggle ? rect.x + 50f : rect.x + 25f,
-                    rect.y + 6f, 13f, 13f),// title位置
+                    rect.y + 6f, 13f, 13f),// title pos
                 new GUIContent(title),
                 titleStyle);
 
-            var triangleRect = new Rect(rect.x + 4f, rect.y + 8f, 13f, 13f);// 三角
+            var triangleRect = new Rect(rect.x + 4f, rect.y + 8f, 13f, 13f);// triangle
 
-            var clickRect = new Rect(rect);// 点击
+            var clickRect = new Rect(rect);// click
             clickRect.height -= 15f;
 
             var toggleRect = new Rect(triangleRect.x + 20f, triangleRect.y + 0f, 13f, 13f);
@@ -157,7 +157,7 @@ namespace JTRP.ShaderDrawer
             }
             else
             {
-                Debug.LogWarning("Please add \"CustomEditor \"JTRP.ShaderDrawer.LWGUI\"\" in your shader!");
+                Debug.LogWarning("Please add \"CustomEditor \"JTRP.ShaderDrawer.LWGUI\"\" to the end of your shader!");
                 return null;
             }
         }

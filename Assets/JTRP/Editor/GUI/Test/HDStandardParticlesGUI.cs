@@ -89,10 +89,11 @@ namespace UnityEditor
             public static string undoApplyCustomVertexStreams = L10n.Tr("Apply custom vertex streams from material");
         }
 
+        static MaterialProperty cullMode = new MaterialProperty() { floatValue = 2 };
         MaterialProperty blendMode = null;
         MaterialProperty colorMode = null;
         MaterialProperty flipbookMode = null;
-        MaterialProperty cullMode = null;
+        MaterialProperty zTestTransparent = null;
         MaterialProperty distortionEnabled = null;
         MaterialProperty distortionStrength = null;
         MaterialProperty distortionBlend = null;
@@ -126,6 +127,7 @@ namespace UnityEditor
             colorMode = FindProperty("_ColorMode", props, false);
             flipbookMode = FindProperty("_FlipbookMode", props);
             cullMode = FindProperty("_Cull", props);
+            zTestTransparent = FindProperty("_ZTestTransparent", props);
             distortionEnabled = FindProperty("_DistortionEnabled", props);
             distortionStrength = FindProperty("_DistortionStrength", props);
             distortionBlend = FindProperty("_DistortionBlend", props);
@@ -183,6 +185,7 @@ namespace UnityEditor
                 EditorGUILayout.Space();
                 GUILayout.Label(Styles.mainOptionsText, EditorStyles.boldLabel);
 
+                m_MaterialEditor.ShaderProperty(zTestTransparent, "Z Test");
                 FlipbookBlendingPopup();
                 TwoSidedPopup(material);
                 FadingPopup(material);
@@ -665,6 +668,8 @@ namespace UnityEditor
                     material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
             }
+
+            material.SetShaderPassEnabled("TransparentBackface", (cullMode.floatValue == (float)UnityEngine.Rendering.CullMode.Off));
         }
 
         public static void SetupMaterialWithColorMode(Material material, ColorMode colorMode)

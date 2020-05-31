@@ -2,6 +2,10 @@
 
 
 
+float3 ShiftColorPurity(float3 color, float purity)
+{
+    return lerp(Luminance(color), color, purity);
+}
 
 float GetShadowStep(float halfLambert, float step, float feather, float selfShadow = 1)
 {
@@ -28,7 +32,6 @@ float GetScaleWithHight()
 float GetSSRimScale(float z)
 {
     float w = (1.0 / (PositivePow(z + saturate(UNITY_MATRIX_P._m00), 1.5) + 0.75)) * GetScaleWithHight();
-    // w *= pow(UNITY_MATRIX_P._m00, 1.15);
     w *= lerp(1, UNITY_MATRIX_P._m00, 0.60 * saturate(0.25 * z * z));
     return w < 0.01 ? 0: w;
 }
@@ -156,12 +159,6 @@ float4 ComputeScreenPos(float4 pos, float projectionSign)
     o.xy = float2(o.x, o.y * projectionSign) + o.w;
     o.zw = pos.zw;
     return o;
-}
-
-float3 GetShadowColor(float3 color, float shadowPower)
-{
-    shadowPower = max(1, shadowPower);
-    return pow(abs(color), shadowPower);
 }
 
 float3 GetMatCap(float3 V, float3 lightColor, float2 uv, float shadowStep, float3 N, float matcapMask)

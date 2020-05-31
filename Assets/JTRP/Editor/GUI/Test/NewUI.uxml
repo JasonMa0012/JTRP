@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Button text="Button">
+        <Style src="NewUI.uss" />
+    </ui:Button>
+    <ui:Label text="Label">
+        <Style src="NewUI.uss" />
+    </ui:Label>
+    <uie:ColorField label="Color" value="RGBA(0.000, 1.000, 1.000, 1.000)">
+        <Style src="NewUI.uss" />
+    </uie:ColorField>
+    <uie:CurveField label="Curve">
+        <Style src="NewUI.uss" />
+    </uie:CurveField>
+    <uie:GradientField label="Gradient">
+        <Style src="NewUI.uss" />
+    </uie:GradientField>
+</ui:UXML>

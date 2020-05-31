@@ -9,6 +9,7 @@ Shader "JTRP/Lit"
         [Title(_, Diffuse)]
         [Tex(_, _Color)] _MainTex ("ColorMap (RGB)", 2D) = "white" { }
         [HideInInspector] _Color ("Color", Color) = (1, 1, 1, 1)
+        _Purity ("Purity：纯度", Range(0, 5)) = 1
         _AddColorIntensity ("Add Int", Range(0, 1)) = 0
         [HDR]_AddColor ("Add Color", Color) = (0, 0, 0, 1)
         
@@ -34,8 +35,8 @@ Shader "JTRP/Lit"
         [Title(_shadow, 1st Shadow)]
         [Tex(_shadow, _ShadowMapColor)]_ShadowColorMap ("ShadowColorMap (RGB)", 2D) = "white" { }
         [HideInInspector]_ShadowMapColor ("Color", Color) = (1, 1, 1, 1)
-        [Sub(_shadow)]_ShadowIntensity ("Int：强度", Range(0, 1)) = 0.6 // 降低强度提高浓度有助于减少光照探针权重、提高固有色纯度
-        [Sub(_shadow)]_Shadow_Power ("Power：浓度", Range(0, 1)) = 0.5
+        [Sub(_shadow)]_ShadowIntensity ("Int：强度", Range(0, 1)) = 0.6
+        [Sub(_shadow)]_Shadow_Purity ("Purity：纯度", Range(0, 5)) = 2
         [Sub(_shadow)]_Shadow_Step ("Step：阈值", Range(0, 1)) = 0.55
         [SubPowerSlider(_shadow, 6)] _Shadow_Feather ("Feather：羽化", Range(0.0001, 1)) = 0.0001
         [Title(_shadow, 2st Shadow)]
@@ -142,8 +143,8 @@ Shader "JTRP/Lit"
         [SubToggle(OutLine)] _OriginNormal ("Origin Normal：原始法线", float) = 0
         [Sub(OutLine)] _Offset_Z ("Offset Z：深度偏移", float) = 0
         [Sub(OutLine)] _Outline_Blend ("Blend：颜色混合", Range(0, 1)) = 1
-        [SubPowerSlider(OutLine, 1.7)] _Outline_Purity ("Purity：纯度", Range(-1, 1)) = 0
-        [SubPowerSlider(OutLine, 1.7)] _Outline_Lightness ("Lightness：明度", Range(-1, 1)) = 0
+        [SubPowerSlider(OutLine, 2)] _Outline_Purity ("Purity：纯度", Range(0, 5)) = 1
+        [SubPowerSlider(OutLine, 2)] _Outline_Lightness ("Lightness：明度", Range(0, 5)) = 1
         
         
         [HideInInspector]_BaseColor ("BaseColor", Color) = (1, 1, 1, 1)

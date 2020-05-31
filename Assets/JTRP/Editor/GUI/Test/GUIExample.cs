@@ -475,7 +475,7 @@ public sealed class ExampleClass : EditorWindow
 
     private Vector2 mScrollPos;
 
-    [MenuItem("Tools/Example")]
+    [MenuItem("Tools/GUI Example")]
     private static void Example()
     {
         GetWindow<ExampleClass>(true);

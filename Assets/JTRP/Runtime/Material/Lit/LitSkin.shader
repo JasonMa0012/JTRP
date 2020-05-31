@@ -10,6 +10,7 @@ Shader "JTRP/Lit Skin"
         [Title(_, Diffuse)]
         [Tex(_, _Color)] _MainTex ("ColorMap (RGB)", 2D) = "white" { }
         [HideInInspector] _Color ("Color", Color) = (1, 1, 1, 1)
+        _Purity ("Purity：纯度", Range(0, 5)) = 1
         _AddColorIntensity ("Add Int", Range(0, 1)) = 0
         [HDR]_AddColor ("Add Color", Color) = (0, 0, 0, 1)
         
@@ -32,6 +33,7 @@ Shader "JTRP/Lit Skin"
         
         [Sub(_shadow)]_ShadowMapColor ("Color", Color) = (1, 1, 1, 1)
         [Sub(_shadow)]_ShadowIntensity ("Int：强度", Range(0, 1)) = 0.2
+        [Sub(_shadow)]_Shadow_Purity ("Purity：纯度", Range(0, 5)) = 2
         [Sub(_shadow_SKIN_MODE)]_Shadow_Step ("Step：阈值", Range(0, 1)) = 0.55
         [SubPowerSlider(_shadow_SKIN_MODE, 6)] _Shadow_Feather ("Feather：羽化", Range(0.0001, 1)) = 0.0001
         
@@ -105,8 +107,8 @@ Shader "JTRP/Lit Skin"
         [SubToggle(OutLine)] _OriginNormal ("Origin Normal：原始法线", float) = 0
         [Sub(OutLine)] _Offset_Z ("Offset Z：深度偏移", float) = 0
         [Sub(OutLine)] _Outline_Blend ("Blend：颜色混合", Range(0, 1)) = 1
-        [SubPowerSlider(OutLine, 1.7)] _Outline_Purity ("Purity：纯度", Range(-1, 1)) = 0
-        [SubPowerSlider(OutLine, 1.7)] _Outline_Lightness ("Lightness：明度", Range(-1, 1)) = 0
+        [SubPowerSlider(OutLine, 2)] _Outline_Purity ("Purity：纯度", Range(0, 5)) = 1
+        [SubPowerSlider(OutLine, 2)] _Outline_Lightness ("Lightness：明度", Range(0, 5)) = 1
         
         
         [HideInInspector]_BaseColor ("BaseColor", Color) = (1, 1, 1, 1)
@@ -323,22 +325,21 @@ Shader "JTRP/Lit Skin"
                 float4 _MainTex_var = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, context.uv0.xy);
                 float4 _ShadowMap_var = SAMPLE_TEXTURE2D(_ShadowMap, s_linear_repeat_sampler, context.uv0.xy);
                 
+                _MainTex_var.rgb = ShiftColorPurity(_MainTex_var.rgb, _Purity);
                 context.roughness = ComputeRoughness();
                 PreData(_LightColorIntensity, packedInput, input, posInput, builtinData, surfaceData, context);
                 
                 #ifdef _FACE_MODE
                     context.shadowStep = GetDFFaceShadowStep(_FaceForward, context.L, _Shadow_Gamma, context.uv0.xy, _FaceShadowStep, _Shadow_Scale);
                 #else
-                    context.shadowStep = max(_ShadowMap_var.a,
-                    GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, GetSelfShadow(context, posInput)));
+                    context.shadowStep = GetShadowStep(context.halfLambert, _Shadow_Step, _Shadow_Feather, GetSelfShadow(context, posInput));
                 #endif
                 
                 context.shadowStep = Max3(context.shadowStep, _ShadowMap_var.a, GetHairShadow(context, posInput, input));
                 
                 float step2 = GetShadowStep(context.halfLambert, _Shadow_Step2, _Shadow_Feather2);
                 
-                GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Power * 5 + 1,
-                step2 * _ShadowColor2.rgb * _ShadowIntensity2, _ShadowColorBlend2);
+                GetBaseColor(context, _MainTex_var.rgb * _Color.rgb, _SkyColorIntensity, _Shadow_Purity);
                 
                 PointLightLoop(context, posInput, builtinData, _PointLightColorIntensity, _HighColorLevel);
                 

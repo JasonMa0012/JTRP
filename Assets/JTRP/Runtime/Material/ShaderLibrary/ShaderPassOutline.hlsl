@@ -69,15 +69,15 @@ float4 frag(VertexOutput i): SV_Target
     #ifndef _OUTLINE_ENABLE_ON
         return(float4)0;
     #endif
-
+    
     float3 lightColor = _DirectionalLightDatas[0].color.rgb * GetCurrentExposureMultiplier() * _LightColorIntensity;
     float2 Set_UV0 = i.uv0;
     float2 Set_UV1 = i.uv1;
     float4 _MainTex_var = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, Set_UV0) * _Color;
     
     float3 Set_BaseColor = _Outline_Color.rgb * lightColor * lerp(1, _MainTex_var.rgb, _Outline_Blend);
-    Set_BaseColor = RgbToHsv(Set_BaseColor);
-    Set_BaseColor = float3(Set_BaseColor.r, Set_BaseColor.g + _Outline_Purity, Set_BaseColor.b + _Outline_Lightness);
     
-    return float4(HsvToRgb(Set_BaseColor) + _AddColor.rgb * _AddColorIntensity, 1.0);
+    Set_BaseColor = ShiftColorPurity(Set_BaseColor, _Outline_Purity) * _Outline_Lightness;
+    
+    return float4(Set_BaseColor + _AddColor.rgb * _AddColorIntensity, 1.0);
 }
