@@ -86,19 +86,22 @@ float GetShadow(DirectionalLightData mainLight, HDShadowContext sc, float2 scree
 
 float3 GetCaustics(float2 t, float3 sceneWorldPos, float3 sceneNormal)
 {
+    // extract shared uv
     // sceneNormal.y系数控制竖直方向采样速度，xz控制水平采样方向
-    float2 uv1 = t + TRANSFORM_TEX((sceneWorldPos.xz + sceneWorldPos.y * - (sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5), _MainTex);
-    float result1 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv1).rgb;// World space texture sampling
-    //return result1; //added: disabled original result 
+    float2 uv = sceneWorldPos.xz + sceneWorldPos.y * -(sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5;
 
-    //added: make caustics more random, and not flowing to only a single direction uniformly (caustics will not flow to a single direction)
-    //----------------------------------------------------------------------------------------
-    float2 uv2 = t * float2(-1.07,-1.437)*1.777 + TRANSFORM_TEX((sceneWorldPos.xz + sceneWorldPos.y * -(sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5), _MainTex);
-    float result2 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv2 * 0.777).rgb;// World space texture sampling
+    // original caustics
+    float2 uv1 = t + TRANSFORM_TEX(uv, _MainTex);
+    float3 result1 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv1).rgb;// World space texture sampling
+    //return result1; //enable this line will return Jason's original caustics result 
 
-    float intensityFix = 4; //because we use min(), overall result will be darker, use a multiply to fix it
-    return min(result1, result2) * intensityFix; //min() is the magic function of rendering cheap caustics
-    //----------------------------------------------------------------------------------------
+    // sample caustics texture with an opposite flow direction uv again, the goal is to make caustics more random, caustics will never flow to a single direction uniformly
+    float2 uv2 = t * float2(-1.07,-1.437) * 1.777 + TRANSFORM_TEX(uv, _MainTex);//any opposite direction uv, as long as uv2 is not equals uv1, it should looks good
+    uv2 *= 0.777; //make texture bigger
+    float3 result2 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv2).rgb;// World space texture sampling
+
+    float intensityFix = 4; //because we will use min() next line, overall result will be darker, use a multiply to fix it
+    return min(result1, result2) * intensityFix; //min() is the magic function of rendering fastest fake caustics!
 }
 
 float3 Scattering(float depth)
