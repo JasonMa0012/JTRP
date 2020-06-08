@@ -87,8 +87,18 @@ float GetShadow(DirectionalLightData mainLight, HDShadowContext sc, float2 scree
 float3 GetCaustics(float2 t, float3 sceneWorldPos, float3 sceneNormal)
 {
     // sceneNormal.y系数控制竖直方向采样速度，xz控制水平采样方向
-    float2 uv = t + TRANSFORM_TEX((sceneWorldPos.xz + sceneWorldPos.y * - (sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5), _MainTex);
-    return SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv).rgb;// World space texture sampling
+    float2 uv1 = t + TRANSFORM_TEX((sceneWorldPos.xz + sceneWorldPos.y * - (sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5), _MainTex);
+    float result1 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv1).rgb;// World space texture sampling
+    //return result1; //added: disabled original result 
+
+    //added: make caustics more random, and not flowing to only a single direction uniformly (caustics will not flow to a single direction)
+    //----------------------------------------------------------------------------------------
+    float2 uv2 = t * float2(-1.07,-1.437)*1.777 + TRANSFORM_TEX((sceneWorldPos.xz + sceneWorldPos.y * -(sceneNormal.x + sceneNormal.z) * (sceneNormal.y + 0.5) * 0.5), _MainTex);
+    float result2 = SAMPLE_TEXTURE2D(_MainTex, s_linear_repeat_sampler, uv2 * 0.777).rgb;// World space texture sampling
+
+    float intensityFix = 4; //because we use min(), overall result will be darker, use a multiply to fix it
+    return min(result1, result2) * intensityFix; //min() is the magic function of rendering cheap caustics
+    //----------------------------------------------------------------------------------------
 }
 
 float3 Scattering(float depth)
