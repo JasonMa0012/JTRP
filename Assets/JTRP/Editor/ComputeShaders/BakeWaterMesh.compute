@@ -1,0 +1,93 @@
+﻿#pragma kernel Culling
+
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+
+struct Tri
+{
+    float3 v[3];
+    float2 uv[3];
+};
+
+StructuredBuffer<float3> vertices;
+StructuredBuffer<float3> normals;
+StructuredBuffer<int3> triangles;
+AppendStructuredBuffer<Tri> resultTriangles;
+uniform float h;
+uniform float4x4 M2W;
+uniform float4x4 W2M;
+
+float3 TransformObjectToWorldNormal(float3 normalOS)
+{
+    // Normal need to be multiply by inverse transpose
+    return SafeNormalize(mul(normalOS, (float3x3)W2M));
+}
+
+
+[numthreads(1, 1, 1)]
+void Culling(uint id: SV_DispatchThreadID)
+{
+    // per triangle
+    //     若与平面有交点（三顶点不在同侧）
+    //         per line
+    //             若有交点
+    //                 用高度差之比lerp属性
+    //                 生成交点顶点、法线
+    //                 向法线位置偏移
+    //                 生成新顶点、法线
+    //             装配三角形，填充输出数据
+    
+    int i[] = {
+        triangles[id]
+    };
+    
+    float3 v[] = (float3[3])0;
+    for (int index = 0; index < 3; index ++)
+    {
+        v[index] = mul(M2W, float4(vertices[i[index]], 1)).xyz;
+    }
+    
+    int isSameSide = (int) (v[0].y > h) + (int) (v[1].y > h) + (int) (v[2].y > h);
+    if (isSameSide == 0 || isSameSide == 3)
+        return;
+    
+    float3 newVert[] = (float3[4])0;
+    float2 newUV[] = (float2[4])0;
+    int newIndex = 0;
+    
+    for (int _i = 0; _i < 3 && newIndex < 4; _i ++)
+    {
+        int p1 = _i, p2 = (_i + 1) == 3 ? 1: _i + 1;
+        float hDiff1 = v[p1].y - h, hDiff2 = v[p2].y - h;
+        if((int) (hDiff1 > 0) + (int) (hDiff2 > 0) != 1)
+            continue;
+        
+        float _lerp = abs(hDiff1) / (abs(hDiff1) + abs(hDiff2));
+        newVert[newIndex] = lerp(v[p1], v[p2], _lerp);
+        newVert[newIndex].y = h + 0.0001;
+        newUV[newIndex] = 0;
+        newIndex ++ ;
+        
+        float3 normal = lerp(normals[p1], normals[p2], _lerp);
+        normal = TransformObjectToWorldNormal(normal) * float3(1, 0, 1);
+        float foamWidth = 0.1;
+        newVert[newIndex] = newVert[newIndex - 1] + normal * foamWidth;
+        newVert[newIndex].y = h + 0.0001;
+        newUV[newIndex] = 1;
+        newIndex ++ ;
+    }
+    
+    Tri tri[] = (Tri[2])0;
+    int3 reindex[] = {
+        int3(0, 1, 3), int3(0, 3, 2)
+    };
+    for (int j = 0; j < 2; j ++)
+    {
+        for (int k = 0; k < 3; k ++)
+        {
+            tri[j].v[k] = newVert[reindex[j][k]];
+            tri[j].uv[k] = newUV[reindex[j][k]];
+        }
+    }
+    resultTriangles.Append(tri[0]);
+    resultTriangles.Append(tri[1]);
+}

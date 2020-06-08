@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace JTRP.Tool
+namespace JTRP.Utility
 {
     public enum NormalMode
     {
@@ -133,4 +133,4 @@ namespace JTRP.Tool
             }
         }
     }
-}// namespace JTRP.Tool
+}// namespace JTRP.Utility

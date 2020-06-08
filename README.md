@@ -10,7 +10,7 @@
 
 NPR交流群：1046752881
 
-- 开发环境：Unity 2019.3.5+、HDRP 7.31+、[其他依赖](https://github.com/Jason-Ma-233/JasonMaToonRenderPipeline/blob/master/Packages/manifest.json)
+- 开发环境：Unity 2019.3.5 - 2019.3.13、HDRP 7.31、[其他依赖](https://github.com/Jason-Ma-233/JasonMaToonRenderPipeline/blob/master/Packages/manifest.json)
 - 感谢[UTS](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)、[TCP](https://assetstore.unity.com/packages/vfx/shaders/toony-colors-pro-2-8105)、HDRP等项目给予的启发
 
 ## Feature

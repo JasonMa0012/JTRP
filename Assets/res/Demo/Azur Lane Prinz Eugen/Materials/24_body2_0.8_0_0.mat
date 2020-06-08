@@ -327,7 +327,7 @@ Material:
     - _Outline_Blend: 1
     - _Outline_Lightness: -0
     - _Outline_Lod: 1
-    - _Outline_Purity: 0.43999997
+    - _Outline_Purity: 0.44
     - _Outline_Width: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
@@ -338,6 +338,7 @@ Material:
     - _PointLightColorIntensity: 1
     - _PointLightFeather: 0.18
     - _PointLightStep: 0.7
+    - _Purity: 1
     - _ReceivesSSR: 1
     - _RefractionModel: 0
     - _RenderQueue: 2000

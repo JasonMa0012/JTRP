@@ -4,20 +4,25 @@ using UnityEngine;
 using UnityEditor;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Burst;
 using System.IO;
 using Unity.Collections.LowLevel.Unsafe;
+using static Unity.Mathematics.math;
+using Unity.Mathematics;
+using JTRP.Utility;
 
 namespace JTRP.CustomAssetPostprocessor
 {
     public class ModelOutlineImporter : AssetPostprocessor
     {
+        [BurstCompile(CompileSynchronously = true)]
         public struct CollectNormalJob : IJobParallelFor
         {
-            [ReadOnly] public NativeArray<Vector3> normals, vertrx;
+            [ReadOnly] public NativeArray<float3> normals, vertrx;
             [NativeDisableContainerSafetyRestriction]
-            public NativeArray<UnsafeHashMap<Vector3, Vector3>.ParallelWriter> result;
+            public NativeArray<UnsafeHashMap<float3, float3>.ParallelWriter> result;
 
-            public CollectNormalJob(NativeArray<Vector3> normals, NativeArray<Vector3> vertrx, NativeArray<UnsafeHashMap<Vector3, Vector3>.ParallelWriter> result)
+            public CollectNormalJob(NativeArray<float3> normals, NativeArray<float3> vertrx, NativeArray<UnsafeHashMap<float3, float3>.ParallelWriter> result)
             {
                 this.normals = normals;
                 this.vertrx = vertrx;
@@ -44,15 +49,16 @@ namespace JTRP.CustomAssetPostprocessor
             }
         }
 
+        [BurstCompile(CompileSynchronously = true)]
         public struct BakeNormalJob : IJobParallelFor
         {
-            [ReadOnly] public NativeArray<Vector3> vertrx, normals;
-            [ReadOnly] public NativeArray<Vector4> tangents;
+            [ReadOnly] public NativeArray<float3> vertrx, normals;
+            [ReadOnly] public NativeArray<float4> tangents;
             [NativeDisableContainerSafetyRestriction]
-            [ReadOnly] public NativeArray<UnsafeHashMap<Vector3, Vector3>> result;
-            [WriteOnly] public NativeArray<Vector2> uv8;
+            [ReadOnly] public NativeArray<UnsafeHashMap<float3, float3>> result;
+            [WriteOnly] public NativeArray<float2> uv8;
 
-            public BakeNormalJob(NativeArray<Vector3> vertrx, NativeArray<Vector3> normals, NativeArray<Vector4> tangents, NativeArray<UnsafeHashMap<Vector3, Vector3>> result, NativeArray<Vector2> uv8)
+            public BakeNormalJob(NativeArray<float3> vertrx, NativeArray<float3> normals, NativeArray<float4> tangents, NativeArray<UnsafeHashMap<float3, float3>> result, NativeArray<float2> uv8)
             {
                 this.vertrx = vertrx;
                 this.normals = normals;
@@ -63,28 +69,27 @@ namespace JTRP.CustomAssetPostprocessor
 
             void IJobParallelFor.Execute(int index)
             {
-                Vector3 smoothedNormals = Vector3.zero;
+                // 对于重合顶点进行平均法线
+                float3 smoothedNormals = 0;
                 for (int i = 0; i < result.Length; i++)
                 {
-                    if (result[i][vertrx[index]] != Vector3.zero)
+                    if (!all(result[i][vertrx[index]] == 0))
                         smoothedNormals += result[i][vertrx[index]];
                     else
                         break;
                 }
-                smoothedNormals = smoothedNormals.normalized;
+                smoothedNormals = normalizesafe(smoothedNormals);
 
-                var bitangent = (Vector3.Cross(normals[index], tangents[index]) * tangents[index].w).normalized;
+                var bitangent = normalizesafe(cross(normals[index], tangents[index].xyz) * tangents[index].w);
 
-                var tbn = new Matrix4x4(
-                    tangents[index],
+                var tbn = new float3x3(
+                    tangents[index].xyz,
                     bitangent,
-                    normals[index],
-                    Vector4.zero);
-                tbn = tbn.transpose;
+                    normals[index]
+                );
 
-                var bakedNormal = tbn.MultiplyVector(smoothedNormals).normalized;
-                Vector2 newUV = new Vector2(bakedNormal.x, bakedNormal.y);
-                uv8[index] = newUV;
+                var bakedNormal = mul(smoothedNormals, tbn);
+                uv8[index] = bakedNormal.xy;
             }
         }
 
@@ -96,6 +101,7 @@ namespace JTRP.CustomAssetPostprocessor
                 // 更改导入设置，使用Unity自带算法平滑模型，会自动合并重合顶点
                 ModelImporter model = assetImporter as ModelImporter;
                 model.importNormals = ModelImporterNormals.Calculate;
+                // model.isReadable = true;
                 model.normalCalculationMode = ModelImporterNormalCalculationMode.AngleWeighted;
                 model.normalSmoothingAngle = 180.0f;
                 model.importAnimation = false;
@@ -160,24 +166,24 @@ namespace JTRP.CustomAssetPostprocessor
 
             return dic;
         }
-        void ComputeSmoothedNormalByJob(Mesh smoothedMesh, Mesh originalMesh, int maxOverlapvertices = 20)
+        void ComputeSmoothedNormalByJob(Mesh smoothedMesh, Mesh originalMesh, int maxOverlapvertices = 50)
         {
             int svc = smoothedMesh.vertexCount, ovc = originalMesh.vertexCount;
             // CollectNormalJob Data
-            NativeArray<Vector3> normals = new NativeArray<Vector3>(smoothedMesh.normals, Allocator.Persistent),
-                vertrx = new NativeArray<Vector3>(smoothedMesh.vertices, Allocator.Persistent),
-                smoothedNormals = new NativeArray<Vector3>(svc, Allocator.Persistent);
-            var result = new NativeArray<UnsafeHashMap<Vector3, Vector3>>(maxOverlapvertices, Allocator.Persistent);
-            var resultParallel = new NativeArray<UnsafeHashMap<Vector3, Vector3>.ParallelWriter>(result.Length, Allocator.Persistent);
+            NativeArray<float3> normals = new NativeArray<float3>(smoothedMesh.normals.ToF3(), Allocator.Persistent),
+                vertrx = new NativeArray<float3>(smoothedMesh.vertices.ToF3(), Allocator.Persistent),
+                smoothedNormals = new NativeArray<float3>(svc, Allocator.Persistent);
+            var result = new NativeArray<UnsafeHashMap<float3, float3>>(maxOverlapvertices, Allocator.Persistent);
+            var resultParallel = new NativeArray<UnsafeHashMap<float3, float3>.ParallelWriter>(result.Length, Allocator.Persistent);
             // NormalBakeJob Data
-            NativeArray<Vector3> normalsO = new NativeArray<Vector3>(originalMesh.normals, Allocator.Persistent),
-                vertrxO = new NativeArray<Vector3>(originalMesh.vertices, Allocator.Persistent);
-            var tangents = new NativeArray<Vector4>(originalMesh.tangents, Allocator.Persistent);
-            var uv8 = new NativeArray<Vector2>(ovc, Allocator.Persistent);
+            NativeArray<float3> normalsO = new NativeArray<float3>(originalMesh.normals.ToF3(), Allocator.Persistent),
+                vertrxO = new NativeArray<float3>(originalMesh.vertices.ToF3(), Allocator.Persistent);
+            var tangents = new NativeArray<float4>(originalMesh.tangents.ToF4(), Allocator.Persistent);
+            var uv8 = new NativeArray<float2>(ovc, Allocator.Persistent);
 
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = new UnsafeHashMap<Vector3, Vector3>(svc, Allocator.Persistent);
+                result[i] = new UnsafeHashMap<float3, float3>(svc, Allocator.Persistent);
                 resultParallel[i] = result[i].AsParallelWriter();
             }
 
@@ -186,9 +192,9 @@ namespace JTRP.CustomAssetPostprocessor
 
             normalBakeJob.Schedule(ovc, 8, collectNormalJob.Schedule(svc, 100)).Complete();
 
-            var _uv8 = new Vector2[ovc];
+            var _uv8 = new float2[ovc];
             uv8.CopyTo(_uv8);
-            originalMesh.uv8 = _uv8;
+            originalMesh.uv8 = _uv8.ToV2();
 
             normals.Dispose();
             vertrx.Dispose();
@@ -199,6 +205,7 @@ namespace JTRP.CustomAssetPostprocessor
             vertrxO.Dispose();
             tangents.Dispose();
             uv8.Dispose();
+
         }
     }
 
