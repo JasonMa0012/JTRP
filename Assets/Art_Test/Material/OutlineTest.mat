@@ -1,0 +1,186 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7376660343576514931
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 11
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OutlineTest
+  m_Shader: {fileID: 4800000, guid: dd87fc42f22ec9c4ba9c126b90525ea3, type: 3}
+  m_ShaderKeywords: _DISABLE_SSR_TRANSPARENT _EMISSIVE_SIMPLE _IS_ANGELRING_OFF _IS_CLIPPING_OFF
+    _IS_OUTLINE_CLIPPING_NO _NORMALMAP_TANGENT_SPACE _ORIGINNORMAL_ON _OUTLINE_ENABLE_ON
+    _OUTLINE_NML _RIMLIGHT_ENABLE_ON _RIM_NORMAL _SHADOW_RAMP
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    IgnoreProjection: False
+  disabledShaderPasses:
+  - DistortionVectors
+  - MOTIONVECTORS
+  - TransparentDepthPrepass
+  - TransparentDepthPostpass
+  - TransparentBackface
+  - RayTracingPrepass
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MatCapNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MatCap_Sampler:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Outline_ColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Outline_Width_Ramp:
+        m_Texture: {fileID: 2800000, guid: 2b0d8a59e6613184095fb15960edef28, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowAddRamp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowColorRamp:
+        m_Texture: {fileID: 2800000, guid: a1487b04e076bf74db63452b45c7b7b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AlphaDstBlend: 0
+    - _AlphaIsTransparent: 0
+    - _AlphaSrcBlend: 1
+    - _BloomFactor: 1
+    - _BlurLevelMatcap: 0
+    - _BumpScaleMatcap: 1
+    - _CullMode: 2
+    - _DiffuseNormalBlend: 1
+    - _DstBlend: 0
+    - _EnableShadowColorRamp: 1
+    - _Enable_HighLight: 0
+    - _HdrpVersion: 2
+    - _HighColorInt1: 1
+    - _HighColorInt2: 1
+    - _HighColorIntOnShadow1: 0.3
+    - _HighColorIntOnShadow2: 0.3
+    - _HighColorPointInt1: 0.005
+    - _HighColorPointInt2: 0.005
+    - _HighLightFeather1: 0.001
+    - _HighLightPower2: 888
+    - _HighLightStep1: 0.99
+    - _HighLight_Mode: 0
+    - _LightColorBlend: 0.5
+    - _LightColorIntensity: 0.3
+    - _MatCap: 0.1
+    - _MatCap_Enable: 0
+    - _NormalScale: 1
+    - _Offset_Z: 0
+    - _OriginNormal: 1
+    - _OutLine_Enable: 1
+    - _Outline_Blend: 1
+    - _Outline_Lightness: 1
+    - _Outline_Purity: 1
+    - _Outline_Ramp_Max_Distance: 10
+    - _Outline_Width: 4.13
+    - _PointLightColorIntensity: 1
+    - _PointLightFeather: 0.001
+    - _PointLightStep: 0.6
+    - _Purity: 1
+    - _RenderQueue: 2000
+    - _RimLightBlend: 0.5
+    - _RimLightBlend2: 0.5
+    - _RimLightBlendPoint: 0.35
+    - _RimLightBlendPoint2: 0.35
+    - _RimLightFeather: 0.005
+    - _RimLightIntInShadow: 0.35
+    - _RimLightIntensity: 0
+    - _RimLightIntensity2: 1
+    - _RimLightLength: 7
+    - _RimLightWidth: 0.3
+    - _RimLight_Enable: 1
+    - _RimLight_Mode: 0
+    - _ShadowColorBlend2: 1
+    - _ShadowIntensity: 1
+    - _ShadowIntensity2: 0
+    - _Shadow_Feather: 0.31162563
+    - _Shadow_Feather2: 0.26138884
+    - _Shadow_Mode: 1
+    - _Shadow_Purity: 1
+    - _Shadow_Step: 0.802
+    - _Shadow_Step2: 0.325
+    - _SkyColorIntensity: 0.5
+    - _SrcBlend: 1
+    - _StencilCompare: 8
+    - _StencilOP: 0
+    - _StencilRef: 0
+    - _SurfaceType: 0
+    - _TessellationBackFaceCullEpsilon: -1
+    - _TessellationFactor: 0
+    - _TessellationFactorMaxDistance: 50
+    - _TessellationFactorMinDistance: 20
+    - _TessellationFactorTriangleSize: 100
+    - _TessellationMode: 0
+    - _TessellationShapeFactor: 0.75
+    - _TweakMatCapOnShadow: 0.25
+    - _ZOffset: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _enable_selfshadow: 0
+    - _roughness: 0.5
+    - _shadow: 0
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.8906494, b: 0.7783019, a: 1}
+    - _HighColor1: {r: 1, g: 1, b: 1, a: 1}
+    - _HighColor2: {r: 1, g: 1, b: 1, a: 1}
+    - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Outline_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RimLightColor2: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor2: {r: 0, g: 0.91298866, b: 1, a: 1}
+    - _ShadowFixedColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

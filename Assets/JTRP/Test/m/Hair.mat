@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Hair
+  m_Shader: {fileID: 4800000, guid: e77286aa3a07b184aadb884b730078de, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _LightMap:
+        m_Texture: {fileID: 2800000, guid: ba23b072b45094845a71d02cee1fbbdb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 80003ea32d2bd6246bf11d1aec167e4f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
+    - _BlendMode: 0
+    - _CullMode: 2
+    - _CullModeForward: 2
+    - _DiffusionProfile: 0
+    - _DiffusionProfileHash: 0
+    - _DmcShadowIntensity: 0.5
+    - _DstBlend: 0
+    - _EnableFogOnTransparent: 1
+    - _FogColorMode: 0
+    - _InvTilingScale: 1
+    - _LightFeather: 0.329
+    - _LightIntShadow: 0.5
+    - _LightLength: 0.479
+    - _LightThreshold: 0.1
+    - _LightWidth: 0.622
+    - _NormalMapSpace: 0
+    - _ShadowFeather: 0.01
+    - _ShadowThreshold: 0.5
+    - _SrcBlend: 1
+    - _SurfaceType: 0
+    - _TexWorldScale: 1
+    - _UVBase: 0
+    - _ZTestDepthEqualForOpaque: 4
+    - _ZTestGBuffer: 4
+    - _ZTestModeDistortion: 8
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 0.83137256, g: 0.8117647, b: 0.7882353, a: 1}
+    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
+    - _LightColor_H: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
+    - _LightColor_L: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
+    - _ShadowColor: {r: 0.65882355, g: 0.65882355, b: 0.65882355, a: 1}
+    - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}

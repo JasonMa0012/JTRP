@@ -1,0 +1,11 @@
+﻿RWTexture2D<float4> RenderTarget;
+
+#pragma max_recursion_depth 1
+
+[shader("raygeneration")]
+void MyRaygenShader()
+{
+    uint2 dispatchIdx = DispatchRaysIndex().xy;
+   
+    RenderTarget[dispatchIdx] = float4(dispatchIdx.x & dispatchIdx.y, (dispatchIdx.x & 15)/15.0, (dispatchIdx.y & 15)/15.0, 0.0);
+}
