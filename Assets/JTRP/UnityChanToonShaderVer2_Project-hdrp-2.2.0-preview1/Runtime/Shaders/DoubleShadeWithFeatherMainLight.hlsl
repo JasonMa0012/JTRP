@@ -59,7 +59,7 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
 
 
     float3 mainLihgtDirection = -_DirectionalLightDatas[mainLightIndex].forward;
-    float3 mainLightColor = _DirectionalLightDatas[mainLightIndex].color; // *GetCurrentExposureMultiplier();
+    float3 mainLightColor = _DirectionalLightDatas[mainLightIndex].color * GetCurrentExposureMultiplier() * _LightIntensity;
 //    float4 tmpColor = EvaluateLight_Directional(context, posInput, _DirectionalLightDatas[mainLightIndex]);
 //    float3 mainLightColor = tmpColor.xyz;
     float3 defaultLightDirection = normalize(UNITY_MATRIX_V[2].xyz + UNITY_MATRIX_V[1].xyz);
@@ -106,10 +106,14 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
     float _2ndColorFeatherForMask = lerp(_1st2nd_Shades_Feather, 0.0f, max(_SecondShadeOverridden, _ComposerMaskMode));
 
 
+    float hairShadow = 1.0;
+    #ifdef JTRP_FACE_SHADER
+        GetJTRPHairShadow(hairShadow, input.positionSS.xyz, lightDirection);
+    #endif
     //v.2.0.6
     //Minmimum value is same as the Minimum Feather's value with the Minimum Step's value as threshold.
     float _SystemShadowsLevel_var = (shadowAttenuation * 0.5) + 0.5 + _Tweak_SystemShadowsLevel > 0.001 ? (shadowAttenuation * 0.5) + 0.5 + _Tweak_SystemShadowsLevel : 0.0001;
-    float Set_FinalShadowMask = saturate((1.0 + ((lerp(_HalfLambert_var, _HalfLambert_var * saturate(_SystemShadowsLevel_var), _Set_SystemShadowsToBase) - (_BaseColor_Step - _1stColorFeatherForMask)) * ((1.0 - _Set_1st_ShadePosition_var.rgb).r - 1.0)) / (_BaseColor_Step - (_BaseColor_Step - _1stColorFeatherForMask))));
+    float Set_FinalShadowMask = saturate((1.0 + ((lerp(_HalfLambert_var, _HalfLambert_var * saturate(_SystemShadowsLevel_var), _Set_SystemShadowsToBase) * hairShadow - (_BaseColor_Step - _1stColorFeatherForMask)) * ((1.0 - _Set_1st_ShadePosition_var.rgb).r - 1.0)) / (_BaseColor_Step - (_BaseColor_Step - _1stColorFeatherForMask))));
 
     //
     //Composition: 3 Basic Colors as Set_FinalBaseColor
@@ -181,7 +185,7 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
 #endif
     //Matcap
     //v.2.0.6 : CameraRolling Stabilizer
-    //‹¾ƒXƒNƒŠƒvƒg”»’èF_sign_Mirror = -1 ‚È‚çA‹¾‚Ì’†‚Æ”»’è.
+    //ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½ï¿½F_sign_Mirror = -1 ï¿½È‚ï¿½Aï¿½ï¿½ï¿½Ì’ï¿½ï¿½Æ”ï¿½ï¿½ï¿½.
     //v.2.0.7
     fixed _sign_Mirror = 0; //  todo. i.mirrorFlag;
     float3 _Camera_Right = UNITY_MATRIX_V[0].xyz;
@@ -189,7 +193,7 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
     float3 _Up_Unit = float3(0, 1, 0);
     float3 _Right_Axis = cross(_Camera_Front, _Up_Unit);
 
-    //‹¾‚Ì’†‚È‚ç”½“].
+    //ï¿½ï¿½ï¿½Ì’ï¿½ï¿½È‚ç”½ï¿½].
     if (_sign_Mirror < 0) {
         _Right_Axis = -1 * _Right_Axis;
         _Rotate_MatCapUV = -1 * _Rotate_MatCapUV;
@@ -215,7 +219,7 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
     float2 _ViewNormalAsMatCapUV = (lerp(noSknewViewNormal, viewNormal, _Is_Ortho).rg * 0.5) + 0.5;
     //v.2.0.7
     float2 _Rot_MatCapUV_var = RotateUV((0.0 + ((_ViewNormalAsMatCapUV - (0.0 + _Tweak_MatCapUV)) * (1.0 - 0.0)) / ((1.0 - _Tweak_MatCapUV) - (0.0 + _Tweak_MatCapUV))), _Rot_MatCapUV_var_ang, float2(0.5, 0.5), 1.0);
-    //‹¾‚Ì’†‚È‚çUV¶‰E”½“].
+    //ï¿½ï¿½ï¿½Ì’ï¿½ï¿½È‚ï¿½UVï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½].
     if (_sign_Mirror < 0) {
         _Rot_MatCapUV_var.x = 1 - _Rot_MatCapUV_var.x;
     }
@@ -241,6 +245,15 @@ float3 UTS_MainLight(LightLoopContext lightLoopContext, FragInputs input, int ma
     float3 matCapColorOnMultiplyMode = Set_HighColor * (1 - _Tweak_MatcapMaskLevel_var_MultiplyMode) + Set_HighColor * Set_MatCap * _Tweak_MatcapMaskLevel_var_MultiplyMode + lerp(float3(0, 0, 0), Set_RimLight, _RimLight);
     float3 matCapColorFinal = lerp(matCapColorOnMultiplyMode, matCapColorOnAddMode, _Is_BlendAddToMatCap);
     float3 finalColor = lerp(_RimLight_var, matCapColorFinal, _MatCap);// Final Composition before Emissive
+
+
+    //===============================================
+    //                    JTRP
+    //===============================================
+    GetTangentHighLight(finalColor, input.tangentToWorld, input.positionRWS, V, input.texCoord0.xy, input.texCoord1.xy, 1 - Set_FinalShadowMask);
+
+    GetSSRimLight(finalColor, posInput, Set_UV0, lightDirection, normalDirection, Set_FinalShadowMask);
+
     //
     //v.2.0.6: GI_Intensity with Intensity Multiplier Filter
 

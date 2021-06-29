@@ -84,7 +84,7 @@
                 float3 _BakedNormalDir = normalize(mul(_BakedNormal_var.rgb, tangentTransform));
                 //ここまで.
 				float viewDistance = distance(objPos.rgb,_WorldSpaceCameraPos);
-				float outlineWidthRamp = SAMPLE_TEXTURE2D_LOD(_Outline_Width_Ramp, s_linear_clamp_sampler, float2(viewDistance / _Outline_Ramp_Max_Distance, 0.5), 0).r;
+				float outlineWidthRamp = SampleRampSignalLine(_Outline_Width_Ramp, viewDistance / _Outline_Ramp_Max_Distance).r;
                 float Set_Outline_Width = (_Outline_Width * 0.001 * outlineWidthRamp * smoothstep( _Farthest_Distance, _Nearest_Distance, viewDistance )*_Outline_Sampler_var.rgb).r;
                 Set_Outline_Width *= (1.0f - _ZOverDrawMode);
                 //v.2.0.7.5
@@ -108,6 +108,9 @@
 #endif
                 //v.2.0.7.5
                 o.pos.z = o.pos.z + _Offset_Z * _ClipCameraPos.z;
+
+                AntiPerspective(o.pos);
+
                 return o;
             }
             float4 frag(VertexOutput i) : SV_Target{

@@ -145,11 +145,11 @@ Material:
     - _ShadowColorBlend2: 1
     - _ShadowIntensity: 1
     - _ShadowIntensity2: 0
-    - _Shadow_Feather: 0.31162563
+    - _Shadow_Feather: 0.44351348
     - _Shadow_Feather2: 0.26138884
     - _Shadow_Mode: 1
     - _Shadow_Purity: 1
-    - _Shadow_Step: 0.802
+    - _Shadow_Step: 0.947
     - _Shadow_Step2: 0.325
     - _SkyColorIntensity: 0.5
     - _SrcBlend: 1

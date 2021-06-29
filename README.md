@@ -1,18 +1,11 @@
 # ![](README.assets/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
-* [Jason Ma Toon Render Pipeline (JTRP)](#jason-ma-toon-render-pipeline-jtrp)
-  * [Feature](#feature)
-  * [Get Start](#get-start)
-  * [Lit Shader](#lit-shader)
-  * [平滑法线导入工具（ModelOutlineImporter）（Legacy）](#%E5%B9%B3%E6%BB%91%E6%B3%95%E7%BA%BF%E5%AF%BC%E5%85%A5%E5%B7%A5%E5%85%B7modeloutlineimporterlegacy)
-  * [Light Weight ShaderGUI](#light-weight-shadergui)
-    * [Function List](#function-list)
-  * Reference
+
 
 这是一个基于**Unity HDRP  + DirectX 12 Raytracing** 的**PBR + NPR**混合渲染管线，定位于**高品质实时渲染MMD、CG**内容创作的工具集。
 
-~~演示+教学视频：~~
 
-专栏：https://www.zhihu.com/people/blackcat1312/posts
+
+**更多信息请关注专栏，此RM不做过多介绍且图文不再更新：https://www.zhihu.com/people/blackcat1312/posts**
 
 B站：https://space.bilibili.com/42463206
 
@@ -20,19 +13,14 @@ NPR交流群：1046752881
 
 ## Features
 
-- **Lit Toon Shader**：working...
-- **Lit Toon Shader ASE Template**：working...
-- **Geometry Character Outline**：working... https://www.bilibili.com/video/BV1vp4y1r7sF
-- **Post Process Scene Outline**：Initially available
-- **DXR PBR + NPR Sample**：Kotenbu
-- **Light Weight ShaderGUI**：[Light Weight ShaderGUI | GUI 工具 | Unity Asset Store](https://assetstore.unity.com/packages/tools/gui/light-weight-shadergui-170331)
-- **Back Face Outline + Model Outline Importer（Legacy）**
+- **UTS2高度集成+扩展**
+- ……
 
 
 
 ## Getting started
 
-Development environment: Unity 2020.2、HDRP 10.2、[Other dependencies](https://github.com/Jason-Ma-233/JasonMaToonRenderPipeline/blob/master/Packages/manifest.json)
+Development environment: Unity 2020.3、[Other dependencies](https://github.com/Jason-Ma-233/JasonMaToonRenderPipeline/blob/master/Packages/manifest.json)
 
 Download and open the project, open [**Window > Render Pipeline > HD Render Pipeline Wizard**](https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@8.2/manual/Render-Pipeline-Wizard.html).
 

@@ -8,54 +8,77 @@ using UnityEngine.Rendering.HighDefinition;
 namespace JTRP
 {
 	[System.Serializable]
-	// ReSharper disable once InconsistentNaming
 	class CustomPassJTRP : CustomPass
 	{
+		[Header("Post Process Outline")]
 		public bool enablePPOutline = true;
+
 		public Material ppOutlineMaterial;
+
+		[Header("Geometry Outline")]
 		public bool enableGeometryOutline = true;
+
 		public bool enable3XDepth = false;
-		[Range(0, 5)] public float globalGeometryWidthScale = 1f;
 
-		RTHandle _customBuffer; // vertex color
-		RTHandle _depthBuffer; // 3X Depth Texture
-		RTHandle _postProcessTempBuffer;
+		[Range(0, 5)]
+		public float globalGeometryWidthScale = 1f;
 
-		private static readonly int _camera3XDepthTexture = Shader.PropertyToID("_Camera3XDepthTexture");
-		private static readonly int _jtrpCameraDepth = Shader.PropertyToID("_JTRP_CameraDepth");
-		private static readonly int _jtrpCameraColor = Shader.PropertyToID("_JTRP_CameraColor");
 
-		protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
+		private RTHandle _customBuffer; // vertex color
+		private RTHandle _depthBuffer;  // 3X Depth Texture
+		private RTHandle _postProcessTempBuffer;
+
+		private RayTracingAccelerationStructure _ras;
+
+		private readonly int _camera3XDepthTexture = Shader.PropertyToID("_Camera3XDepthTexture");
+		private readonly int _jtrpCameraDepth      = Shader.PropertyToID("_JTRP_CameraDepth");
+		private readonly int _jtrpCameraColor      = Shader.PropertyToID("_JTRP_CameraColor");
+		private readonly int _jtrpMask_Map         = Shader.PropertyToID("_JTRP_Mask_Map");
+
+		private static ShaderTagId _shaderTagId_JTRPMask;
+		private static ShaderTagId _shaderTagId_JTRPFace;
+		private static ShaderTagId _shaderTagId_JTRPLitToon;
+
+		protected override void Setup(ScriptableRenderContext ctx, CommandBuffer cmd)
 		{
-			// _customBuffer = RTHandles.Alloc(
-			// 	scaleFactor: Vector2.one,
-			// 	colorFormat: GraphicsFormat.B8G8R8A8_UNorm,
-			// 	name: "Vertex Color Buffer",
-			// 	autoGenerateMips: false
-			// );
+			_shaderTagId_JTRPMask = new ShaderTagId("JTRPMask");
+			_shaderTagId_JTRPFace = new ShaderTagId("JTRPFace");
+			_shaderTagId_JTRPLitToon = new ShaderTagId("JTRPLitToon");
+
+			_customBuffer = RTHandles.Alloc(
+			                                scaleFactor: Vector2.one,
+			                                colorFormat: GraphicsFormat.R32_SFloat,
+			                                name: "JTRP Mask Buffer",
+			                                autoGenerateMips: false
+			                               );
+
+			// if (ShaderConfig.s_CameraRelativeRendering != 0)
+			// 	_ras.Build(Camera.current.transform.position);
+			// else
+			// 	_ras.Build();
 		}
 
 		private void SetupPPTempBuffer(CustomPassContext ctx)
 		{
 			if (_postProcessTempBuffer == null)
 				_postProcessTempBuffer = RTHandles.Alloc(
-					scaleFactor: Vector2.one,
-					colorFormat: ctx.cameraColorBuffer.rt.graphicsFormat,
-					filterMode: ctx.cameraColorBuffer.rt.filterMode,
-					name: "JTRP PP Temp");
+				                                         scaleFactor: Vector2.one,
+				                                         colorFormat: ctx.cameraColorBuffer.rt.graphicsFormat,
+				                                         filterMode: ctx.cameraColorBuffer.rt.filterMode,
+				                                         name: "JTRP PP Temp");
 		}
 
 		private void Setup3XDepthBuffer()
 		{
 			if (_depthBuffer == null)
 				_depthBuffer = RTHandles.Alloc(
-					Vector2.one * 3,
-					TextureXR.slices,
-					DepthBits.Depth32,
-					dimension: TextureXR.dimension,
-					useDynamicScale: true,
-					name: "3X CameraDepthStencil"
-				);
+				                               Vector2.one * 3,
+				                               TextureXR.slices,
+				                               DepthBits.Depth32,
+				                               dimension: TextureXR.dimension,
+				                               useDynamicScale: true,
+				                               name: "3X CameraDepthStencil"
+				                              );
 		}
 
 		//? BUG: HDUtils.BlitCameraTexture can not blit to ctx.cameraColorBuffer
@@ -64,24 +87,43 @@ namespace JTRP
 		{
 			SetRenderTargetAuto(ctx.cmd);
 			HDUtils.BlitQuad(ctx.cmd, src,
-				new Vector2(src.rtHandleProperties.rtHandleScale.x,
-					src.rtHandleProperties.rtHandleScale.y),
-				Vector2.one,
-				0, false);
+			                 new Vector2(src.rtHandleProperties.rtHandleScale.x,
+			                             src.rtHandleProperties.rtHandleScale.y),
+			                 Vector2.one,
+			                 0, false);
 		}
 
+		// TODO
+		// 1.Draw hair vertex color to custom mask buffer
+		// 2.Draw face with hair buffer and shadow map
 		protected override void Execute(CustomPassContext ctx)
 		{
-			#region Draw Vertex Color
+			// Draw Vertex Color Mask
+			CoreUtils.SetRenderTarget(ctx.cmd, _customBuffer);
+			CoreUtils.ClearRenderTarget(ctx.cmd, ClearFlag.Color, Color.black);
+			var resultJTRPMask =
+				new RendererListDesc(_shaderTagId_JTRPMask, ctx.cullingResults, ctx.hdCamera.camera)
+				{
+					rendererConfiguration = PerObjectData.None,
+					renderQueueRange = RenderQueueRange.all,
+					sortingCriteria = SortingCriteria.CommonTransparent,
+					// layerMask = LayerMask.GetMask("Hair"),
+				};
+			CoreUtils.DrawRendererList(ctx.renderContext, ctx.cmd, RendererList.Create(resultJTRPMask));
 
-			// use MRT to render JTRP Shader after Opaque / Sky
-			// CoreUtils.SetRenderTarget(ctx.cmd, _customBuffer);
-			// CoreUtils.ClearRenderTarget(ctx.cmd, ClearFlag.Color, Color.white);
-			//
-			// CoreUtils.SetRenderTarget(ctx.cmd, new RenderTargetIdentifier[] {ctx.cameraColorBuffer, _customBuffer},
-			// 	ctx.cameraDepthBuffer);
+			// Draw UTS Face
+			SetRenderTargetAuto(ctx.cmd);
+			ctx.cmd.SetGlobalTexture(_jtrpMask_Map, _customBuffer);
+			var resultJTRPFace =
+				new RendererListDesc(_shaderTagId_JTRPFace, ctx.cullingResults, ctx.hdCamera.camera)
+				{
+					rendererConfiguration = (PerObjectData) 2047, // all
+					renderQueueRange = RenderQueueRange.all,
+					sortingCriteria = SortingCriteria.CommonTransparent,
+					// layerMask = LayerMask.GetMask("Face"),
+				};
+			CoreUtils.DrawRendererList(ctx.renderContext, ctx.cmd, RendererList.Create(resultJTRPFace));
 
-			#endregion
 
 			// render PP to tempBuffer and zhen copy back to cameraColor
 			if (enablePPOutline)
@@ -93,16 +135,18 @@ namespace JTRP
 				BlitToCameraColorTexture(ctx, _postProcessTempBuffer);
 			}
 
-			// draw opaque
-			var resultJTRPOpaque =
-				new RendererListDesc(new ShaderTagId("JTRPLitToon"), ctx.cullingResults, ctx.hdCamera.camera)
+			// draw JTRPLitToon
+			/*
+			SetRenderTargetAuto(ctx.cmd);
+			var resultJTRP =
+				new RendererListDesc(_shaderTagId_JTRPLitToon, ctx.cullingResults, ctx.hdCamera.camera)
 				{
 					rendererConfiguration = (PerObjectData) 2047, // all
-					renderQueueRange = RenderQueueRange.opaque,
-					sortingCriteria = SortingCriteria.CommonOpaque
+					renderQueueRange = RenderQueueRange.all,
+					sortingCriteria = SortingCriteria.CommonTransparent
 				};
-			SetRenderTargetAuto(ctx.cmd);
-			CoreUtils.DrawRendererList(ctx.renderContext, ctx.cmd, RendererList.Create(resultJTRPOpaque));
+			CoreUtils.DrawRendererList(ctx.renderContext, ctx.cmd, RendererList.Create(resultJTRP));*/
+
 
 			// Procedural Geometry Outline
 			if (enableGeometryOutline)
@@ -146,14 +190,15 @@ namespace JTRP
 
 		private static bool _needRebake = true;
 
-		[UnityEditor.MenuItem("JTRP/Rebake Geometry Outline")]
-		private static void Rebake()
-		{
-			_needRebake = true;
-		}
+		// [UnityEditor.MenuItem("JTRP/Rebake Geometry Outline")]
+		// private static void Rebake()
+		// {
+		// 	_needRebake = true;
+		// }
 
 		private void DoGeometryOutline(CustomPassContext ctx)
-		{// TODO:Analyze performance
+		{
+			// TODO:Analyze performance
 			var needRebake = _needRebake;
 			ctx.cmd.SetGlobalFloat("_globalEdgeWidthScale", globalGeometryWidthScale);
 			ctx.cmd.SetGlobalFloat("_enable3XDepth", enable3XDepth ? 1 : 0);

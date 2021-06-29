@@ -76,6 +76,8 @@
 	// float4 _BaseColorMap_TexelSize;
 	// float4 _BaseColorMap_MipInfo;
 
+	float4 _UVMappingMaskEmissive;
+
 	float _Metallic;
 	float _Smoothness;
 	float4 _DetailMap_ST;

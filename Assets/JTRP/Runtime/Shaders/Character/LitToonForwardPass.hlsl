@@ -13,13 +13,13 @@
 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
 
 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/VertMesh.hlsl"
-
+#include "ForwardFunction.hlsl"
 
 PackedVaryingsType Vert(AttributesMesh inputMesh)
 {
     VaryingsType varyingsType;
     varyingsType.vmesh = VertMesh(inputMesh);
-    
+
     return PackVaryingsType(varyingsType);
 }
 
@@ -27,13 +27,13 @@ PackedVaryingsToPS VertTesselation(VaryingsToDS input)
 {
     VaryingsToPS output;
     output.vmesh = VertMeshTesselation(input.vmesh);
-    
+
+    AntiPerspective(output.vmesh.positionCS);
+
     return PackVaryingsToPS(output);
 }
 
 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/TessellationShare.hlsl"
-#include "ForwardFunction.hlsl"
-
 
 void Frag(PackedVaryingsToPS packedInput, 
 out float4 outColor: SV_Target0,

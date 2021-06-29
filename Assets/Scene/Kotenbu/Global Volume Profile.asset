@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
@@ -413,8 +413,8 @@ MonoBehaviour:
   - {fileID: -8173248499848286934}
   - {fileID: 987579072709543115}
   - {fileID: 6533569435794997825}
-  - {fileID: -8299243663882456254}
   - {fileID: 9168727535282739183}
+  - {fileID: -8299243663882456254}
   - {fileID: 1531657599689442622}
 --- !u!114 &987579072709543115
 MonoBehaviour:
@@ -440,10 +440,10 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 6.43
+    m_Value: 7
   multiplier:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 4.13
     min: 0
   upperHemisphereLuxValue:
     m_OverrideState: 1
@@ -911,7 +911,7 @@ MonoBehaviour:
     max: 4
   directLightingStrength:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.5
     min: 0
     max: 1
   radius:
@@ -941,35 +941,35 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value:
       serializedVersion: 2
-      m_Bits: 305
+      m_Bits: 25
   m_StepCount:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 16
     min: 2
     max: 32
   m_FullResolution:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   m_MaximumRadiusInPixels:
     m_OverrideState: 1
-    m_Value: 32
+    m_Value: 80
     min: 16
     max: 256
   m_BilateralUpsample:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   m_DirectionCount:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 4
     min: 1
     max: 6
   m_RayLength:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 20
     min: 0.01
   m_SampleCount:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 16
     min: 1
     max: 64
   m_Denoise:
@@ -977,7 +977,7 @@ MonoBehaviour:
     m_Value: 1
   m_DenoiserRadius:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.03
     min: 0.001
     max: 1
 --- !u!114 &9168727535282739183
@@ -1049,7 +1049,7 @@ MonoBehaviour:
     max: 1
   m_SmoothnessFadeStart:
     m_OverrideState: 1
-    m_Value: 0.506
+    m_Value: 0.493
     min: 0
     max: 1
   m_RayMaxIterations:
@@ -1061,7 +1061,7 @@ MonoBehaviour:
     min: 0.01
   m_ClampValue:
     m_OverrideState: 1
-    m_Value: 0.8
+    m_Value: 1
     min: 0.001
     max: 10
   m_UpscaleRadius:

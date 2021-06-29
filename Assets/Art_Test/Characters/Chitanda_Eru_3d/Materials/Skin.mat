@@ -37,6 +37,9 @@ Material:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
+  - SRPDEFAULTUNLIT
+  - JTRPFace
+  - JTRPMask
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -97,6 +100,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emissive_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairShadowWidthRamp:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -255,6 +262,7 @@ Material:
     - _AngelRingOverridden: 0
     - _AngelRingVisible: 1
     - _Anisotropy: 0
+    - _AntiPerspectiveIntensity: 0
     - _Ap_RimLight_FeatherOff: 0
     - _Ap_RimLight_Power: 0.1
     - _AutoRenderQueue: 1
@@ -316,10 +324,13 @@ Material:
     - _EnableShadowColorRamp: 0
     - _Enable_HighLight: 0
     - _EnergyConservingSpecularColor: 1
+    - _FaceShadowBias: 0
     - _Farthest_Distance: 100
     - _FirstShadeOverridden: 0
     - _FirstShadeVisible: 1
     - _GI_Intensity: 0
+    - _HairShadowRampMaxDistance: 10
+    - _HairShadowWidth: 1
     - _HdrpVersion: 2
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -351,6 +362,8 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _IsBaseMapAlphaAsClippingMask: 0
+    - _IsFace: 0
+    - _IsHair: 0
     - _Is_BLD: 0
     - _Is_BakedNormal: 0
     - _Is_BlendAddToHiColor: 0
@@ -383,6 +396,7 @@ Material:
     - _LightColorBlend: 0.5
     - _LightColorIntensity: 0.3
     - _LightDirection_MaskOn: 0
+    - _LightIntensity: 0.03
     - _LinkDetailsWithBase: 1
     - _MatCap: 0.1
     - _MatCap_Enable: 0

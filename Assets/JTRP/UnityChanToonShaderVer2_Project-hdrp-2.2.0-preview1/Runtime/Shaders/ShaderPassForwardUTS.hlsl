@@ -9,6 +9,7 @@ PackedVaryingsType Vert(AttributesMesh inputMesh, AttributesPass inputPass)
 {
     VaryingsType varyingsType;
     varyingsType.vmesh = VertMesh(inputMesh);
+
     return MotionVectorVS(varyingsType, inputMesh, inputPass);
 }
 
@@ -37,6 +38,10 @@ PackedVaryingsType Vert(AttributesMesh inputMesh)
     VaryingsType varyingsType;
     varyingsType.vmesh = VertMesh(inputMesh);
 
+#ifndef TESSELLATION_ON
+    AntiPerspective(varyingsType.vmesh.positionCS);
+#endif
+
     return PackVaryingsType(varyingsType);
 }
 
@@ -61,7 +66,7 @@ PackedVaryingsToPS VertTesselation(VaryingsToDS input)
 #endif
 
 
-
+// unused
 float3 GetLightColor(LightLoopContext context, FragInputs input, PositionInputs posInput,
     float3 V, BuiltinData builtinData,
     BSDFData bsdfData, PreLightData preLightData, LightData light)
@@ -126,6 +131,8 @@ float3 GetLightColor(LightLoopContext context, FragInputs input, PositionInputs 
     return finalColor;
 }
 
+
+
 uniform sampler2D _RaytracedHardShadow;
 float4 _RaytracedHardShadow_TexelSize;
 uniform int UtsUseRaytracingShadow;
@@ -156,6 +163,7 @@ void Frag(PackedVaryingsToPS packedInput,
 
     // input.positionSS is SV_Position
     PositionInputs posInput = GetPositionInput(input.positionSS.xy, _ScreenSize.zw, input.positionSS.z, input.positionSS.w, input.positionRWS.xyz, tileIndex);
+
 
 #ifdef VARYINGS_NEED_POSITION_WS
     float3 V = GetWorldSpaceNormalizeViewDir(input.positionRWS);
@@ -198,6 +206,7 @@ void Frag(PackedVaryingsToPS packedInput,
 
     float3 i_normalDir = surfaceData.normalWS;
 
+
     float3 finalColor = float3(0.0f, 0.0f, 0.0f);
     if (featureFlags & LIGHTFEATUREFLAGS_DIRECTIONAL)
     {
@@ -213,51 +222,25 @@ void Frag(PackedVaryingsToPS packedInput,
             else
 #endif
             {
-                // TODO: this will cause us to load from the normal buffer first. Does this cause a performance problem?
                 float3 L = -light.forward;
 
-                // Is it worth sampling the shadow map?
+#if defined(UTS_USE_RAYTRACING_SHADOW)
+                // JTRP: HDRP Screen Space Ray Tracing Shadow, with hard self shadow (NoL < 0)
+                if ((light.screenSpaceShadowIndex & SCREEN_SPACE_SHADOW_INDEX_MASK) != INVALID_SCREEN_SPACE_SHADOW)
+                {
+                    context.shadowValue = lerp(1, (float)GetScreenSpaceColorShadow(posInput, light.screenSpaceShadowIndex), light.shadowDimmer);
+                }
+#else
+                // HDRP Shadow Map
                 if ((light.lightDimmer > 0) && (light.shadowDimmer > 0) && // Note: Volumetric can have different dimmer, thus why we test it here
                     IsNonZeroBSDF(V, L, preLightData, bsdfData) &&
                     !ShouldEvaluateThickObjectTransmission(V, L, preLightData, bsdfData, light.shadowIndex))
                 {
-
-#if defined(UTS_USE_RAYTRACING_SHADOW)
-                    {
-                        /*
-                        struct PositionInputs
-                        {
-                            float3 positionWS;  // World space position (could be camera-relative)
-                            float2 positionNDC; // Normalized screen coordinates within the viewport    : [0, 1) (with the half-pixel offset)
-                            uint2  positionSS;  // Screen space pixel coordinates                       : [0, NumPixels)
-                            uint2  tileCoord;   // Screen tile coordinates                              : [0, NumTiles)
-                            float  deviceDepth; // Depth from the depth buffer                          : [0, 1] (typically reversed)
-                            float  linearDepth; // View space Z coordinate                              : [Near, Far]
-                        };
-                        float4 size = _RaytracedHardShadow_TexelSize;
-                        */
-
-                        float r = UNITY_SAMPLE_SCREEN_SHADOW(_RaytracedHardShadow, float4(posInput.positionNDC.xy, 0.0, 1));
-                        context.shadowValue = r;
-                    }
-#else
-                    {
-                        context.shadowValue = GetDirectionalShadowAttenuation(context.shadowContext,
-                            posInput.positionSS, posInput.positionWS, GetNormalForShadowBias(bsdfData),
-                            light.shadowIndex, L);
-
-                    }
-#endif // UTS_USE_RAYTRACING_SHADOW
-
-
-                }
-#if defined (UTS_USE_RAYTRACING_SHADOW)
-                else 
-                {
-                    float r = UNITY_SAMPLE_SCREEN_SHADOW(_RaytracedHardShadow, float4(posInput.positionNDC.xy, 0.0, 1));
-                    context.shadowValue = r;
-                }
-#endif // UTS_USE_RAYTRACING_SHADOW
+					context.shadowValue = GetDirectionalShadowAttenuation(context.shadowContext,
+                        posInput.positionSS, posInput.positionWS + L * _FaceShadowBias, GetNormalForShadowBias(bsdfData),
+                        light.shadowIndex, L);
+				}
+#endif
             }
 
         }
@@ -282,7 +265,7 @@ void Frag(PackedVaryingsToPS packedInput,
                 if (mainLightIndex != i)
                 {
                     
-                    float3 lightColor = _DirectionalLightDatas[i].color;
+                    float3 lightColor = _DirectionalLightDatas[i].color * _LightIntensity;
                     float3 lightDirection = -_DirectionalLightDatas[i].forward;
                     float notDirectional = 0.0f;
 #if defined(_SHADINGGRADEMAP)
@@ -297,7 +280,7 @@ void Frag(PackedVaryingsToPS packedInput,
         }
 
     }
-
+    
     AggregateLighting aggregateLighting;
     ZERO_INITIALIZE(AggregateLighting, aggregateLighting); // LightLoop is in charge of initializing the struct
 
@@ -512,7 +495,14 @@ void Frag(PackedVaryingsToPS packedInput,
     float3 envLightIntensity = 0.299*envLightColor.r + 0.587*envLightColor.g + 0.114*envLightColor.b < 1 ? (0.299*envLightColor.r + 0.587*envLightColor.g + 0.114*envLightColor.b) : 1;
 
     finalColor = saturate(finalColor) + (envLightColor*envLightIntensity*_GI_Intensity*smoothstep(1, 0, envLightIntensity / 2)) + emissive;
-    //    finalColor = float3(context.shadowValue, 0, 0);
+    
+    
+    
+    
+
+
+
+
 #if defined(_SHADINGGRADEMAP)
     //v.2.0.4
   #ifdef _IS_TRANSCLIPPING_OFF

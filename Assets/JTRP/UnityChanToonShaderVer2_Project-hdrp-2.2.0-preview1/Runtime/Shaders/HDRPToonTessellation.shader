@@ -330,7 +330,7 @@ Shader "HDRP/ToonTessellation"
         [Toggle(_)] _Is_BlendAddToHiColor("Is_BlendAddToHiColor", Float) = 0
         [Toggle(_)] _Is_UseTweakHighColorOnShadow("Is_UseTweakHighColorOnShadow", Float) = 0
         _TweakHighColorOnShadow("TweakHighColorOnShadow", Range(0, 1)) = 0
-        //ƒnƒCƒJƒ‰[ƒ}ƒXƒN.
+        //ï¿½nï¿½Cï¿½Jï¿½ï¿½ï¿½[ï¿½}ï¿½Xï¿½N.
         _Set_HighColorMask("Set_HighColorMask", 2D) = "white" {}
         _Tweak_HighColorMaskLevel("Tweak_HighColorMaskLevel", Range(-1, 1)) = 0
         [Toggle(_)] _RimLight("RimLight", Float) = 0
@@ -340,7 +340,7 @@ Shader "HDRP/ToonTessellation"
         _RimLight_Power("RimLight_Power", Range(0, 1)) = 0.1
         _RimLight_InsideMask("RimLight_InsideMask", Range(0.0001, 1)) = 0.0001
         [Toggle(_)] _RimLight_FeatherOff("RimLight_FeatherOff", Float) = 0
-        //ƒŠƒ€ƒ‰ƒCƒg’Ç‰ÁƒvƒƒpƒeƒB.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½gï¿½Ç‰ï¿½ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B.
         [Toggle(_)] _LightDirection_MaskOn("LightDirection_MaskOn", Float) = 0
         _Tweak_LightDirection_MaskLevel("Tweak_LightDirection_MaskLevel", Range(0, 0.5)) = 0
         [Toggle(_)] _Add_Antipodean_RimLight("Add_Antipodean_RimLight", Float) = 0
@@ -348,10 +348,10 @@ Shader "HDRP/ToonTessellation"
         [Toggle(_)] _Is_LightColor_Ap_RimLight("Is_LightColor_Ap_RimLight", Float) = 1
         _Ap_RimLight_Power("Ap_RimLight_Power", Range(0, 1)) = 0.1
         [Toggle(_)] _Ap_RimLight_FeatherOff("Ap_RimLight_FeatherOff", Float) = 0
-        //ƒŠƒ€ƒ‰ƒCƒgƒ}ƒXƒN.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½gï¿½}ï¿½Xï¿½N.
         _Set_RimLightMask("Set_RimLightMask", 2D) = "white" {}
         _Tweak_RimLightMaskLevel("Tweak_RimLightMaskLevel", Range(-1, 1)) = 0
-        //‚±‚±‚Ü‚Å.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.
         [Toggle(_)] _MatCap("MatCap", Float) = 0
         _MatCap_Sampler("MatCap_Sampler", 2D) = "black" {}
         //v.2.0.6
@@ -375,7 +375,7 @@ Shader "HDRP/ToonTessellation"
         [Toggle(_)] _Inverse_MatcapMask("Inverse_MatcapMask", Float) = 0
         //v.2.0.5
         [Toggle(_)] _Is_Ortho("Orthographic Projection for MatCap", Float) = 0
-        ////“Vg‚Ì—Ö’Ç‰ÁƒvƒƒpƒeƒB.
+        ////ï¿½Vï¿½gï¿½Ì—Ö’Ç‰ï¿½ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B.
         [Toggle(_)] _AngelRing("AngelRing", Float) = 0
         _AngelRing_Sampler("AngelRing_Sampler", 2D) = "black" {}
         _AngelRing_Color("AngelRing_Color", Color) = (1, 1, 1, 1)
@@ -383,7 +383,7 @@ Shader "HDRP/ToonTessellation"
         _AR_OffsetU("AR_OffsetU", Range(0, 0.5)) = 0
         _AR_OffsetV("AR_OffsetV", Range(0, 1)) = 0.3
         [Toggle(_)] _ARSampler_AlphaOn("ARSampler_AlphaOn", Float) = 0
-        //‚±‚±‚Ü‚Å.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.
         //v.2.0.7 Emissive
         [KeywordEnum(SIMPLE, ANIMATION)] _EMISSIVE("EMISSIVE MODE", Float) = 0
         _Emissive_Tex("Emissive_Tex", 2D) = "white" {}
@@ -571,6 +571,8 @@ Shader "HDRP/ToonTessellation"
 
     // #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.cs.hlsl"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitProperties.hlsl"
+
+	#include "../../../Runtime/Shaders/Common/Common.hlsl"
 
     // TODO:
     // Currently, Lit.hlsl and LitData.hlsl are included for every pass. Split Lit.hlsl in two:

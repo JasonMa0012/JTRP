@@ -169,7 +169,7 @@ MonoBehaviour:
     maximumLODLevelMode: 0
     maximumLODLevelQualityLevel: 0
     sssQualityMode: 0
-    sssQualityLevel: 0
+    sssQualityLevel: 2
     sssCustomSampleBudget: 20
     materialQuality: 0
   m_RenderingPathDefaultBakedOrCustomReflectionFrameSettings:
@@ -327,7 +327,7 @@ MonoBehaviour:
       forceResolution: 0
       forcedPercentage: 100
     lowresTransparentSettings:
-      enabled: 1
+      enabled: 0
       checkerboardDepthBuffer: 1
       upsampleType: 1
     xrSettings:
@@ -446,10 +446,16 @@ MonoBehaviour:
   diffusionProfileSettingsList:
   - {fileID: 11400000, guid: b845c4a49bd4ca7479c55875e1966ac6, type: 2}
   - {fileID: 11400000, guid: 4e40a6975c2cefc45993fc4b82269959, type: 2}
-  beforeTransparentCustomPostProcesses: []
+  beforeTransparentCustomPostProcesses:
+  - Pencil_4.HDRP.PencilLine, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   beforeTAACustomPostProcesses: []
-  beforePostProcessCustomPostProcesses: []
-  afterPostProcessCustomPostProcesses: []
+  beforePostProcessCustomPostProcesses:
+  - Pencil_4.HDRP.PencilLine_BeforePostProcess, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  afterPostProcessCustomPostProcesses:
+  - Pencil_4.HDRP.PencilLine_AfterPostProcess, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
   virtualTexturingSettings:
     streamingCpuCacheSizeInMegaBytes: 256
     streamingGpuCacheSettings:

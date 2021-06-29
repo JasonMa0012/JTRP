@@ -1,6 +1,10 @@
 #ifndef JTRP_COMMON
 #define JTRP_COMMON
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+
+#define inverselerp(a, b, x) saturate(((x) - (a)) / ((b) - (a)))
+
 float2 GetWHRatio()
 {
 	return float2(_ScreenParams.y / _ScreenParams.x, 1);
@@ -12,17 +16,33 @@ float StepAntiAliasing(float x, float y)
 	return saturate(v / fwidth(v));//fwidth(x) = abs(ddx(x) + ddy(x))
 }
 
+#define SampleRampSignalLine(texture, u) (SAMPLE_TEXTURE2D_LOD(texture, s_linear_clamp_sampler, float2(u, 0.5), 0))
+
 // ----------------------------------------------------------------------------
 // Transform
 // ----------------------------------------------------------------------------
 
-float2 RotateUV(float2 _uv, float _radian, float2 _piv, float _time)
+float3 ProjectOnPlane(float3 vec, float3 normal)
+{
+    return vec - normal * dot(vec, normal);
+}
+
+float2 Rotate_UV(float2 _uv, float _radian, float2 _piv, float _time)
 {
 	float RotateUV_ang = _radian;
 	float RotateUV_cos = cos(_time * RotateUV_ang);
 	float RotateUV_sin = sin(_time * RotateUV_ang);
 	return(mul(_uv - _piv, float2x2(RotateUV_cos, -RotateUV_sin, RotateUV_sin, RotateUV_cos)) + _piv);
 }
+
+// Anti-perspective form Colin: Counteract perspective effects by replacing regular depth with uniform depth
+uniform float _AntiPerspectiveIntensity;
+void AntiPerspective(inout float4 clipPos)
+{
+	float centerVSz = mul(UNITY_MATRIX_V, float4(UNITY_MATRIX_M._m03_m13_m23, 1.0)).z;
+    clipPos.xy *= lerp(1.0, abs(clipPos.w) / -centerVSz, _AntiPerspectiveIntensity);
+}
+
 
 // ----------------------------------------------------------------------------
 // Color

@@ -41,6 +41,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Ramp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _normal:
         m_Texture: {fileID: 2800000, guid: 2658587fd589aea48bbd013077c3b807, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -71,3 +75,4 @@ Material:
     - _mColor1: {r: 1, g: 0, b: 0, a: 1}
     - _mColor2: {r: 0, g: 1, b: 0, a: 1}
     - _mColor3: {r: 0, g: 0, b: 1, a: 1}
+  m_BuildTextureStacks: []

@@ -33,6 +33,8 @@ uniform fixed _Is_LightColor_1st_Shade;
 uniform sampler2D _2nd_ShadeMap; uniform float4 _2nd_ShadeMap_ST;
 uniform float4 _2nd_ShadeColor;
 uniform fixed _Is_LightColor_2nd_Shade;
+uniform float _LightIntensity;
+
 //uniform sampler2D _NormalMap; uniform float4 _NormalMap_ST;
 uniform fixed _Is_NormalMapToBase;
 uniform fixed _Set_SystemShadowsToBase;
@@ -46,7 +48,7 @@ uniform sampler2D _Set_2nd_ShadePosition; uniform float4 _Set_2nd_ShadePosition_
 
 // ShadingGradeMap
 #if defined(_SHADINGGRADEMAP)
-uniform sampler2D _ShadingGradeMap; uniform float4 _ShadingGradeMap_ST;
+	uniform sampler2D _ShadingGradeMap; uniform float4 _ShadingGradeMap_ST;
 #endif
 //v.2.0.6
 uniform float _Tweak_ShadingGradeMapLevel;
@@ -110,7 +112,7 @@ uniform fixed _BlurLevelMatcap;
 uniform fixed _Inverse_MatcapMask;
 #if UCTS_LWRP
 #else
-uniform float _BumpScale;
+	uniform float _BumpScale;
 #endif
 uniform float _BumpScaleMatcap;
 //Emissive
@@ -129,7 +131,7 @@ uniform float _ColorShift_Speed;
 uniform fixed _Is_ColorShift;
 uniform fixed _Is_ViewShift;
 uniform float3 emissive;
-// 
+//
 uniform float _Unlit_Intensity;
 //v.2.0.5
 uniform fixed _Is_Filter_HiCutPointLightColor;
@@ -142,19 +144,19 @@ uniform float _Offset_Y_Axis_BLD;
 uniform fixed _Inverse_Z_Axis_BLD;
 //v.2.0.4
 #ifdef _IS_CLIPPING_MODE
-//DoubleShadeWithFeather_Clipping
-uniform sampler2D _ClippingMask; uniform float4 _ClippingMask_ST;
-uniform float _Clipping_Level;
-uniform fixed _Inverse_Clipping;
+	//DoubleShadeWithFeather_Clipping
+	uniform sampler2D _ClippingMask; uniform float4 _ClippingMask_ST;
+	uniform float _Clipping_Level;
+	uniform fixed _Inverse_Clipping;
 #elif defined(_IS_CLIPPING_TRANSMODE) || defined(_IS_TRANSCLIPPING_ON)
-//DoubleShadeWithFeather_TransClipping
-uniform sampler2D _ClippingMask; uniform float4 _ClippingMask_ST;
-uniform fixed _IsBaseMapAlphaAsClippingMask;
-uniform float _Clipping_Level;
-uniform fixed _Inverse_Clipping;
-uniform float _Tweak_transparency;
+	//DoubleShadeWithFeather_TransClipping
+	uniform sampler2D _ClippingMask; uniform float4 _ClippingMask_ST;
+	uniform fixed _IsBaseMapAlphaAsClippingMask;
+	uniform float _Clipping_Level;
+	uniform fixed _Inverse_Clipping;
+	uniform float _Tweak_transparency;
 #elif defined(_IS_CLIPPING_OFF) || defined(_IS_TRANSCLIPPING_OFF)
-//DoubleShadeWithFeather
+	//DoubleShadeWithFeather
 #endif
 
 
@@ -162,19 +164,19 @@ sampler2D _MainTex; uniform float4 _MainTex_ST;
 uniform float _GI_Intensity;
 #if defined(_SHADINGGRADEMAP)
 
-#ifdef _IS_ANGELRING_OFF
-//
-#elif _IS_ANGELRING_ON
-uniform fixed _AngelRing;
+	#ifdef _IS_ANGELRING_OFF
+		//
+	#elif _IS_ANGELRING_ON
+		uniform fixed _AngelRing;
 
-uniform sampler2D _AngelRing_Sampler; uniform float4 _AngelRing_Sampler_ST;
-uniform float4 _AngelRing_Color;
-uniform fixed _Is_LightColor_AR;
-uniform float _AR_OffsetU;
-uniform float _AR_OffsetV;
-uniform fixed _ARSampler_AlphaOn;
+		uniform sampler2D _AngelRing_Sampler; uniform float4 _AngelRing_Sampler_ST;
+		uniform float4 _AngelRing_Color;
+		uniform fixed _Is_LightColor_AR;
+		uniform float _AR_OffsetU;
+		uniform float _AR_OffsetV;
+		uniform fixed _ARSampler_AlphaOn;
 
-#endif
+	#endif
 #endif     //#if defined(_SHADINGGRADEMP)
 
 
@@ -207,85 +209,94 @@ uniform float _OutlineOverridden;
 uniform float4 _OutlineMaskColor;
 
 uniform float _ComposerMaskMode;
+
+
 // just grafted from UTS/Universal RP
 struct UtsLight
 {
-    float4   direction;
-    float3   color;
-    float    distanceAttenuation;
-    float    shadowAttenuation;
-    int     type;
+	float4 direction;
+	float3 color;
+	float distanceAttenuation;
+	float shadowAttenuation;
+	int type;
 };
 
-// UVâÒì]ÇÇ∑ÇÈä÷êîÅFRotateUV()
+// UVÔøΩÔøΩ]ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ÷êÔøΩÔøΩFRotateUV()
 //float2 rotatedUV = RotateUV(i.uv0, (_angular_Verocity*3.141592654), float2(0.5, 0.5), _Time.g);
 float2 RotateUV(float2 _uv, float _radian, float2 _piv, float _time)
 {
-    float RotateUV_ang = _radian;
-    float RotateUV_cos = cos(_time*RotateUV_ang);
-    float RotateUV_sin = sin(_time*RotateUV_ang);
-    return (mul(_uv - _piv, float2x2(RotateUV_cos, -RotateUV_sin, RotateUV_sin, RotateUV_cos)) + _piv);
+	float RotateUV_ang = _radian;
+	float RotateUV_cos = cos(_time * RotateUV_ang);
+	float RotateUV_sin = sin(_time * RotateUV_ang);
+	return(mul(_uv - _piv, float2x2(RotateUV_cos, -RotateUV_sin, RotateUV_sin, RotateUV_cos)) + _piv);
 }
 
 
-float  GetLightAttenuation(float3 lightColor)
+float GetLightAttenuation(float3 lightColor)
 {
-    float lightAttenuation = 0.299*lightColor.r + 0.587*lightColor.g + 0.114*lightColor.b;
-    return lightAttenuation;
+	float lightAttenuation = 0.299 * lightColor.r + 0.587 * lightColor.g + 0.114 * lightColor.b;
+	return lightAttenuation;
 }
 
 int GetNextDirectionalLightIndex(BuiltinData builtinData, int currentIndex, int mainLightIndex)
 {
-    uint i = 0; // Declare once to avoid the D3D11 compiler warning.
-    for (i = 0; i < _DirectionalLightCount; ++i)
-    {
-        if (IsMatchingLightLayer(_DirectionalLightDatas[i].lightLayers, builtinData.renderingLayers))
-        {
-            if (mainLightIndex != i)
-            {
-                if (currentIndex < i)
-                {
-                    return i;
-                }
-            }
-        }
-    }
-    return -1; // not found
+	uint i = 0; // Declare once to avoid the D3D11 compiler warning.
+	for (i = 0; i < _DirectionalLightCount; ++i)
+	{
+		if (IsMatchingLightLayer(_DirectionalLightDatas[i].lightLayers, builtinData.renderingLayers))
+		{
+			if (mainLightIndex != i)
+			{
+				if (currentIndex < i)
+				{
+					return i;
+				}
+			}
+		}
+	}
+	return -1; // not found
+
 }
 int GetUtsMainLightIndex(BuiltinData builtinData)
 {
-    int mainLightIndex = -1;
-    float3 lightColor = float3(0.0f, 0.0f, 0.0f);
-    float  lightAttenuation = 0.0f;
-    uint i = 0; // Declare once to avoid the D3D11 compiler warning.
-    for (i = 0; i < _DirectionalLightCount; ++i)
-    {
-        if (IsMatchingLightLayer(_DirectionalLightDatas[i].lightLayers, builtinData.renderingLayers))
-        {
-            float3 currentLightColor = _DirectionalLightDatas[i].color;
-            float  currentLightAttenuation = GetLightAttenuation(currentLightColor);
+	int mainLightIndex = -1;
+	float3 lightColor = float3(0.0f, 0.0f, 0.0f);
+	float lightAttenuation = 0.0f;
+	uint i = 0; // Declare once to avoid the D3D11 compiler warning.
+	for (i = 0; i < _DirectionalLightCount; ++i)
+	{
+		if (IsMatchingLightLayer(_DirectionalLightDatas[i].lightLayers, builtinData.renderingLayers))
+		{
+			float3 currentLightColor = _DirectionalLightDatas[i].color;
+			float currentLightAttenuation = GetLightAttenuation(currentLightColor);
 
-            if (mainLightIndex == -1 || (currentLightAttenuation > lightAttenuation))
-            {
-                mainLightIndex = i;
-                lightAttenuation = currentLightAttenuation;
-                lightColor = currentLightColor;
-            } 
-        }
-    }
+			if (mainLightIndex == -1 || (currentLightAttenuation > lightAttenuation))
+			{
+				mainLightIndex = i;
+				lightAttenuation = currentLightAttenuation;
+				lightColor = currentLightColor;
+			}
+		}
+	}
 
-    return mainLightIndex;
+	return mainLightIndex;
 }
+
+
+#include "JTRPFunction.hlsl"
+
+
 #if defined(_SHADINGGRADEMAP)
-# include "ShadingGrademapOtherLight.hlsl"
+	# include "ShadingGrademapOtherLight.hlsl"
 #else //#if defined(_SHADINGGRADEMAP)
-# include "DoubleShadeWithFeatherOtherLight.hlsl"
+	# include "DoubleShadeWithFeatherOtherLight.hlsl"
 #endif //#if defined(_SHADINGGRADEMAP)
 
 
 #if defined(_SHADINGGRADEMAP)
-# include "ShadingGrademapMainLight.hlsl"
+	# include "ShadingGrademapMainLight.hlsl"
 #else
-# include "DoubleShadeWithFeatherMainLight.hlsl"
+	# include "DoubleShadeWithFeatherMainLight.hlsl"
 #endif
+
 

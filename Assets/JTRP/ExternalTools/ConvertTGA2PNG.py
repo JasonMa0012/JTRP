@@ -3,7 +3,7 @@ import shutil
 from PIL import Image
 from multiprocessing import Pool
 
-PATH = "E:\WorkSpace\JTRP\Assets\Art_Test\Characters\Azur Lane Prinz Eugen"
+PATH = "E:\WorkSpace\BarbaraDance\BarbaraDance\Assets"
 SRC_EXTENSION = ".tga"
 DST_EXTENSION = ".png"
 MAX_RESOLUTION = 1024

@@ -585,7 +585,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: OBI_ONI_SUPPORTED;CROSS_PLATFORM_INPUT;ENABLE_RAYTRACING;BAKERY_INCLUDED;TERRAINPACKAGE_EXIST;BAKERYPACKAGE_EXIST;HDRPPACKAGE_EXIST
+    1: OBI_ONI_SUPPORTED;CROSS_PLATFORM_INPUT;BAKERY_INCLUDED;TERRAINPACKAGE_EXIST;BAKERYPACKAGE_EXIST;HDRPPACKAGE_EXIST;AMPLIFY_SHADER_EDITOR;ENABLE_RAYTRACING
     4: OBI_ONI_SUPPORTED;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     7: OBI_ONI_SUPPORTED;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     13: CROSS_PLATFORM_INPUT
@@ -604,6 +604,7 @@ PlayerSettings:
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 0
+  assemblyVersionValidation: 1
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform:
     Standalone: 3
@@ -654,6 +655,7 @@ PlayerSettings:
   XboxOneCapability: []
   XboxOneGameRating: {}
   XboxOneIsContentPackage: 0
+  XboxOneEnhancedXboxCompatibilityMode: 0
   XboxOneEnableGPUVariability: 1
   XboxOneSockets: {}
   XboxOneSplashScreen: {fileID: 0}

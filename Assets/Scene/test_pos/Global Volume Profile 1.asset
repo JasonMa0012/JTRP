@@ -53,6 +53,43 @@ MonoBehaviour:
     m_Value: 1
     min: 0
     max: 1
+--- !u!114 &-5619012148505835821
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a79c9cffef5cc469553b1341c2ecdf, type: 3}
+  m_Name: RecursiveRendering
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  enable:
+    m_OverrideState: 1
+    m_Value: 1
+  layerMask:
+    m_OverrideState: 1
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 4294967295
+  maxDepth:
+    m_OverrideState: 1
+    m_Value: 4
+    min: 1
+    max: 10
+  rayLength:
+    m_OverrideState: 1
+    m_Value: 10
+    min: 0
+    max: 50
+  minSmoothness:
+    m_OverrideState: 1
+    m_Value: 0.5
+    min: 0
+    max: 1
 --- !u!114 &-4977391713510488446
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -285,6 +322,8 @@ MonoBehaviour:
   - {fileID: -1709179542204369905}
   - {fileID: -7063944051912568637}
   - {fileID: -4281007869078125122}
+  - {fileID: -5619012148505835821}
+  - {fileID: 7529827264665930685}
 --- !u!114 &2155743443418345442
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -564,3 +603,22 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.5
     min: 0
+--- !u!114 &7529827264665930685
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be2734668711f444bdc1134d876c26b, type: 3}
+  m_Name: PencilLine
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  alpha:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 0
+    max: 1

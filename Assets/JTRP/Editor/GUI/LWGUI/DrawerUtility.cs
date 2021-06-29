@@ -200,6 +200,21 @@ namespace JTRP.ShaderDrawer
                 }
             }
         }
+        
+        public static void SetShaderKeyWord(Material[] materials, string keyWord, bool isEnable)
+        {
+            foreach (Material m in materials)
+            {
+                if (m.IsKeywordEnabled(keyWord))
+                {
+                    if (!isEnable) m.DisableKeyword(keyWord);
+                }
+                else
+                {
+                    if (isEnable) m.EnableKeyword(keyWord);
+                }
+            }
+        }
 
         public static void SetShaderKeyWord(UnityEngine.Object[] materials, string[] keyWords, int index)
         {

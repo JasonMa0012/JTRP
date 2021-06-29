@@ -109,7 +109,7 @@
 			// 修正摄像机旋转后
 			float3 noSknewViewNormal = NormalBlend_MatcapUV_Base * dot(NormalBlend_MatcapUV_Base, NormalBlend_MatcapUV_Detail) / NormalBlend_MatcapUV_Base.b - NormalBlend_MatcapUV_Detail;
 			float2 _ViewNormalAsMatCapUV = (noSknewViewNormal.rg * 0.5) + 0.5;
-			float2 _Rot_MatCapUV_var = RotateUV(_ViewNormalAsMatCapUV, _Rot_MatCapUV_var_ang, float2(0.5, 0.5), 1.0);
+			float2 _Rot_MatCapUV_var = Rotate_UV(_ViewNormalAsMatCapUV, _Rot_MatCapUV_var_ang, float2(0.5, 0.5), 1.0);
 
 			/*
 			//鏡の中ならUV左右反転.

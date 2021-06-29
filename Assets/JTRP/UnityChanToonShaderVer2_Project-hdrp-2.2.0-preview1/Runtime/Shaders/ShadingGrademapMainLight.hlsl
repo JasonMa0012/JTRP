@@ -33,6 +33,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
 
     float4 _MainTex_var = tex2D(_MainTex, TRANSFORM_TEX(Set_UV0, _MainTex));
     float3 i_normalDir = surfaceData.normalWS;
+    float3 sphericalShadowNormal = SphericalShadowNormal(input.positionRWS, i_normalDir);
     float3 viewDirection = V;
     /* to here todo. these should be put int a struct */
     //v.2.0.4
@@ -53,7 +54,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
 
 
     float3 mainLihgtDirection = -_DirectionalLightDatas[mainLightIndex].forward;
-    float3 mainLightColor = _DirectionalLightDatas[mainLightIndex].color; // *GetCurrentExposureMultiplier();
+    float3 mainLightColor = _DirectionalLightDatas[mainLightIndex].color * GetCurrentExposureMultiplier() * _LightIntensity;
 
 
     //v.2.0.4
@@ -92,7 +93,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     //v.2.0.5
     float4 _1st_ShadeMap_var = lerp(tex2D(_1st_ShadeMap, TRANSFORM_TEX(Set_UV0, _1st_ShadeMap)), _MainTex_var, _Use_BaseAs1st);
     float3 _Is_LightColor_1st_Shade_var = lerp((_1st_ShadeMap_var.rgb * _1st_ShadeColor.rgb), ((_1st_ShadeMap_var.rgb * _1st_ShadeColor.rgb) * Set_LightColor), _Is_LightColor_1st_Shade);
-    float _HalfLambert_var = 0.5 * dot(lerp(i_normalDir, normalDirection, _Is_NormalMapToBase), lightDirection) + 0.5; // Half Lambert
+    float _HalfLambert_var = 0.5 * dot(lerp(sphericalShadowNormal, normalDirection, _Is_NormalMapToBase), lightDirection) + 0.5; // Half Lambert
     //float4 _ShadingGradeMap_var = tex2D(_ShadingGradeMap,TRANSFORM_TEX(Set_UV0, _ShadingGradeMap));
     //v.2.0.6
     float4 _ShadingGradeMap_var = tex2Dlod(_ShadingGradeMap, float4(TRANSFORM_TEX(Set_UV0, _ShadingGradeMap), 0.0, _BlurLevelSGM));
@@ -104,11 +105,19 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
 #endif
     float _SystemShadowsLevel_var = (shadowAttenuation *0.5)+0.5+_Tweak_SystemShadowsLevel > 0.001 ? (shadowAttenuation*0.5)+0.5+_Tweak_SystemShadowsLevel : 0.0001;
 
-    float _ShadingGradeMapLevel_var = _ShadingGradeMap_var.r < 0.95 ? _ShadingGradeMap_var.r + _Tweak_ShadingGradeMapLevel : 1;
+	float _ShadingGradeMapLevel_var = _ShadingGradeMap_var.r;// < 1.0 ? _ShadingGradeMap_var.r + _Tweak_ShadingGradeMapLevel: 1.0;
 
-    float Set_ShadingGrade = saturate(_ShadingGradeMapLevel_var) * lerp(_HalfLambert_var, (_HalfLambert_var * saturate(_SystemShadowsLevel_var)), _Set_SystemShadowsToBase );
+	// < 0.5: Easier to darken   > 0.5: Easier to brighten
+	float Set_ShadingGrade = _HalfLambert_var * lerp(1.0, saturate(_ShadingGradeMapLevel_var * 2.0), _Tweak_ShadingGradeMapLevel);
+	Set_ShadingGrade = lerp(Set_ShadingGrade, 1.0, saturate(_ShadingGradeMapLevel_var - 0.5) * 2.0 * _Tweak_ShadingGradeMapLevel);
+	Set_ShadingGrade *= lerp(1.0, saturate(_SystemShadowsLevel_var), _Set_SystemShadowsToBase);
 
 //    float Set_ShadingGrade = saturate(_ShadingGradeMapLevel_var) * lerp(_HalfLambert_var, (_HalfLambert_var * saturate(1.0 + _Tweak_SystemShadowsLevel)), _Set_SystemShadowsToBase);
+
+#ifdef JTRP_FACE_SHADER
+    GetJTRPHairShadow(Set_ShadingGrade, input.positionSS.xyz, lightDirection);
+#endif
+
 
     float _1stColorFeatherForMask = lerp(_1st_ShadeColor_Feather, 0.0f, max(_ComposerMaskMode, _FirstShadeOverridden));
     //
@@ -209,9 +218,11 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     float3 Set_RimLight = (saturate((_Set_RimLightMask_var.g + _Tweak_RimLightMaskLevel)) * lerp(_LightDirection_MaskOn_var, (_LightDirection_MaskOn_var + (lerp(_Ap_RimLightColor.rgb, (_Ap_RimLightColor.rgb * Set_LightColor), _Is_LightColor_Ap_RimLight) * saturate((lerp((0.0 + ((_ApRimLightPower_var - _RimLight_InsideMask) * (1.0 - 0.0)) / (1.0 - _RimLight_InsideMask)), step(_RimLight_InsideMask, _ApRimLightPower_var), _Ap_RimLight_FeatherOff) - (saturate(_VertHalfLambert_var) + _Tweak_LightDirection_MaskLevel))))), _Add_Antipodean_RimLight));
     float3 _RimLight_var = lerp(Set_HighColor, (Set_HighColor + Set_RimLight), _RimLight);
 #endif
+
+
     //Matcap
     //v.2.0.6 : CameraRolling Stabilizer
-    //‹¾ƒXƒNƒŠƒvƒg”»’èF_sign_Mirror = -1 ‚È‚çA‹¾‚Ì’†‚Æ”»’è.
+    //ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½ï¿½F_sign_Mirror = -1 ï¿½È‚ï¿½Aï¿½ï¿½ï¿½Ì’ï¿½ï¿½Æ”ï¿½ï¿½ï¿½.
     //v.2.0.7
     fixed _sign_Mirror = 0.0; // i.mirrorFlag; todo.
     //
@@ -219,7 +230,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     float3 _Camera_Front = UNITY_MATRIX_V[2].xyz;
     float3 _Up_Unit = float3(0, 1, 0);
     float3 _Right_Axis = cross(_Camera_Front, _Up_Unit);
-    //‹¾‚Ì’†‚È‚ç”½“].
+    //ï¿½ï¿½ï¿½Ì’ï¿½ï¿½È‚ç”½ï¿½].
     if (_sign_Mirror < 0) {
         _Right_Axis = -1 * _Right_Axis;
         _Rotate_MatCapUV = -1 * _Rotate_MatCapUV;
@@ -248,7 +259,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     //
     //v.2.0.7
     float2 _Rot_MatCapUV_var = RotateUV((0.0 + ((_ViewNormalAsMatCapUV - (0.0 + _Tweak_MatCapUV)) * (1.0 - 0.0)) / ((1.0 - _Tweak_MatCapUV) - (0.0 + _Tweak_MatCapUV))), _Rot_MatCapUV_var_ang, float2(0.5, 0.5), 1.0);
-    //‹¾‚Ì’†‚È‚çUV¶‰E”½“].
+    //ï¿½ï¿½ï¿½Ì’ï¿½ï¿½È‚ï¿½UVï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½].
     if (_sign_Mirror < 0) {
         _Rot_MatCapUV_var.x = 1 - _Rot_MatCapUV_var.x;
     }
@@ -308,6 +319,16 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     finalColor = lerp(finalColor, lerp((finalColor + Set_AngelRing), ((finalColor * (1.0 - Set_ARtexAlpha)) + Set_AngelRingWithAlpha), _ARSampler_AlphaOn), _AngelRing);// Final Composition before Emissive
 # endif //#ifdef UTS_LAYER_VISIBILITY
 #endif //#ifdef _IS_ANGELRING_OFF
+
+
+    //===============================================
+    //                    JTRP
+    //===============================================
+    GetTangentHighLight(finalColor, input.tangentToWorld, input.positionRWS, V, input.texCoord0.xy, input.texCoord1.xy, 1 - Set_FinalShadowMask);
+
+    GetSSRimLight(finalColor, posInput, Set_UV0, lightDirection, normalDirection, Set_FinalShadowMask);
+
+
 //v.2.0.7
 #ifdef _EMISSIVE_SIMPLE
     float4 _Emissive_Tex_var = tex2D(_Emissive_Tex, TRANSFORM_TEX(Set_UV0, _Emissive_Tex));
@@ -321,7 +342,7 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
     float3 noSknewViewNormal_Emissive = NormalBlend_Emissive_Base * dot(NormalBlend_Emissive_Base, NormalBlend_Emissive_Detail) / NormalBlend_Emissive_Base.z - NormalBlend_Emissive_Detail;
     float2 _ViewNormalAsEmissiveUV = noSknewViewNormal_Emissive.xy * 0.5 + 0.5;
     float2 _ViewCoord_UV = RotateUV(_ViewNormalAsEmissiveUV, -(_Camera_Dir * _Camera_Roll), float2(0.5, 0.5), 1.0);
-    //‹¾‚Ì’†‚È‚çUV¶‰E”½“].
+    //ï¿½ï¿½ï¿½Ì’ï¿½ï¿½È‚ï¿½UVï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½].
     if (_sign_Mirror < 0) {
         _ViewCoord_UV.x = 1 - _ViewCoord_UV.x;
     }
@@ -363,5 +384,6 @@ float3 UTS_MainLightShadingGrademap(LightLoopContext lightLoopContext, FragInput
 
     finalColor = saturate(finalColor) + (envLightColor * envLightIntensity * _GI_Intensity * smoothstep(1, 0, envLightIntensity / 2)) + emissive;
 */
+
     return finalColor;
 }

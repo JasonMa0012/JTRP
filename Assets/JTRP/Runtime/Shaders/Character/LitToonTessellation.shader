@@ -154,6 +154,7 @@ Shader "JTRP/Lit Toon Tessellation"
 	#pragma target 5.0
 	#pragma only_renderers d3d11 ps4 xboxone vulkan metal switch
 	#pragma require tessellation tessHW
+	#pragma enable_d3d11_debug_symbols
 	
 	#pragma shader_feature_local _ _TESSELLATION_DISPLACEMENT _PIXEL_DISPLACEMENT
 	#pragma shader_feature_local _TESSELLATION_PHONG
@@ -178,136 +179,136 @@ Shader "JTRP/Lit Toon Tessellation"
 	#include "LitToonDefine.hlsl"
 	
 	ENDHLSL
-	
+
 	SubShader
 	{
-		Pass
-		{
-			Name "GBuffer"
-			Tags { "LightMode" = "GBuffer" }// This will be only for opaque object based on the RenderQueue index
+		// Pass
+		// {
+		// 	Name "GBuffer"
+		// 	Tags { "LightMode" = "GBuffer" }// This will be only for opaque object based on the RenderQueue index
 			
-			Cull [_CullMode]
-			ZTest [_ZTest]
+		// 	Cull [_CullMode]
+		// 	ZTest [_ZTest]
 			
-			Stencil
-			{
-				Ref [_StencilRef]
-				Comp [_StencilCompare]
-				Pass [_StencilOP]
-			}
+		// 	Stencil
+		// 	{
+		// 		Ref [_StencilRef]
+		// 		Comp [_StencilCompare]
+		// 		Pass [_StencilOP]
+		// 	}
 			
-			HLSLPROGRAM
+		// 	HLSLPROGRAM
+
+		// 	#pragma multi_compile _ DEBUG_DISPLAY
+		// 	#pragma multi_compile _ LIGHTMAP_ON
+		// 	#pragma multi_compile _ DIRLIGHTMAP_COMBINED
+		// 	#pragma multi_compile _ DYNAMICLIGHTMAP_ON
+		// 	#pragma multi_compile _ SHADOWS_SHADOWMASK
+		// 	// Setup DECALS_OFF so the shader stripper can remove variants
+		// 	#pragma multi_compile DECALS_OFF DECALS_3RT DECALS_4RT
+		// 	#pragma multi_compile _ LIGHT_LAYERS
 			
-			#pragma multi_compile _ DEBUG_DISPLAY
-			#pragma multi_compile _ LIGHTMAP_ON
-			#pragma multi_compile _ DIRLIGHTMAP_COMBINED
-			#pragma multi_compile _ DYNAMICLIGHTMAP_ON
-			#pragma multi_compile _ SHADOWS_SHADOWMASK
-			// Setup DECALS_OFF so the shader stripper can remove variants
-			#pragma multi_compile DECALS_OFF DECALS_3RT DECALS_4RT
-			#pragma multi_compile _ LIGHT_LAYERS
+		// 	#ifndef DEBUG_DISPLAY
+		// 		// When we have alpha test, we will force a depth prepass so we always bypass the clip instruction in the GBuffer
+		// 		// Don't do it with debug display mode as it is possible there is no depth prepass in this case
+		// 		#define SHADERPASS_GBUFFER_BYPASS_ALPHA_TEST
+		// 	#endif
 			
-			#ifndef DEBUG_DISPLAY
-				// When we have alpha test, we will force a depth prepass so we always bypass the clip instruction in the GBuffer
-				// Don't do it with debug display mode as it is possible there is no depth prepass in this case
-				#define SHADERPASS_GBUFFER_BYPASS_ALPHA_TEST
-			#endif
+		// 	#define SHADERPASS SHADERPASS_GBUFFER
+		// 	#ifdef DEBUG_DISPLAY
+		// 		#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Debug/DebugDisplay.hlsl"
+		// 	#endif
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
 			
-			#define SHADERPASS SHADERPASS_GBUFFER
-			#ifdef DEBUG_DISPLAY
-				#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Debug/DebugDisplay.hlsl"
-			#endif
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassGBuffer.hlsl"
 			
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassGBuffer.hlsl"
+		// 	#pragma vertex Vert
+		// 	#pragma fragment Frag
+		// 	#pragma hull Hull
+		// 	#pragma domain Domain
 			
-			#pragma vertex Vert
-			#pragma fragment Frag
-			#pragma hull Hull
-			#pragma domain Domain
-			
-			ENDHLSL
-			
-		}
+		// 	ENDHLSL
+
+		// }
 		
-		// This tags allow to use the shader replacement features
-		Tags { "RenderPipeline" = "HDRenderPipeline" "RenderType" = "HDLitShader" /* "Queue" = "Transparent+100"*/ }
-		Pass
-		{
-			Name "ShadowCaster"
-			Tags { "LightMode" = "ShadowCaster" }
+		// // This tags allow to use the shader replacement features
+		// Tags { "RenderPipeline" = "HDRenderPipeline" "RenderType" = "HDLitShader" /* "Queue" = "Transparent+100"*/ }
+		// Pass
+		// {
+		// 	Name "ShadowCaster"
+		// 	Tags { "LightMode" = "ShadowCaster" }
 			
-			Cull off
+		// 	Cull off
 			
-			ZClip [_ZClip]
-			ZWrite On
-			ZTest LEqual
+		// 	ZClip [_ZClip]
+		// 	ZWrite On
+		// 	ZTest LEqual
 			
-			ColorMask 0
+		// 	ColorMask 0
 			
-			HLSLPROGRAM
+		// 	HLSLPROGRAM
+
+		// 	#define SHADERPASS SHADERPASS_SHADOWS
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
 			
-			#define SHADERPASS SHADERPASS_SHADOWS
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
+		// 	#pragma vertex Vert
+		// 	#pragma fragment Frag
+		// 	#pragma hull Hull
+		// 	#pragma domain Domain
 			
-			#pragma vertex Vert
-			#pragma fragment Frag
-			#pragma hull Hull
-			#pragma domain Domain
-			
-			ENDHLSL
-			
-		}
+		// 	ENDHLSL
+
+		// }
 		
-		Pass
-		{
-			Name "DepthOnly"
-			Tags { "LightMode" = "DepthOnly" }
+		// Pass
+		// {
+		// 	Name "DepthOnly"
+		// 	Tags { "LightMode" = "DepthOnly" }
 			
-			Cull[_CullMode]
-			ZWrite [_ZWrite]
-			ZTest [_ZTest]
-			Offset [_ZOffset], 0
+		// 	Cull[_CullMode]
+		// 	ZWrite [_ZWrite]
+		// 	ZTest [_ZTest]
+		// 	Offset [_ZOffset], 0
 			
-			Stencil
-			{
-				Ref [_StencilRef]
-				Comp [_StencilCompare]
-				Pass [_StencilOP]
-			}
+		// 	Stencil
+		// 	{
+		// 		Ref [_StencilRef]
+		// 		Comp [_StencilCompare]
+		// 		Pass [_StencilOP]
+		// 	}
 			
-			HLSLPROGRAM
+		// 	HLSLPROGRAM
+
+		// 	// In deferred, depth only pass don't output anything.
+		// 	// In forward it output the normal buffer
+		// 	#pragma multi_compile _ WRITE_NORMAL_BUFFER
+		// 	#pragma multi_compile _ WRITE_MSAA_DEPTH
 			
-			// In deferred, depth only pass don't output anything.
-			// In forward it output the normal buffer
-			#pragma multi_compile _ WRITE_NORMAL_BUFFER
-			#pragma multi_compile _ WRITE_MSAA_DEPTH
+		// 	#define SHADERPASS SHADERPASS_DEPTH_ONLY
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
 			
-			#define SHADERPASS SHADERPASS_DEPTH_ONLY
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl"
+		// 	#ifdef WRITE_NORMAL_BUFFER // If enabled we need all regular interpolator
+		// 		#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
+		// 	#else
+		// 		#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
+		// 	#endif
 			
-			#ifdef WRITE_NORMAL_BUFFER // If enabled we need all regular interpolator
-				#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitSharePass.hlsl"
-			#else
-				#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/ShaderPass/LitDepthPass.hlsl"
-			#endif
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
+		// 	#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
 			
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/LitData.hlsl"
-			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDepthOnly.hlsl"
+		// 	#pragma vertex Vert
+		// 	#pragma fragment Frag
+		// 	#pragma hull Hull
+		// 	#pragma domain Domain
 			
-			#pragma vertex Vert
-			#pragma fragment Frag
-			#pragma hull Hull
-			#pragma domain Domain
-			
-			ENDHLSL
-			
-		}
+		// 	ENDHLSL
+
+		// }
 		
 		Pass
 		{
@@ -328,7 +329,7 @@ Shader "JTRP/Lit Toon Tessellation"
 			}
 			
 			HLSLPROGRAM
-			
+
 			// Supported shadow modes per light type
 			#pragma multi_compile SHADOW_HIGH SHADOW_LOW SHADOW_MEDIUM
 			#pragma multi_compile USE_FPTL_LIGHTLIST USE_CLUSTERED_LIGHTLIST
@@ -349,7 +350,7 @@ Shader "JTRP/Lit Toon Tessellation"
 			#pragma domain Domain
 			
 			ENDHLSL
-			
+
 		}
 
 		Pass
@@ -359,7 +360,7 @@ Shader "JTRP/Lit Toon Tessellation"
 			ZWrite [_ZWrite]
 			
 			HLSLPROGRAM
-			
+
 			#pragma multi_compile SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH
 			
 			#pragma shader_feature_local _ _OUTLINE_ENABLE_ON
@@ -376,8 +377,59 @@ Shader "JTRP/Lit Toon Tessellation"
 			// #pragma domain Domain
 			
 			ENDHLSL
-			
+
 		}
 	}
+
+	SubShader
+	{
+		Pass
+		{
+			// Pass Name and LightMode must match that specified by SetShaderPass()
+			Name "JTRPRayTracingOutline"
+			Tags { "LightMode" = "JTRPRayTracingOutline" }
+			HLSLPROGRAM
+
+			#pragma only_renderers d3d11
+			#pragma raytracing surface_shader
+
+			#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/Raytracing/Shaders/RaytracingIntersection.hlsl"
+			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/Raytracing/Shaders/RaytracingFragInputs.hlsl"
+			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/Raytracing/Shaders/Common/AtmosphericScatteringRayTracing.hlsl"
+			
+			[shader("closesthit")]
+			void JTRPRayTracingOutline(inout RayIntersection rayIntersection: SV_RayPayload, AttributeData attributeData: SV_IntersectionAttributes)
+			{
+				// The first thing that we should do is grab the intersection vertice
+				IntersectionVertex currentVertex;
+				GetCurrentIntersectionVertex(attributeData, currentVertex);
+
+				// Build the Frag inputs from the intersection vertice
+				FragInputs fragInput;
+				BuildFragInputsFromIntersection(currentVertex, rayIntersection.incidentDirection, fragInput);
+				float3 normalWS = fragInput.tangentToWorld[2];
+
+				// Compute the view vector
+				float3 viewWS = -rayIntersection.incidentDirection;
+
+				// Let's compute the world space position (the non-camera relative one if camera relative rendering is enabled)
+				float3 pointWSPos = fragInput.positionRWS;
+				
+				// Make sure to add the additional travel distance
+				float travelDistance = length(fragInput.positionRWS - rayIntersection.origin);
+				rayIntersection.t = travelDistance;
+
+
+				float4 albedo = travelDistance;
+				// float4 albedo = float4(normalWS, 1);//float4(0.5, 1, 0.5, 1);
+				rayIntersection.color = albedo;
+				rayIntersection.rayCount += 1;
+			}
+			ENDHLSL
+
+		}
+	}
+
 	CustomEditor "JTRP.ShaderDrawer.LWGUI"
 }
