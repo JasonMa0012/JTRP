@@ -56,6 +56,7 @@
                 float3 normal : NORMAL;
                 float4 tangent : TANGENT;
                 float2 texcoord0 : TEXCOORD0;
+                float2 bakedNormal:TEXCOORD7;
             };
             struct VertexOutput {
                 float4 pos : SV_POSITION;
@@ -64,6 +65,13 @@
                 float3 tangentDir : TEXCOORD2;
                 float3 bitangentDir : TEXCOORD3;
             };
+
+            float3 GetSmoothedWorldNormal(float2 bakedNormal, float3x3 tbn)
+            {
+                float3 normal = float3(bakedNormal, 0);
+                normal.z = sqrt(1.0 - saturate(dot(normal.xy, normal.xy)));
+                return mul(normal, tbn);
+            }
 
 #undef unity_ObjectToWorld 
 #undef unity_WorldToObject 
@@ -81,7 +89,9 @@
                 float3x3 tangentTransform = float3x3( o.tangentDir, o.bitangentDir, o.normalDir);
                 //UnpackNormal()が使えないので、以下で展開。使うテクスチャはBump指定をしないこと.
                 float4 _BakedNormal_var = (tex2Dlod(_BakedNormal,float4(TRANSFORM_TEX(Set_UV0, _BakedNormal),0.0,0)) * 2 - 1);
-                float3 _BakedNormalDir = normalize(mul(_BakedNormal_var.rgb, tangentTransform));
+                //float3 _BakedNormalDir = normalize(mul(_BakedNormal_var.rgb, tangentTransform));
+                float3 _BakedNormalDir = GetSmoothedWorldNormal(v.bakedNormal, tangentTransform);
+
                 //ここまで.
 				float viewDistance = distance(objPos.rgb,_WorldSpaceCameraPos);
 				float outlineWidthRamp = SampleRampSignalLine(_Outline_Width_Ramp, viewDistance / _Outline_Ramp_Max_Distance).r;
