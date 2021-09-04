@@ -1,0 +1,17 @@
+{
+    "name": "UTJ.UnitychanToonShader2.Hdrp.Editor",
+    "references": [
+        "UTJ.UnitychanToonShader2.Hdrp.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

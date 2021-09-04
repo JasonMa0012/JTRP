@@ -1,0 +1,19 @@
+{
+    "name": "PSOFT.Pencil_4_HDRP.Editor",
+    "references": [
+        "GUID:92984615daa6fc14db1f6d9be7bd9b1a",
+        "GUID:13ff4e4eb6517d2478807bc9c55e7ed1",
+        "GUID:592be49cc7bfb624dab5361901225b2e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

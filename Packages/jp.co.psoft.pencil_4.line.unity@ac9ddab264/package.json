@@ -1,0 +1,11 @@
+{
+  "name": "jp.co.psoft.pencil_4.line.unity",
+  "version": "4.1.0",
+  "displayName": "PSOFT Pencil+ 4 Line",
+  "unity": "2018.3",
+  "description": "Pencil+ 4 Line functionality can be used to create a wide range of richly expressive lines such as uniform lines, lines jutting out of objects, rough sketch lines or lines with width modulation like those found in Japanese manga.",
+  "author": {
+    "name": "P SOFTHOUSE Co., Ltd.",
+    "url": "https://www.psoft.co.jp"
+  }
+}

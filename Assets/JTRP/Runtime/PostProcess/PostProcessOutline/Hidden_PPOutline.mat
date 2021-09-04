@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Hidden_PPOutline
+  m_Shader: {fileID: 4800000, guid: dd354f068a468e4438c44b6e95b19b9c, type: 3}
+  m_ShaderKeywords: _AUGMENTSCENECOLOR_ON _CRLINEENABLE_ON _SCLINEENABLE_ON _SILINEENABLE_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _AugmentSceneColor: 1
+    - _CRLineEnable: 1
+    - _CRLineStrength: 1
+    - _CRLineThickness: 1
+    - _CRLineThreshold: 0
+    - _SCLineEnable: 1
+    - _SCLineStrength: 100
+    - _SCLineThickness: 1
+    - _SCLineThreshold: 0
+    - _SILineEnable: 1
+    - _SILineStrength: 1
+    - _SILineThickness: 1
+    - _SILineThreshold: 0
+    m_Colors:
+    - _BGColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _CRLineColor: {r: 0, g: 0, b: 1, a: 1}
+    - _SCLineColor: {r: 0, g: 1, b: 0, a: 1}
+    - _SILineColor: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
