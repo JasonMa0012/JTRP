@@ -27,10 +27,10 @@ uniform fixed _Use_BaseAs1st;
 uniform fixed _Use_1stAs2nd;
 //
 uniform fixed _Is_LightColor_Base;
-uniform sampler2D _1st_ShadeMap; uniform float4 _1st_ShadeMap_ST;
+uniform TEXTURE2D(_1st_ShadeMap); uniform float4 _1st_ShadeMap_ST;
 uniform float4 _1st_ShadeColor;
 uniform fixed _Is_LightColor_1st_Shade;
-uniform sampler2D _2nd_ShadeMap; uniform float4 _2nd_ShadeMap_ST;
+uniform TEXTURE2D(_2nd_ShadeMap); uniform float4 _2nd_ShadeMap_ST;
 uniform float4 _2nd_ShadeColor;
 uniform fixed _Is_LightColor_2nd_Shade;
 uniform float _LightIntensity;
