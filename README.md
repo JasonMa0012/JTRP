@@ -1,19 +1,19 @@
-# ![](README.assets/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
+# ![img](README.assets/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
 
 
-
-* [三渲二入门视频教程](#%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
-* [Usage](#usage)
-  * [环境](#%E7%8E%AF%E5%A2%83)
-  * [目录结构](#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84)
-  * [场景设置](#%E5%9C%BA%E6%99%AF%E8%AE%BE%E7%BD%AE)
+* [Works](#works)
+* [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
+* [Usages](#usages)
+  * [Environment](#environment)
+  * [Directory Structure](#directory-structure)
+  * [Scene Settings](#scene-settings)
     * [JTRP Custom Pass](#jtrp-custom-pass)
     * [Pencil\+ Outline 4 Unity](#pencil-outline-4-unity)
-  * [材质参数](#%E6%9D%90%E8%B4%A8%E5%8F%82%E6%95%B0)
-  * [脚本](#%E8%84%9A%E6%9C%AC)
-* [DXR Sample (Removed)](#dxr-sample-removed)
-* [Light Weight ShaderGUI](#light-weight-shadergui)
-* [Model Outline Importer（Legacy）](#model-outline-importerlegacy)
+  * [Material Parameters](#material-parameters)
+  * [Scripts](#scripts)
+  * [DXR Sample (Removed)](#dxr-sample-removed)
+  * [Light Weight ShaderGUI](#light-weight-shadergui)
+  * [Model Outline Importer（Legacy）](#model-outline-importerlegacy)
 * [Future Works](#future-works)
 
 这是我业余时间开发的基于**Unity HDRP**并支持**DX12 RayTracing**的卡通渲染工具集，定位于实时生产影视级质量卡通渲染CG。
@@ -26,7 +26,20 @@ B站：https://space.bilibili.com/42463206
 
 技术交流群：1046752881
 
-## 三渲二入门视频教程
+## Works
+
+https://www.bilibili.com/video/BV1wD4y1w7oU?spm_id_from=333.999.0.0
+
+![](image/README/1647811318271.png)
+
+![](image/README/1647811386474.png)
+
+https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
+
+![](image/README/1647811706282.png)![](image/README/1647811937504.png)![](image/README/1647812077711.png)
+
+
+## Getting Started：三渲二入门视频教程
 
 ![JTRP教程](README.assets/JTRP教程.jpg)
 
@@ -78,15 +91,15 @@ JTRP
   - LUT制作：https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@10.6/manual/LUT-Authoring-Resolve.html
 - 渲染输出
 
-## Usage
+## Usages
 
 由于JTRP是在UTS的基础上扩展而来，因此你应该先了解UTS的基本功能：https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project/blob/release/legacy/2.0/Manual/UTS2_Manual_en.md
 
-### 环境
+### Environment
 
 Unity 2021.2 安装最新版本，启动时如有报错请忽略
 
-### 目录结构
+### Directory Structure
 
 Assets\SampleScenes：示例场景，每个场景文件都有一张对应的截图，打开场景后和截图对比以确认你的渲染结果是否正确
 
@@ -102,7 +115,7 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 
 然后回到Unity触发Reimport。
 
-### 场景设置
+### Scene Settings
 
 参考示例场景，每个场景必须要有：
 
@@ -132,7 +145,7 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 
 如要去除水印和范围限制请购买正版，官网：https://www.psoft.co.jp/jp/product/pencil/unity/。
 
-### 材质参数
+### Material Parameters
 
 如有遗漏，可以参考视频教程和UTS文档，这里只列出JTRP相对于UTS的新增部分。
 
@@ -153,10 +166,10 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 | ![img](image/README/1647805003341.png)                                                                      | Environmental Lighting                                                                                                                                                                                                         |
 | Built-in Light Direction                                                                                  | 该功能可以手动指定光线方向，从而控制脸影、发影等。可以搭配脚本实现更智能的光线方向控制，参考视频教程                                                                                                                           |
 | ![img](image/README/1647806050520.png)                                                                      | Hair HighLight（**先点击Show All properties切换UI**）<br /><br />**看视频吧，实在没时间写了，欢迎好心人提交RP**                                                                                                    |
-| ![img](image/README/1647806243135.png)                                                                      | Screen Space Rim Light（**同上**）                                                                                                                                                                                            |
+| ![img](image/README/1647806243135.png)                                                                      | Screen Space Rim Light（**同上**）                                                                                                                                                                                       |
 |                                                                                                           |                                                                                                                                                                                                                                |
 
-### 脚本
+### Scripts
 
 如有疑问参考视频教程
 
@@ -167,18 +180,18 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 | ![img](image/README/1647805180231.png) |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | Center / Renderer                    | 原理同上                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | Project Light Dir                    | 将光线方向投影到2D圆环上。光源方向通常不可控，但三渲二中对脸影的要求又相当严格，通过这些设置可以将光线方向限制在一个与头顶方向相切的圆环上，防止光源乱跑。<br />1. 在脸材质上开启Built-in Light Direction<br />2. 把场景中的Directional Light赋给Light<br />3. 在ForwardDir中选择脸的正面方向是FaceCenter的哪根轴向，Forward是+Z，Up是+Y，Right是+X<br />4. 调整Y Offset，旋转光源查看效果<br />5. （可选）通过Dot Power重映射Y Offset，横轴是光线与Forward点积（可以理解为夹角），竖轴是该夹角下的Y Offset值 |
-| ![img](image/README/1647805141160.png) | Camera Sync<br /><br />在编辑器和Timeline中同步Scene View和Game View相机，方便**预览渲染效果和制作相机动画**。                                                                                                                                                                                                                                                                                                                                                                                               |
+| ![img](image/README/1647805141160.png) | Camera Sync<br /><br />在编辑器和Timeline中同步Scene View和Game View相机，方便**预览渲染效果和制作相机动画**。                                                                                                                                                                                                                                                                                                                                                                                          |
 | Game To Scene / Scene To Game        | 字面意思，手动复制一个View的相机状态到另一个View的相机                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Mode                                 | Game To Scene / Scene To Game：自动复制相机状态<br />Automatic：适用于Timeline中预览/修改相机动画<br />1. 选择场景中的Timeline组件赋给Timeline Playable Director<br />2. 选择相机的Transform赋给Root<br />3. 在Timeline中播放相机动画，此时Scene View的相机会跟随Game View相机<br />4. 时间轴定位到要修改的相机动画关键帧处，移动Scene View相机，此时Game View相机会跟随Scene View相机<br />5. 使用Update Create Key (Shift+Q)保存相机关键帧                                                                  |
 |                                      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-## DXR Sample (Removed)
+### DXR Sample (Removed)
 
 ![image-20210111010551810](README.assets/image-20210111010551810.png)![image-20210111010608857](README.assets/image-20210111010608857.png)
 
 Video：https://www.bilibili.com/video/BV1Tr4y1F7Pv
 
-## Light Weight ShaderGUI
+### Light Weight ShaderGUI
 
 ![image-20210110034731796](README.assets/image-20210110034731796.png)
 
@@ -234,7 +247,7 @@ Title(string group, string header)
 
 其中函数名带Sub的一般只支持在折叠组下显示，不带Sub的group参数填“_”以在折叠组外显示，另外Decorator与内置Drawer不兼容，比如 `[Header(string)]`只应在不使用Attribute或使用内置Attribute的Property上使用，而在使用LWGUI的Property上应使用 `[Title(group, string)]`，否则显示可能会出错。
 
-## Model Outline Importer（Legacy）
+### Model Outline Importer（Legacy）
 
 ![](README.assets/Snipaste_2020-04-14_22-30-12.png)
 
