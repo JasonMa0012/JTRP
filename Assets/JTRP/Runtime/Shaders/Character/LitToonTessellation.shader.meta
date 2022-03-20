@@ -1,9 +1,0 @@
-fileFormatVersion: 2
-guid: dd87fc42f22ec9c4ba9c126b90525ea3
-ShaderImporter:
-  externalObjects: {}
-  defaultTextures: []
-  nonModifiableTextures: []
-  userData: '{"shaderPath":"JTRP/Lit","attributes":[{"isBaseTexture":true,"channel":4,"index":0,"range":{"x":0.0,"y":1.0},"propertyTarget":"_MatCapBiasMap","mask":0}]}'
-  assetBundleName: 
-  assetBundleVariant: 

@@ -196,6 +196,7 @@ void Frag(PackedVaryingsToPS packedInput,
     context.shadowContext = InitShadowContext();
     context.shadowValue = 1;
     context.sampleReflection = 0;
+    context.splineVisibility = -1;
 
     // With XR single-pass and camera-relative: offset position to do lighting computations from the combined center view (original camera matrix).
     // This is required because there is only one list of lights generated on the CPU. Shadows are also generated once and shared between the instanced views.

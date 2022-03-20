@@ -206,6 +206,7 @@ float3 ShadeSH9(float4 normal)
 //=========================================
 // JTRP
 //=========================================
+uniform float _JTRP_Enable_Global_BackFace_Outline = 1;
 
 float GetScaleWithHight()
 {

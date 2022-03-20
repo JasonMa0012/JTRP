@@ -111,6 +111,9 @@
 
                 AntiPerspective(o.pos);
 
+                if(_JTRP_Enable_Global_BackFace_Outline == 0)
+                    o.pos = 0;
+                
                 return o;
             }
             float4 frag(VertexOutput i) : SV_Target{

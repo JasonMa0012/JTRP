@@ -11,12 +11,15 @@ namespace JTRP
 	class CustomPassJTRP : CustomPass
 	{
 		[Header("Post Process Outline")]
-		public bool enablePPOutline = true;
+		public bool enablePPOutline = false;
 
 		public Material ppOutlineMaterial;
 
+		[Header("BackFace Outline")]
+		public bool enableBackFaceOutline = false;
+		
 		[Header("Geometry Outline")]
-		public bool enableGeometryOutline = true;
+		public bool enableGeometryOutline = false;
 
 		public bool enable3XDepth = false;
 
@@ -37,13 +40,11 @@ namespace JTRP
 
 		private static ShaderTagId _shaderTagId_JTRPMask;
 		private static ShaderTagId _shaderTagId_JTRPFace;
-		private static ShaderTagId _shaderTagId_JTRPLitToon;
 
 		protected override void Setup(ScriptableRenderContext ctx, CommandBuffer cmd)
 		{
 			_shaderTagId_JTRPMask = new ShaderTagId("JTRPMask");
 			_shaderTagId_JTRPFace = new ShaderTagId("JTRPFace");
-			_shaderTagId_JTRPLitToon = new ShaderTagId("JTRPLitToon");
 
 			_customBuffer = RTHandles.Alloc(
 			                                scaleFactor: Vector2.one,
@@ -135,18 +136,6 @@ namespace JTRP
 				BlitToCameraColorTexture(ctx, _postProcessTempBuffer);
 			}
 
-			// draw JTRPLitToon
-			/*
-			SetRenderTargetAuto(ctx.cmd);
-			var resultJTRP =
-				new RendererListDesc(_shaderTagId_JTRPLitToon, ctx.cullingResults, ctx.hdCamera.camera)
-				{
-					rendererConfiguration = (PerObjectData) 2047, // all
-					renderQueueRange = RenderQueueRange.all,
-					sortingCriteria = SortingCriteria.CommonTransparent
-				};
-			CoreUtils.DrawRendererList(ctx.renderContext, ctx.cmd, RendererList.Create(resultJTRP));*/
-
 
 			// Procedural Geometry Outline
 			if (enableGeometryOutline)
@@ -171,6 +160,9 @@ namespace JTRP
 
 				DoGeometryOutline(ctx);
 			}
+			
+			// Set BackFace Outline
+			Shader.SetGlobalFloat("_JTRP_Enable_Global_BackFace_Outline", enableBackFaceOutline? 1 : 0);
 		}
 
 		protected override void Cleanup()

@@ -25,9 +25,8 @@ Material:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
-  - SRPDEFAULTUNLIT
-  - JTRPMask
   - JTRPFace
+  - JTRPMask
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -91,6 +90,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _HairHighLightColorRamp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _HairHighLightGradientRamp:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -100,6 +103,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HairHighLightOffsetRamp:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairHighLightWidthRamp:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -172,7 +179,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Outline_Width_Ramp:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 2b0d8a59e6613184095fb15960edef28, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SSRimMask:
@@ -251,6 +258,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _1st2nd_Shades_Feather: 0.0001
     - _1st_ShadeColor_Feather: 0.0001
@@ -337,6 +345,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
+    - _EnableHairHighLightRampUVCameraSpace: 0
     - _EnableRayTracingShadow: 1
     - _EnableSSRim: 0
     - _EnableShadowColorRamp: 0
@@ -350,8 +359,10 @@ Material:
     - _GI_Intensity: 0
     - _GradientRampIntensity: 0
     - _HairHighLightIntensityInShadow: 0.5
+    - _HairShadowBias: 0
     - _HairShadowRampMaxDistance: 10
     - _HairShadowWidth: 1
+    - _HairZOffset: 0
     - _HdrpVersion: 2
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
@@ -447,7 +458,7 @@ Material:
     - _Outline_Lightness: 1
     - _Outline_Purity: 1
     - _Outline_Ramp_Max_Distance: 10
-    - _Outline_Width: 0.05
+    - _Outline_Width: 7
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
     - _PPDMinSamples: 5
@@ -618,6 +629,7 @@ Material:
     - _HairHighLightHighColor: {r: 1, g: 1, b: 1, a: 0}
     - _HairHighLightLowColor: {r: 0.29999998, g: 0.29999998, b: 0.29999998, a: 0}
     - _HairHighLightRampST: {r: 1, g: 0, b: 1, a: 0}
+    - _HairHighLightRampUVOffset: {r: 0, g: 0, b: 0, a: 0}
     - _HighColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighColor1: {r: 1, g: 1, b: 1, a: 1}
     - _HighColor2: {r: 1, g: 1, b: 1, a: 1}
@@ -659,3 +671,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 2
+  hdPluginSubTargetMaterialVersions:
+    m_Keys: []
+    m_Values: 

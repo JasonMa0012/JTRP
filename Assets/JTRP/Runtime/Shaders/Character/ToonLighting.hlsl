@@ -203,6 +203,8 @@
         context.shadowContext = InitShadowContext();
         context.shadowValue = 1;
         context.sampleReflection = 0;
+        context.splineVisibility = -1;
+
         ApplyCameraRelativeXR(posInput.positionWS);
         InitContactShadow(posInput, context);
         
