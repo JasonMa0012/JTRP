@@ -50,6 +50,7 @@ Shader "JTRP/SampleDrawer"
     HLSLINCLUDE
     
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
     
     CBUFFER_START(UnityPerMaterial)
     float4 _Color;
@@ -77,7 +78,6 @@ Shader "JTRP/SampleDrawer"
                 float4 texcoord0: TEXCOORD0;
                 float3 normal: NORMAL;
                 float4 color: COLOR;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
             struct GraphVertexOutput
             {
