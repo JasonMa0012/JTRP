@@ -1,4 +1,4 @@
-# <img src="image/README/JTRPLogoLow.png" alt="img" style="zoom: 67%;" />Jason Ma Toon Render Pipeline (JTRP)
+# <img src="image/README/JTRPLogoLow.png" alt="img" style="zoom: 80%;" />Jason Ma Toon Render Pipeline (JTRP)
 
   * [Works](#works)
   * [Installation](#installation)
