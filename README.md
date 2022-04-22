@@ -1,19 +1,6 @@
-# ![img](image/README/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
+# <img src="image/README/JTRPLogoLow.png" alt="img" style="zoom: 67%;" />Jason Ma Toon Render Pipeline (JTRP)
 
-* [Works](#works)
-* [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
-* [Usages](#usages)
-  * [Environment](#environment)
-  * [Directory Structure](#directory-structure)
-  * [Scene Settings](#scene-settings)
-    * [JTRP Custom Pass](#jtrp-custom-pass)
-    * [Pencil\+ Outline 4 Unity](#pencil-outline-4-unity)
-  * [Material Parameters](#material-parameters)
-  * [Scripts](#scripts)
-  * [DXR Sample (Removed)](#dxr-sample-removed)
-  * [Light Weight ShaderGUI](#light-weight-shadergui)
-  * [Model Outline Importer（Legacy）](#model-outline-importerlegacy)
-* [Future Works](#future-works)
+[TOC]
 
 这是我业余时间开发的基于**Unity HDRP**并支持**DX12 RayTracing**的卡通渲染工具集，定位于实时生产影视级质量卡通渲染CG。
 
@@ -40,12 +27,18 @@ https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
 ## Installation
 
 1. 使用Unity 2021最新版本创建一个新项目（或使用你自己的项目）
-2. （需要代理）Window > Package Manager > Add > Add package from git URL 输入https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git
+2. （需要代理）`Window > Package Manager > Add > Add package from git URL` 输入`https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git`
 
-   * 你也可以选择手动从Github下载Zip，然后从Package Manager > Add package from disk添加Local Package
+   * 你也可以选择手动从Github下载Zip，然后从`Package Manager > Add package from disk`添加Local Package
 
-   ![img](image/README/1650651450991.png)
-3. 
+   <img src="image/README/1650651450991.png" alt="img" style="zoom: 67%;" />
+3. 在Project面板中找到`Packages > JTRP`，同时打开`Edit > Project Settings > Graphics`，将`JTRP\RenderPipelineResources\JTRP_RenderPipelineAsset`分配给`SRP Settings`
+
+   <img src="image/README/1650652521492.png" alt="img" style="zoom:80%;" />
+4. 打开`Window > Rendering > HDRP Wizard`（一般会自动打开），点击`Fix All`，重启编辑器
+
+   <img src="image/README/1650652730659.png" style="zoom: 67%;" />
+5. 双击`JTRP\Samples\JTRP_Samples.unitypackage`导出示例场景，打开`Assets\JTRP_Samples\SampleScenes`中的场景，检查渲染结果是否与截图一致，若渲染结果异常，请重新检查安装过程或提交Issue
 
 ## Getting Started：三渲二入门视频教程
 
