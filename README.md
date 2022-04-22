@@ -1,19 +1,17 @@
 # ![img](image/README/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
 
-* [Works](#works)
-* [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
-* [Usages](#usages)
-  * [Environment](#environment)
-  * [Directory Structure](#directory-structure)
-  * [Scene Settings](#scene-settings)
+  * [Works](#works)
+  * [Installation](#installation)
+  * [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
+  * [Usages](#usages)
     * [JTRP Custom Pass](#jtrp-custom-pass)
     * [Pencil\+ Outline 4 Unity](#pencil-outline-4-unity)
-  * [Material Parameters](#material-parameters)
-  * [Scripts](#scripts)
-  * [DXR Sample (Removed)](#dxr-sample-removed)
-  * [Light Weight ShaderGUI](#light-weight-shadergui)
-  * [Model Outline Importer（Legacy）](#model-outline-importerlegacy)
-* [Future Works](#future-works)
+    * [Material Parameters](#material-parameters)
+    * [Scripts](#scripts)
+    * [DXR Sample (Removed)](#dxr-sample-removed)
+    * [Light Weight ShaderGUI](#light-weight-shadergui)
+    * [Model Outline Importer（Legacy）](#model-outline-importerlegacy)
+  * [Future Works](#future-works)
 
 这是我业余时间开发的基于**Unity HDRP**并支持**DX12 RayTracing**的卡通渲染工具集，定位于实时生产影视级质量卡通渲染CG。
 
@@ -104,7 +102,7 @@ JTRP
 
 由于JTRP是在UTS的基础上扩展而来，因此你应该先了解UTS的基本功能：https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project/blob/release/legacy/2.0/Manual/UTS2_Manual_en.md
 
-#### JTRP Custom Pass
+### JTRP Custom Pass
 
 ![](image/README/1647802771257.png)
 
@@ -116,7 +114,7 @@ JTRP
 
 **Geometry Outline**只开发了一半，设置较为复杂，不推荐使用。已经有优化思路，但是没有时间继续开发，有缘人可以一起开发，效果参考视频：https://www.bilibili.com/video/BV1vp4y1r7sF
 
-#### Pencil+ Outline 4 Unity
+### Pencil+ Outline 4 Unity
 
 ![](image/README/1647803219913.png)
 
