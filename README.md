@@ -37,6 +37,16 @@ https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
 
 ![](image/README/1647811706282.png)![](image/README/1647811937504.png)![](image/README/1647812077711.png)
 
+## Installation
+
+1. 使用Unity 2021最新版本创建一个新项目（或使用你自己的项目）
+2. （需要代理）Window > Package Manager > Add > Add package from git URL 输入https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git
+
+   * 你也可以选择手动从Github下载Zip，然后从Package Manager > Add package from disk添加Local Package
+
+   ![img](image/README/1650651450991.png)
+3. 
+
 ## Getting Started：三渲二入门视频教程
 
 ![JTRP教程](image/README/JTRP教程.jpg)
@@ -89,23 +99,10 @@ JTRP
   - LUT制作：https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@10.6/manual/LUT-Authoring-Resolve.html
 - 渲染输出
 
+
 ## Usages
 
 由于JTRP是在UTS的基础上扩展而来，因此你应该先了解UTS的基本功能：https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project/blob/release/legacy/2.0/Manual/UTS2_Manual_en.md
-
-### Installation
-
-1. 使用Unity2021最新版本创建一个新项目（或使用你自己的项目）
-
-### Scene Settings
-
-场景中：
-
-* Directional Light：必须有且只支持一个
-* JTRP_Custom Pass（RenderPipelineResources\JTRP_Custom Pass.prefab）：必须有，提供JTRP基本的渲染功能，全局控制Outline
-* Global Volume：设置Pencil+透明度、覆盖Default Volume中的参数
-
-如有疑问请善用文档和Google：https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@12.1/manual/index.html
 
 #### JTRP Custom Pass
 
