@@ -1,11 +1,11 @@
-# ![img](image/README/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
+# <img src="image/README/JTRPLogoLow.png" alt="img" style="zoom: 80%;" />Jason Ma Toon Render Pipeline (JTRP)
 
   * [Works](#works)
   * [Installation](#installation)
   * [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
   * [Usages](#usages)
-    * [JTRP Custom Pass](#jtrp-custom-pass)
-    * [Pencil\+ Outline 4 Unity](#pencil-outline-4-unity)
+      * [JTRP Custom Pass](#jtrp-custom-pass)
+      * [Pencil\+ Outline 4 Unity](#pencil-outline-4-unity)
     * [Material Parameters](#material-parameters)
     * [Scripts](#scripts)
     * [DXR Sample (Removed)](#dxr-sample-removed)
@@ -38,12 +38,18 @@ https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
 ## Installation
 
 1. 使用Unity 2021最新版本创建一个新项目（或使用你自己的项目）
-2. （需要代理）Window > Package Manager > Add > Add package from git URL 输入https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git
+2. （需要代理）`Window > Package Manager > Add > Add package from git URL` 输入`https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git`
 
-   * 你也可以选择手动从Github下载Zip，然后从Package Manager > Add package from disk添加Local Package
+   * 你也可以选择手动从Github下载Zip，然后从`Package Manager > Add package from disk`添加Local Package
 
-   ![img](image/README/1650651450991.png)
-3. 
+   <img src="image/README/1650651450991.png" alt="img" style="zoom: 67%;" />
+3. 在Project面板中找到`Packages > JTRP`，同时打开`Edit > Project Settings > Graphics`，将`JTRP\RenderPipelineResources\JTRP_RenderPipelineAsset`分配给`SRP Settings`
+
+   <img src="image/README/1650652521492.png" alt="img" style="zoom:80%;" />
+4. 打开`Window > Rendering > HDRP Wizard`（一般会自动打开），点击`Fix All`，重启编辑器
+
+   <img src="image/README/1650652730659.png" style="zoom: 67%;" />
+5. 双击`JTRP\Samples\JTRP_Samples.unitypackage`导出示例场景，打开`Assets\JTRP_Samples\SampleScenes`中的场景，检查渲染结果是否与截图一致，若渲染结果异常，请重新检查安装过程或提交Issue
 
 ## Getting Started：三渲二入门视频教程
 
@@ -102,7 +108,7 @@ JTRP
 
 由于JTRP是在UTS的基础上扩展而来，因此你应该先了解UTS的基本功能：https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project/blob/release/legacy/2.0/Manual/UTS2_Manual_en.md
 
-### JTRP Custom Pass
+#### JTRP Custom Pass
 
 ![](image/README/1647802771257.png)
 
@@ -114,7 +120,7 @@ JTRP
 
 **Geometry Outline**只开发了一半，设置较为复杂，不推荐使用。已经有优化思路，但是没有时间继续开发，有缘人可以一起开发，效果参考视频：https://www.bilibili.com/video/BV1vp4y1r7sF
 
-### Pencil+ Outline 4 Unity
+#### Pencil+ Outline 4 Unity
 
 ![](image/README/1647803219913.png)
 
