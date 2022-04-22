@@ -1,5 +1,4 @@
-# ![img](README.assets/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
-
+# ![img](image/README/JTRPLogoLow.png)Jason Ma Toon Render Pipeline (JTRP)
 
 * [Works](#works)
 * [Getting Started：三渲二入门视频教程](#getting-started%E4%B8%89%E6%B8%B2%E4%BA%8C%E5%85%A5%E9%97%A8%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B)
@@ -38,10 +37,9 @@ https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
 
 ![](image/README/1647811706282.png)![](image/README/1647811937504.png)![](image/README/1647812077711.png)
 
-
 ## Getting Started：三渲二入门视频教程
 
-![JTRP教程](README.assets/JTRP教程.jpg)
+![JTRP教程](image/README/JTRP教程.jpg)
 
 教程：https://www.bilibili.com/video/BV1AA411A7RR/
 
@@ -95,33 +93,17 @@ JTRP
 
 由于JTRP是在UTS的基础上扩展而来，因此你应该先了解UTS的基本功能：https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project/blob/release/legacy/2.0/Manual/UTS2_Manual_en.md
 
-### Environment
+### Installation
 
-Unity 2021.2 安装最新版本，启动时如有报错请忽略
-
-### Directory Structure
-
-Assets\SampleScenes：示例场景，每个场景文件都有一张对应的截图，打开场景后和截图对比以确认你的渲染结果是否正确
-
-Assets\Art_Test\Characters\Hanser v1.0 200120：视频教程中的材质球，如要使用请根据教程下载并处理模型
-
-DCC：视频教程中为Hanser模型绘制的一些MaskTexture
-
-**Packages：和渲染有关的本地Package，JTRP有对HDRP进行修改，注意！Unity在第一次打开工程时可能会自动升级Package版本导致报错，如果你在第一次打开时发现JTRP没有正常工作请尝试：**
-
-* 对于通过Zip下载JTRP的用户，将Packages\manifest.json和Packages\packages-lock.json文件从Zip中解压并覆盖到本地
-
-- 对于通过Git Clone下载JTRP的用户，请通过git命令或GUI撤销对Packages文件夹内容的修改（主要是manifest.json和packages-lock.json）
-
-然后回到Unity触发Reimport。
+1. 使用Unity2021最新版本创建一个新项目（或使用你自己的项目）
 
 ### Scene Settings
 
-参考示例场景，每个场景必须要有：
+场景中：
 
-* Directional Light
-* CustomPass（Assets\JTRP\Runtime\RenderPipelineResources\Custom Pass.prefab）
-* Global Volume
+* Directional Light：必须有且只支持一个
+* JTRP_Custom Pass（RenderPipelineResources\JTRP_Custom Pass.prefab）：必须有，提供JTRP基本的渲染功能，全局控制Outline
+* Global Volume：设置Pencil+透明度、覆盖Default Volume中的参数
 
 如有疑问请善用文档和Google：https://docs.unity3d.com/Packages/com.unity.render-pipelines.high-definition@12.1/manual/index.html
 
@@ -149,25 +131,25 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 
 如有遗漏，可以参考视频教程和UTS文档，这里只列出JTRP相对于UTS的新增部分。
 
-| ![img](image/README/1647804306427.png)                                                                      | HDRP/Toon                                                                                                                                                                                                                      |
-| --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Workflow Mode                                                                                             | 优先使用ShadingGradeMap，否则不保证功能完全                                                                                                                                                                                    |
-| ![img](https://file+.vscode-resource.vscode-webview.net/e%3A/WorkSpace/JTRP/image/README/1647803760469.png) | Shadow                                                                                                                                                                                                                         |
-| Shading Grade Map                                                                                         | 通过一张灰度图控制阴影的范围。阴影是通过光线方向与法线方向的点积（Gradient）计算，通过影响Gradient使某些区域更容易变亮/变暗。贴图颜色默认0.5灰色，越接近白色越容易变亮，为1时常亮，反之亦然。                                  |
-| ![img](image/README/1647804186475.png)                                                                      | JTRP Features                                                                                                                                                                                                                  |
-| Is Face / Hair                                                                                            | 头发和脸的开关，如需使用发影、脸影功能则须正确设置。<br />对于脸材质打开Is Face，对于头发材质打开Is Hair，普通材质保持默认关闭即可。                                                                                           |
-| Hair Shadow ……                                                                                          | 在**脸材质上**对发影进行调整，Width控制宽度，Ramp控制宽度的距离衰减，Bais控制裁剪距离                                                                                                                                    |
-| Hair Z Offset                                                                                             | 在**头发材质上**调整，控制发影渲染时在视线方向上的偏移                                                                                                                                                                   |
-| Face Shadow Bias                                                                                          | 在**脸材质上**调整，打开脸接受阴影的选项（System Shadows Self Shadows Receiving）时调整脸的阴影在光线方向的偏移，可以裁剪掉一些近距离不想要的阴影                                                                        |
-| Spherical Shadow……                                                                                      | 高级选项，控制球面化法线，需要配合脚本使用，参考视频教程                                                                                                                                                                       |
-| Anti-Perspective                                                                                          | 高级选项，控制反透视强度，为1时模型在视线方向压扁，从而抵消透视畸变。在3D中，FOV越大，透视畸变越大，视角越广，而三渲二追求还原手绘感，所以需要尽可能减小透视畸变，此功能适合在单独展示模型时使用，否则会与3D场景穿插造成穿帮。 |
-| ![img](image/README/1647804204924.png)                                                                      | Outline                                                                                                                                                                                                                        |
-| Outline Width Ramp                                                                                        | 通过Ramp控制描边在不同距离下的粗细                                                                                                                                                                                             |
-| ![img](image/README/1647805003341.png)                                                                      | Environmental Lighting                                                                                                                                                                                                         |
-| Built-in Light Direction                                                                                  | 该功能可以手动指定光线方向，从而控制脸影、发影等。可以搭配脚本实现更智能的光线方向控制，参考视频教程                                                                                                                           |
-| ![img](image/README/1647806050520.png)                                                                      | Hair HighLight（**先点击Show All properties切换UI**）<br /><br />**看视频吧，实在没时间写了，欢迎好心人提交RP**                                                                                                    |
-| ![img](image/README/1647806243135.png)                                                                      | Screen Space Rim Light（**同上**）                                                                                                                                                                                       |
-|                                                                                                           |                                                                                                                                                                                                                                |
+| ![img](image/README/1647804306427.png) | HDRP/Toon                                                                                                                                                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Workflow Mode                        | 优先使用ShadingGradeMap，否则不保证功能完全                                                                                                                                                                                    |
+| ![img](image/README/1647803760469.png) | Shadow                                                                                                                                                                                                                         |
+| Shading Grade Map                    | 通过一张灰度图控制阴影的范围。阴影是通过光线方向与法线方向的点积（Gradient）计算，通过影响Gradient使某些区域更容易变亮/变暗。贴图颜色默认0.5灰色，越接近白色越容易变亮，为1时常亮，反之亦然。                                  |
+| ![img](image/README/1647804186475.png) | JTRP Features                                                                                                                                                                                                                  |
+| Is Face / Hair                       | 头发和脸的开关，如需使用发影、脸影功能则须正确设置。<br />对于脸材质打开Is Face，对于头发材质打开Is Hair，普通材质保持默认关闭即可。                                                                                           |
+| Hair Shadow ……                     | 在**脸材质上**对发影进行调整，Width控制宽度，Ramp控制宽度的距离衰减，Bais控制裁剪距离                                                                                                                                    |
+| Hair Z Offset                        | 在**头发材质上**调整，控制发影渲染时在视线方向上的偏移                                                                                                                                                                   |
+| Face Shadow Bias                     | 在**脸材质上**调整，打开脸接受阴影的选项（System Shadows Self Shadows Receiving）时调整脸的阴影在光线方向的偏移，可以裁剪掉一些近距离不想要的阴影                                                                        |
+| Spherical Shadow……                 | 高级选项，控制球面化法线，需要配合脚本使用，参考视频教程                                                                                                                                                                       |
+| Anti-Perspective                     | 高级选项，控制反透视强度，为1时模型在视线方向压扁，从而抵消透视畸变。在3D中，FOV越大，透视畸变越大，视角越广，而三渲二追求还原手绘感，所以需要尽可能减小透视畸变，此功能适合在单独展示模型时使用，否则会与3D场景穿插造成穿帮。 |
+| ![img](image/README/1647804204924.png) | Outline                                                                                                                                                                                                                        |
+| Outline Width Ramp                   | 通过Ramp控制描边在不同距离下的粗细                                                                                                                                                                                             |
+| ![img](image/README/1647805003341.png) | Environmental Lighting                                                                                                                                                                                                         |
+| Built-in Light Direction             | 该功能可以手动指定光线方向，从而控制脸影、发影等。可以搭配脚本实现更智能的光线方向控制，参考视频教程                                                                                                                           |
+| ![img](image/README/1647806050520.png) | Hair HighLight（**先点击Show All properties切换UI**）<br /><br />**看视频吧，实在没时间写了，欢迎好心人提交RP**                                                                                                    |
+| ![img](image/README/1647806243135.png) | Screen Space Rim Light（**同上**）                                                                                                                                                                                       |
+|                                      |                                                                                                                                                                                                                                |
 
 ### Scripts
 
@@ -187,13 +169,13 @@ DCC：视频教程中为Hanser模型绘制的一些MaskTexture
 
 ### DXR Sample (Removed)
 
-![image-20210111010551810](README.assets/image-20210111010551810.png)![image-20210111010608857](README.assets/image-20210111010608857.png)
+![image-20210111010551810](image/README/image-20210111010551810.png)![image-20210111010608857](image/README/image-20210111010608857.png)
 
 Video：https://www.bilibili.com/video/BV1Tr4y1F7Pv
 
 ### Light Weight ShaderGUI
 
-![image-20210110034731796](README.assets/image-20210110034731796.png)
+![image-20210110034731796](image/README/image-20210110034731796.png)
 
 LWGUI是一般ShaderGUI的替代方案，为了写最少的代码并保持灵活易用而编写。所有功能基于Custom Drawer，只需在Shader Property前加上Attribute即可实现各种自定义ShaderGUI。使用时无需写一行ShaderGUI，写Shader的同时进行排版，不同Shader互不相干。Shader末尾需要添加 `CustomEditor "JTRP.ShaderDrawer.LWGUI"`。
 
@@ -249,7 +231,7 @@ Title(string group, string header)
 
 ### Model Outline Importer（Legacy）
 
-![](README.assets/Snipaste_2020-04-14_22-30-12.png)
+![](image/README/Snipaste_2020-04-14_22-30-12.png)
 
 导入流程已经失效，详情可以参考[此文章](https://zhuanlan.zhihu.com/p/107664564)。
 

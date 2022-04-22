@@ -1,0 +1,62 @@
+fileFormatVersion: 2
+guid: 873188af6a7b5ca49aa69929a5d863c1
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _BaseColorMap: {instanceID: 0}
+  - _MaskMap: {instanceID: 0}
+  - _NormalMap: {instanceID: 0}
+  - _NormalMapOS: {instanceID: 0}
+  - _BentNormalMap: {instanceID: 0}
+  - _BentNormalMapOS: {instanceID: 0}
+  - _HeightMap: {instanceID: 0}
+  - _DetailMap: {instanceID: 0}
+  - _TangentMap: {instanceID: 0}
+  - _TangentMapOS: {instanceID: 0}
+  - _AnisotropyMap: {instanceID: 0}
+  - _SubsurfaceMaskMap: {instanceID: 0}
+  - _ThicknessMap: {instanceID: 0}
+  - _IridescenceThicknessMap: {instanceID: 0}
+  - _IridescenceMaskMap: {instanceID: 0}
+  - _CoatMaskMap: {instanceID: 0}
+  - _SpecularColorMap: {instanceID: 0}
+  - _EmissiveColorMap: {instanceID: 0}
+  - _DistortionVectorMap: {instanceID: 0}
+  - _TransmittanceColorMap: {instanceID: 0}
+  - _MainTex: {instanceID: 0}
+  - _ClippingMask: {instanceID: 0}
+  - _BaseMap: {instanceID: 0}
+  - _1st_ShadeMap: {instanceID: 0}
+  - _2nd_ShadeMap: {instanceID: 0}
+  - _Set_1st_ShadePosition: {instanceID: 0}
+  - _Set_2nd_ShadePosition: {instanceID: 0}
+  - _ShadingGradeMap: {instanceID: 0}
+  - _HighColor_Tex: {instanceID: 0}
+  - _Set_HighColorMask: {instanceID: 0}
+  - _Set_RimLightMask: {instanceID: 0}
+  - _MatCap_Sampler: {instanceID: 0}
+  - _NormalMapForMatCap: {instanceID: 0}
+  - _Set_MatcapMask: {instanceID: 0}
+  - _AngelRing_Sampler: {instanceID: 0}
+  - _Emissive_Tex: {instanceID: 0}
+  - _Outline_Width_Ramp: {fileID: 2800000, guid: 2b0d8a59e6613184095fb15960edef28,
+      type: 3}
+  - _Outline_Sampler: {instanceID: 0}
+  - _OutlineTex: {instanceID: 0}
+  - _BakedNormal: {instanceID: 0}
+  - _HairShadowWidthRamp: {instanceID: 0}
+  - _HighLightMaskMap: {instanceID: 0}
+  - _HairHighLightGradientRamp: {instanceID: 0}
+  - _HairHighLightColorRamp: {instanceID: 0}
+  - _HairHighLightMaskRamp: {instanceID: 0}
+  - _HairHighLightOffsetRamp: {instanceID: 0}
+  - _HairHighLightWidthRamp: {instanceID: 0}
+  - _TangentDirMap: {fileID: 2800000, guid: 7c6ec8ed07e995841aeb5e1629064081, type: 3}
+  - _SSRimWidthRamp: {fileID: 2800000, guid: 2b0d8a59e6613184095fb15960edef28, type: 3}
+  - _SSRimMask: {instanceID: 0}
+  - _ShadowColorRamp: {instanceID: 0}
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

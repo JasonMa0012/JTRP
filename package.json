@@ -1,0 +1,21 @@
+{
+  "name": "com.jasonma.jtrp",
+  "version": "0.1.0",
+  "displayName": "JTRP",
+  "description": "High Quality Toon Rendering tool set with DX12 Real-Time Ray Tracing (Preview).",
+  "dependencies": {
+    "com.unity.timeline": "1.6.4",
+    "com.unity.render-pipelines.high-definition": "12.1.6"
+  },
+  "keywords": [
+    "shader",
+    "toon",
+    "hdrp",
+    "raytracing"
+  ],
+  "author": {
+    "name": "Jason Ma",
+    "email": "jasonma0012@foxmail.com",
+    "url": "https://github.com/JasonMa0012/JasonMaToonRenderPipeline"
+  }
+}
