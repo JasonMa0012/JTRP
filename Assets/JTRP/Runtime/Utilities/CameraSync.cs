@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEditor.Timeline;
 using UnityEditor.Playables;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.Playables;
 
 namespace JTRP.Utility
 {
-	[ExecuteInEditMode]
+	[ExecuteAlways] // 沙雕Unity，瞎jb改API行为还不留后路
 	[RequireComponent(typeof(Camera))]
 	public class CameraSync : MonoBehaviour
 	{
@@ -28,7 +29,18 @@ namespace JTRP.Utility
 		private Quaternion _lastViewRot = Quaternion.identity;
 		private double _lastTime = 0;
 
-		void LateUpdate()
+		private void OnEnable()
+		{
+			// 只能用这种方式update了，unity在后台依旧会一直运行
+			UnityEditor.EditorApplication.update += DoSync;
+		}
+
+		private void OnDisable()
+		{
+			UnityEditor.EditorApplication.update -= DoSync;
+		}
+
+		void DoSync()
 		{
 			var sceneView = SceneView.lastActiveSceneView;
 			var viewCameraTransform = sceneView.camera.transform;
