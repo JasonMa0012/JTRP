@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace JTRP.Utility
+namespace JTRP.Editor.Utilities
 {
 	public class PropPairs : ScriptableObject
 	{

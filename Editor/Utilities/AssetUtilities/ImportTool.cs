@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 
-namespace JTRP.Utility
+namespace JTRP.Editor.Utilities
 {
     public class ImportUtility
     {

@@ -6,7 +6,13 @@
         "Unity.RenderPipelines.HighDefinition.Runtime",
         "Unity.RenderPipelines.HighDefinition.Config.Runtime",
         "Unity.RenderPipelines.Core.Editor",
-        "Unity.RenderPipelines.Core.Runtime"
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.Barracuda.Editor",
+        "Unity.Barracuda",
+        "Unity.Barracuda.ONNX",
+        "Unity.Barracuda.BurstBLAS",
+        "Unity.Barracuda.iOSBLAS",
+        "Unity.Barracuda.MacBLAS"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

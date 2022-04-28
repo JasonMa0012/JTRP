@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.Timeline;
 using UnityEngine.Timeline;
-using JTRP.Utility;
+using JTRP.Editor.Utilities;
 
 namespace JTRP.Editor
 {

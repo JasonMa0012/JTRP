@@ -3,7 +3,7 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
-namespace JTRP
+namespace JTRP.RenderPipeline
 {
 	[System.Serializable]
 	class CustomPassJTRPRayTracing : CustomPass
@@ -33,9 +33,9 @@ namespace JTRP
 					if (renderer != null)
 						_outlineRAS.AddInstance(renderer);
 			_outlineMask = RTHandles.Alloc(Vector2.one, TextureXR.slices, colorFormat: GraphicsFormat.R8_SNorm,
-			                               dimension: TextureXR.dimension, enableRandomWrite: true,
-			                               useDynamicScale: true, useMipMap: false,
-			                               name: "JTRP Ray Tracing Outline Mask");
+										   dimension: TextureXR.dimension, enableRandomWrite: true,
+										   useDynamicScale: true, useMipMap: false,
+										   name: "JTRP Ray Tracing Outline Mask");
 		}
 
 		protected override void Execute(CustomPassContext ctx)
@@ -62,7 +62,6 @@ namespace JTRP
 			_outlineRAS?.Dispose();
 			_outlineMask?.Release();
 		}
-
 
 		private static bool _needRebake = true;
 
@@ -101,13 +100,13 @@ namespace JTRP
 					if (renderer != null)
 						_outlineRAS.UpdateInstanceTransform(renderer);
 			ctx.cmd.SetRayTracingAccelerationStructure(rayTracingOutlineShader, "_RaytracingAccelerationStructure",
-			                                           _outlineRAS);
+													   _outlineRAS);
 			ctx.cmd.SetRayTracingTextureParam(rayTracingOutlineShader, "RenderTarget", ctx.cameraColorBuffer);
 			ctx.cmd.SetRayTracingTextureParam(rayTracingOutlineShader, "_DepthTexture", ctx.cameraDepthBuffer);
 			ctx.cmd.SetRayTracingTextureParam(rayTracingOutlineShader, "_OutlineMask", _outlineMask);
 			ctx.cmd.DispatchRays(rayTracingOutlineShader, "RayTracingOutlineRaygen",
-			                     (uint) ctx.cameraColorBuffer.rt.width,
-			                     (uint) ctx.cameraColorBuffer.rt.height, 1);
+								 (uint)ctx.cameraColorBuffer.rt.width,
+								 (uint)ctx.cameraColorBuffer.rt.height, 1);
 		}
 	}
 } //namespace JTRP.PostProcessing

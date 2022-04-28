@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JTRP.Utility
+namespace JTRP.Utilities
 {
     public static class GameObjectUtillty
     {

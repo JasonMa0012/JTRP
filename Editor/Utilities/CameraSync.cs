@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
 
-namespace JTRP.Utility
+namespace JTRP.Editor.Utilities
 {
 	[ExecuteAlways] // 沙雕Unity，瞎jb改API行为还不留后路
 	[RequireComponent(typeof(Camera))]

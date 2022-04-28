@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 
-namespace JTRP.Utility
+namespace JTRP.Editor.Utilities
 {
 	public class UpdateMaterial : EditorWindow
 	{

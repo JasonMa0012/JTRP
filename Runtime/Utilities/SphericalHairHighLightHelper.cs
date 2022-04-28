@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JTRP.Utility
+namespace JTRP.Utilities
 {
 	[ExecuteAlways]
 	public class SphericalHairHighLightHelper : MonoBehaviour

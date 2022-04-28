@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace JTRP.Utility
+namespace JTRP.Utilities
 {
 	public enum Dir
 	{
@@ -17,18 +18,18 @@ namespace JTRP.Utility
 		public Transform  faceCenter;
 		public Renderer[] renderers;
 
-
 		[Header("Projected Light Dir(Need Activate Built-in Light Direction)")]
 		public bool enableProjectedLightDir;
 
-		public                Transform      light;
+		[FormerlySerializedAs("light")]
+		public Transform directionalLight;
+		
 		[Range(-1, 1)] public float          yAxisOffset;
 		[Range(-1, 1)] public float          constantY;
 		[Range(0, 1)]  public float          constantYBlend;
 		public                Dir            forwardDir       = Dir.forward;
 		public                bool           invertForwardDir = false;
 		public                AnimationCurve dotPower         = AnimationCurve.Linear(-1, 1, 1, 1);
-
 
 		private MaterialPropertyBlock _block;
 
@@ -41,7 +42,7 @@ namespace JTRP.Utility
 				renderer.GetPropertyBlock(_block);
 				_block.SetMatrix("_SphericalShadowCenter_Matrix_I_M", faceCenter.worldToLocalMatrix);
 				_block.SetMatrix("_SphericalShadowCenter_Matrix_M", faceCenter.localToWorldMatrix);
-				if (enableProjectedLightDir && light != null)
+				if (enableProjectedLightDir && directionalLight != null)
 				{
 					Vector3 forwardDirWS = Vector3.zero;
 					switch (forwardDir)
@@ -61,7 +62,7 @@ namespace JTRP.Utility
 					var forwardWS2D = forwardDirWS;
 					forwardWS2D.y = 0;
 					forwardWS2D = forwardWS2D.normalized;
-					var lightDirWS2D = -light.forward;
+					var lightDirWS2D = -directionalLight.forward;
 					lightDirWS2D.y = 0;
 					lightDirWS2D = lightDirWS2D.normalized;
 
