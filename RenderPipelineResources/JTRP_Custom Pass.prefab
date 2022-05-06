@@ -48,17 +48,17 @@ MonoBehaviour:
   fadeRadius: 0
   priority: 0
   customPasses:
-  - rid: 624702339309371392
+  - rid: 624702382962376704
   injectionPoint: 4
   m_TargetCamera: {fileID: 0}
   useTargetCamera: 0
   references:
     version: 2
     RefIds:
-    - rid: 624702339309371392
-      type: {class: CustomPassJTRP, ns: JTRP, asm: JTRP.Runtime}
+    - rid: 624702382962376704
+      type: {class: CustomPassJTRP, ns: JTRP.RenderPipeline, asm: JTRP.Runtime}
       data:
-        m_Name: JTRP
+        m_Name: Custom Pass
         enabled: 1
         targetColorBuffer: 0
         targetDepthBuffer: 0

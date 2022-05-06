@@ -74,6 +74,8 @@ MonoBehaviour:
   afterPostProcessCustomPostProcesses:
   - Pencil_4.HDRP.PencilLine_AfterPostProcess, PSOFT.Pencil_4_HDRP.Runtime, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
+  - JTRP.PostProcess.StyleTransfer, JTRP.Runtime, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
   beforeTAACustomPostProcesses: []
   lightLayerName0: Light Layer default
   lightLayerName1: Light Layer 1

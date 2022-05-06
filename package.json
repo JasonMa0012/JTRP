@@ -1,11 +1,12 @@
 {
   "name": "com.jasonma.jtrp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "JTRP",
   "description": "High Quality Toon Rendering tool set with DX12 Real-Time Ray Tracing (Preview).",
   "dependencies": {
     "com.unity.timeline": "1.6.4",
-    "com.unity.render-pipelines.high-definition": "12.1.6"
+    "com.unity.render-pipelines.high-definition": "12.1.6",
+    "com.unity.barracuda": "3.0.0"
   },
   "keywords": [
     "shader",

@@ -12,8 +12,9 @@ namespace JTRP.Editor
 			GUILayout.Space(20f);
 			if (GUILayout.Button("Bake"))
 			{
-				foreach (JTRP.GeometryOutline item in targets)
+				foreach (var o in targets)
 				{
+					var item = (GeometryOutline)o;
 					item.DoRebake();
 				}
 			}

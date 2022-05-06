@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace JTRP
+
+namespace JTRP.Utilities
 {
     [ExecuteInEditMode]
     public class FaceShadow : MonoBehaviour

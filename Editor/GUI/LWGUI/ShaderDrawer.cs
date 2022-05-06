@@ -473,22 +473,22 @@ namespace JTRP.ShaderDrawer
 	public class TitleDecorator : SubDrawer
 	{
 		private readonly string header;
-		private readonly float height;
+		private readonly float titleHeight;
 
 		public TitleDecorator(string group, string header) : this(group, header, 24) { }
 
-		public TitleDecorator(string group, string header, float height)
+		public TitleDecorator(string group, string header, float titleHeight)
 		{
 			this.group = group;
 			this.header = header;
-			this.height = height;
+			this.titleHeight = titleHeight;
 		}
 
 		public override void DrawProp(Rect position, MaterialProperty prop, GUIContent label, MaterialEditor editor)
 		{
 			GUIStyle s = new GUIStyle(EditorStyles.boldLabel);
 			s.fontSize += 1;
-			var r = EditorGUILayout.GetControlRect(true, height);
+			var r = EditorGUILayout.GetControlRect(true, titleHeight);
 			r.yMin += 5;
 
 			EditorGUI.LabelField(r, new GUIContent(header), s);
