@@ -39,10 +39,11 @@ namespace JTRP.PostProcess
 		public WorkerFactoryTypeParameter         workerType                     = new WorkerFactoryTypeParameter(WorkerFactory.Type.Auto);
 		public BoolParameter                      debugModelLoading              = new BoolParameter(false);
 		public CloudLayerEnumParameter<ModelType> modelType                      = new CloudLayerEnumParameter<ModelType>(ModelType.RefBut32Channels);
-		public ClampedFloatParameter              styleTextureIndex              = new ClampedFloatParameter(0.0f, 0.0f, 1.0f - 1e-5f);
-		public StyleTexturesParameter             styleTextures                  = new StyleTexturesParameter(null);
 		public ClampedFloatParameter              pregamma                       = new ClampedFloatParameter(1.0f, 0.001f, 5.0f);
 		public ClampedFloatParameter              postgamma                      = new ClampedFloatParameter(2.2f, 0.001f, 5.0f);
+		public BoolParameter                      showStylePreview               = new BoolParameter(true);
+		public IntParameter                       styleTextureIndex              = new IntParameter(0);
+		public StyleTexturesParameter             styleTextures                  = new StyleTexturesParameter(null);
 
 		// 由于API的冲突, 处理的是上一帧的图像, BeforePostProcess时会覆盖所有后处理, 所以必须为AfterPostProcess
 		public override CustomPostProcessInjectionPoint injectionPoint => CustomPostProcessInjectionPoint.AfterPostProcess;
@@ -56,7 +57,7 @@ namespace JTRP.PostProcess
 		// The Material used to gamma correction
 		private Material _pregammaMat, _postgammaMat;
 
-		private          RTHandle      _rtHandle, _rtHandlePregamma, _rtHandlePostgamma;
+		private          RTHandle      _rtHandle, _rtHandlePregamma, _rtHandlePostgamma, _rtHandleStyle;
 		private          NNModel[]     _nnModels;
 		private          List<float[]> _predictionAlphasBetasData;
 		private          Texture2D     _lastStyle;
@@ -70,7 +71,7 @@ namespace JTRP.PostProcess
 		 && styleTextures.value.Count > 0;
 
 		private Texture2D _styleTexture =>
-			IsActive() ? styleTextures.value[Mathf.FloorToInt(styleTextureIndex.value * styleTextures.value.Count)] : null;
+			IsActive() ? styleTextures.value[styleTextureIndex.value] : null;
 
 		public override void Setup()
 		{
@@ -111,6 +112,12 @@ namespace JTRP.PostProcess
 												 wrapMode: TextureWrapMode.Clamp,
 												 enableRandomWrite: true
 												);
+			_rtHandleStyle = RTHandles.Alloc(
+												 256, 256,
+												 colorFormat: GraphicsFormat.R16G16B16A16_SFloat,
+												 wrapMode: TextureWrapMode.Clamp,
+												 enableRandomWrite: true
+												);
 
 			_pregammaMat = new Material(Shader.Find("Barracuda/Activation"));
 			_pregammaMat.EnableKeyword("Pow");
@@ -133,6 +140,7 @@ namespace JTRP.PostProcess
 				_lastStyle = _styleTexture;
 				PrepareStylePrediction();
 				PatchRuntimeWorkerWithStylePrediction();
+				cmd.Blit(_styleTexture, _rtHandleStyle);
 			}
 
 			// Source cannot be used before blit, the reason is unknown
@@ -161,6 +169,8 @@ namespace JTRP.PostProcess
 			_postgammaMat.SetFloat("_Alpha", postgamma.value);
 
 			cmd.Blit(null, destination, _postgammaMat);
+			if (showStylePreview.value)
+				cmd.CopyTexture(_rtHandleStyle, 0, 0, 0, 0, _rtHandleStyle.rt.width, _rtHandleStyle.rt.height, destination, 0, 0, 0, 0);
 			_pred.Dispose();
 		}
 
@@ -172,11 +182,16 @@ namespace JTRP.PostProcess
 				_worker.Dispose();
 			if (_rtHandle != null)
 				_rtHandle.Release();
+			if (_rtHandlePregamma != null)
+				_rtHandlePregamma.Release();
+			if (_rtHandlePostgamma != null)
+				_rtHandlePostgamma.Release();
+			if (_rtHandleStyle != null)
+				_rtHandleStyle.Release();
 			if (_input != null)
 				_input.Dispose();
 			if (_pred != null)
 				_pred.Dispose();
-			
 		}
 
 		// https://github.com/JasonMa0012/barracuda-style-transfer/blob/fb61d2d8172e3150f6ebbfb78443d0fe9def66db/Assets/BarracudaStyleTransfer/BarracudaStyleTransfer.cs#L575
@@ -263,6 +278,7 @@ namespace JTRP.PostProcess
 				_predictionAlphasBetasData.Add(tempWorker.PeekOutput(layer.name).ToReadOnlyArray());
 			}
 
+			
 			tempWorker.Dispose();
 			styleInput.Dispose();
 
