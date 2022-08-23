@@ -1,4 +1,4 @@
-# <img src="README.assets/JTRPLogoLow.png" alt="img" style="zoom: 80%;" />Jason Ma Toon Render Pipeline (JTRP)
+# <img src="README.assets/JTRPLogoLow.png" alt="img" style="zoom: 80%;" /> JTRP (Jason Ma Toon Render Pipeline)
 
 * [Works](#works)
 * [Installation](#installation)
@@ -40,7 +40,7 @@ https://www.bilibili.com/video/BV1Bq4y1r7bn?p=3
 
 1. 使用Unity 2021最新版本创建一个新项目（或使用你自己的项目）
 2. 确保安装了[Blender](https://www.blender.org/download/)，以及**双击.blend文件可以直接打开Blender**，否则示例模型将无法导入
-3. （需要代理）`Window > Package Manager > Add > Add package from git URL` 输入`https://github.com/JasonMa0012/JasonMaToonRenderPipeline.git`
+3. （需要代理）`Window > Package Manager > Add > Add package from git URL` 输入`https://github.com/JasonMa0012/JTRP.git`
 
    * 你也可以选择手动从Github下载Zip，然后从`Package Manager > Add package from disk`添加Local Package
 
