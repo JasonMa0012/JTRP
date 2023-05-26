@@ -1,6 +1,6 @@
 {
   "name": "com.jasonma.jtrp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "displayName": "JTRP",
   "description": "High Quality Toon Rendering tool set with DX12 Real-Time Ray Tracing (Preview).",
   "dependencies": {
