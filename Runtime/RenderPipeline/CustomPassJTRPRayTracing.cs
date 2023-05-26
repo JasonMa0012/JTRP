@@ -64,8 +64,9 @@ namespace JTRP.RenderPipeline
 		}
 
 		private static bool _needRebake = true;
-
+	#if UNITY_EDITOR
 		[UnityEditor.MenuItem("JTRP/Rebake Geometry Outline")]
+	#endif
 		private static void Rebake()
 		{
 			_needRebake = true;
